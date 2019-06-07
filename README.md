@@ -30,6 +30,17 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 
+## 使用的技术
+
+- vue
+- vuex
+- element-ui
+- vue-router
+- axios
+- webpack
+
+
+
 ## components
 
 - Topbar 顶边栏
