@@ -28,21 +28,21 @@
         </el-form-item> -->
         <!-- <el-form-item label="昵称" prop="nickname">
           <el-input v-model="userForm.nickname" placeholder="请输入昵称">
-            
+
           </el-input>
         </el-form-item> -->
         <el-form-item>
-          <el-button style="width:90%" type="primary" @click="signup">
+          <el-button style="width:90%" type="primary" @click="Signup">
             注册</el-button>
-         
+
         </el-form-item>
-       
+
       </el-form>
     </el-col>
-    
+
   </el-row>
   <el-col :span="4" :offset="6">
-   <div> 已有账号？ <el-button type="text" @click="goToSignin">登录</el-button></div>  
+   <div> 已有账号？ <el-button type="text" @click="goToSignin">登录</el-button></div>
    </el-col>
 </div>
 </template>
@@ -112,12 +112,46 @@ export default {
   methods: {
     Signup: function () {
       //检测确认密码是否一致
+      if (this.userForm.password != this.userForm.confirmPassword)
+      {
+        this.$message({
+          message: '密码不一致',
+          type: 'error'
+        })
+        return
+      }
       //请求后台
-      this.$message({
-        message: '注册成功',
-        type: 'success'
+      let server_domain = 'http://118.89.65.154:8765'
+      //let server_domain = 'http://172.18.32.97:8000'
+      this.$http.post(server_domain + '/account/',
+        this.$qs.stringify({
+          // "body":
+          // {
+            email : this.userForm.email,
+            password : this.userForm.password,
+            gender : "male",
+            nickname : this.userForm.username
+          // }
+
+        })
+      )
+      .then(response =>
+      {
+          console.log(response)
+
+          this.$message({
+            message: '注册成功',
+            type: 'success'
+          })
+
+          //this.$router.push('/')
       })
-      this.$router.push('/')
+      .catch(e  =>
+      {
+        console.log(e.response)
+      })
+
+
       //清空表单？
     },
     goToSignin: function () {

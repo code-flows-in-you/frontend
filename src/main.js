@@ -8,14 +8,19 @@ import VueCookies from 'vue-cookies'
 import 'element-ui/lib/theme-chalk/index.css'
 // import VueResource from 'vue-resource'
 import axios from 'axios'
+import qs from 'qs'
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.use(Vuex)
 Vue.use(Element)
 Vue.use(VueCookies)
 
-
+axios.defaults.withCredentials = true
 Vue.prototype.$http = axios;
+
+Vue.prototype.$qs = qs;
+Vue.prototype.$cookie = VueCookies;
+
 const store = new Vuex.Store({
   state: {
     isLogin: false,
