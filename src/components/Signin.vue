@@ -73,17 +73,37 @@ export default {
   },
   methods: {
     Signin: function () {
-      this.$message({
-        message: '登录成功',
-        type: 'success'
+      let server_domain = 'http://118.89.65.154:8765'
+      //let server_domain = 'http://172.18.32.97:8000'
+      this.$http.post(server_domain + '/account/session',
+        this.$qs.stringify({
+            email : this.userForm.email,
+            password : this.userForm.password,
+        })
+      )
+      .then(response =>
+      {
+          console.log(response)
+
+          this.$message({
+            message: '登录成功',
+            type: 'success'
+          })
+
+          //this.$router.push('/')
       })
-      this.$router.push('/')
+      .catch(e  =>
+      {
+        console.log(e.response)
+      })
+
+
     },
     goToSignup: function () {
       this.$router.push('/signup')
     },
     forgetPassword:function () {
-      
+
     }
   }
 }
