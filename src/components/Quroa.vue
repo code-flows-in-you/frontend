@@ -3,23 +3,23 @@
   <el-row :gutter="20">
     <el-col :offset="4" :span="13">
       <el-card class="text item">
-        <div v-for="o in 4" :key="o">
+        <div v-for="item in questionsList" :key="item._id">
           <el-row>
             <el-col :span="22">
-              <div class="question-title" @click="queryDetail( item._id )">标题</div>
+              <div class="question-title" @click="queryDetail( item.aid )">{{ item.title }}</div>
             </el-col>
             <el-col :span="1">
               <i class="el-icon-coin"></i>
             </el-col>
-            <el-col :span="1">1</el-col>
+            <el-col :span="1">{{ item.coin }}</el-col>
           </el-row>
           <div class="question-info">
-            <span class="question-info">发表于：2019年 5 月 31</span>
+            <span class="question-info">{{ item.createTime.substr(0, 10) }}</span>
             <span>   5人已回答</span>
             <span>   已采纳</span>
           </div>
-          <div class="question-content">content</div>
-          <el-button type="text" mini @click="quroaDetail( o )">更多</el-button>
+          <div class="question-content">{{ item.description }}</div>
+          <el-button type="text" mini @click="quroaDetail( item.aid )">更多</el-button>
           <el-divider></el-divider>
         </div>
       </el-card>
@@ -114,8 +114,18 @@ export default {
       payForm: {
         money: '',
         password: ''
-      }
+      },
+      questionsList: []
     }
+  },
+  mounted: function () {
+    this.$http.get('/api/assignment/qa').then(
+      response => {
+        this.questionsList = response.data.assignments
+        console.log(response.data.assignments)
+      },
+      response => console.log(response)
+    )
   },
   methods: {
 
