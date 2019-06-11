@@ -73,35 +73,29 @@ export default {
   },
   methods: {
     Signin: function () {
-      let server_domain = 'http://118.89.65.154:8765'
-      //let server_domain = 'http://172.18.32.97:8000'
       this.$http.post('/api/account/session',
-        this.$qs.stringify({
-            email : this.userForm.email,
-            password : this.userForm.password,
-        })
-      )
-      .then(response =>
-      {
+          this.$qs.stringify({
+            email: this.userForm.email,
+            password: this.userForm.password,
+          })
+        )
+        .then(response => {
           console.log(response)
-
           this.$message({
             message: '登录成功',
             type: 'success'
           })
-
-          //this.$router.push('/')
-      })
-      .catch(e  =>
-      {
-        console.log(e.response)
-         this.$message.error('用户名或密码不正确')
-      })
+          this.$router.push('/')
+        })
+        .catch(e => {
+          console.log(e.response)
+          this.$message.error('用户名或密码不正确')
+        })
     },
     goToSignup: function () {
       this.$router.push('/signup')
     },
-    forgetPassword:function () {
+    forgetPassword: function () {
 
     }
   }

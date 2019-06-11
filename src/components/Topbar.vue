@@ -1,5 +1,5 @@
 <template>
-<div >
+<div>
   <el-row :gutter="20" style="height:50px;">
     <el-col :span="2" :offset="5">
       <img src="../assets/logo.png" height="50px"/>
@@ -15,22 +15,22 @@
       <el-button type="text">问答</el-button>
     </el-col> -->
       <el-col :span="4">
-        <el-menu :default-active="$route.path" router mode="horizontal"  @select="handleSelect">
-             <el-menu-item index="/">全部</el-menu-item>
+        <el-menu :default-active="$route.path" router mode="horizontal" @select="handleSelect">
+          <el-menu-item index="/">全部</el-menu-item>
           <el-menu-item index="/quroa">问答</el-menu-item>
           <el-menu-item index="/survey">问卷</el-menu-item>
         </el-menu>
       </el-col>
       <el-col :span="3">
         <!-- <img src="../assets/avatar.png" /> -->
-        <el-popover  placement="top-start" width="40" trigger="hover">
+        <el-popover placement="top-start" width="40" trigger="hover">
           <el-row>
             <el-button type="text" icon="el-icon-user" @click="goToProfile">个人主页</el-button>
           </el-row>
           <el-row>
             <el-button type="text" icon="el-icon-switch-button" @click="logout">退出</el-button>
           </el-row>
-          <el-button  style="margin-top:10px;"  slot="reference">avatar</el-button>
+          <el-button style="margin-top:10px;" slot="reference">avatar</el-button>
         </el-popover>
       </el-col>
   </el-row>
@@ -67,10 +67,17 @@ export default {
   mounted: function () {},
   methods: {
     logout: function () {
-      this.$message({
-        message: '注销成功',
-        type: 'success'
-      })
+      this.$http.delete('/api/account/session').then(
+        response => {
+          console.log(response)
+          this.$message({
+            message: '注销成功',
+            type: 'success'
+          }).catch(e => {
+            console.log(e)
+          })
+        },error=>console.log(error.response)
+      )
     },
     search() {},
     handleSelect() {},
