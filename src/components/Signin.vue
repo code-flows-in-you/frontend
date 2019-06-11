@@ -75,7 +75,7 @@ export default {
     Signin: function () {
       let server_domain = 'http://118.89.65.154:8765'
       //let server_domain = 'http://172.18.32.97:8000'
-      this.$http.post(server_domain + '/account/session',
+      this.$http.post('/api/account/session',
         this.$qs.stringify({
             email : this.userForm.email,
             password : this.userForm.password,
@@ -95,9 +95,8 @@ export default {
       .catch(e  =>
       {
         console.log(e.response)
+         this.$message.error('用户名或密码不正确')
       })
-
-
     },
     goToSignup: function () {
       this.$router.push('/signup')
@@ -110,16 +109,5 @@ export default {
 </script>
 
 <style scoped>
-.wrapper {
-  left: 106px;
-  top: 202px;
-  width: 555px;
-  height: 665px;
-  line-height: 20px;
-  opacity: 0.48;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0px 0px 0px 0px rgba(170, 170, 170, 1);
-  border: 1px solid rgba(187, 187, 187, 1);
-}
+
 </style>

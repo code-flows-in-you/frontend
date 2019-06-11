@@ -123,7 +123,7 @@ export default {
       //请求后台
       let server_domain = 'http://118.89.65.154:8765'
       //let server_domain = 'http://172.18.32.97:8000'
-      this.$http.post(server_domain + '/account/',
+      this.$http.post('/api/account/',
         this.$qs.stringify({
           // "body":
           // {
