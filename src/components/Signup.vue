@@ -110,51 +110,37 @@ export default {
 
   },
   methods: {
-    Signup: function () {
+    Signup: function ()
+    {
       //检测确认密码是否一致
       if (this.userForm.password != this.userForm.confirmPassword)
       {
-        this.$message({
-          message: '密码不一致',
-          type: 'error'
-        })
+        this.$message.error('密码不一致')
         return
       }
-      //请求后台
-      let server_domain = 'http://118.89.65.154:8765'
-      //let server_domain = 'http://172.18.32.97:8000'
-      this.$http.post('/api/account/',
-        this.$qs.stringify({
-          // "body":
-          // {
-            email : this.userForm.email,
-            password : this.userForm.password,
-            gender : "male",
-            nickname : this.userForm.username
-          // }
 
-        })
-      )
+      let user = {
+        email : this.userForm.email,
+        password : this.userForm.password,
+        gender : "male",
+        nickname : this.userForm.username
+        }
+
+      //请求后台
+      this.$http.post('/api/account/', user)
       .then(response =>
       {
-          console.log(response)
-
-          this.$message({
-            message: '注册成功',
-            type: 'success'
-          })
-
-          //this.$router.push('/')
+        console.log(response)
+        this.$message.success('注册成功')
+        this.$router.push('/signin')
       })
-      .catch(e  =>
+      .catch(e =>
       {
         console.log(e.response)
       })
-
-
-      //清空表单？
     },
-    goToSignin: function () {
+    goToSignin: function ()
+    {
       this.$router.push('/signin')
     }
   }

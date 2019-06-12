@@ -72,31 +72,33 @@ export default {
 
   },
   methods: {
-    Signin: function () {
-      this.$http.post('/api/account/session',
-          this.$qs.stringify({
-            email: this.userForm.email,
-            password: this.userForm.password,
-          })
-        )
-        .then(response => {
-          console.log(response)
-          this.$message({
-            message: '登录成功',
-            type: 'success'
-          })
-          this.$router.push('/')
-        })
-        .catch(e => {
-          console.log(e.response)
-          this.$message.error('用户名或密码不正确')
-        })
+    Signin: function ()
+    {
+      let user = {
+        email: this.userForm.email,
+        password: this.userForm.password,
+        }
+
+      this.$store.dispatch('signin', user)
+      .then(response =>
+      {
+        console.log(response)
+        this.$message.success('登录成功')
+        this.$router.push('/')
+      })
+      .catch(e =>
+      {
+        console.log(e.response)
+        this.$message.error('用户名或密码不正确')
+      })
     },
-    goToSignup: function () {
+    goToSignup: function ()
+    {
       this.$router.push('/signup')
     },
-    forgetPassword: function () {
-
+    forgetPassword: function ()
+    {
+      //to do
     }
   }
 }

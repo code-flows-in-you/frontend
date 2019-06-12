@@ -13,8 +13,22 @@
 export default {
   name: 'app',
   methods: {
-    
+
   },
+  created: function ()
+  {
+    //持久化登录
+    this.$store.dispatch('getUserInfo')
+    .then(response =>
+    {
+      console.log(response)
+    })
+    .catch(e =>
+    {
+      //session expired
+      console.log(e.response)
+    })
+  }
 }
 </script>
 

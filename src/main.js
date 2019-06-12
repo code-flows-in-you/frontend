@@ -5,7 +5,9 @@ import router from './router'
 import VueRouter from 'vue-router'
 import Element from 'element-ui'
 import VueCookies from 'vue-cookies'
+import store from './store'
 import 'element-ui/lib/theme-chalk/index.css'
+
 // import VueResource from 'vue-resource'
 import axios from 'axios'
 import qs from 'qs'
@@ -15,13 +17,10 @@ Vue.use(Vuex)
 Vue.use(Element)
 Vue.use(VueCookies)
 
-axios.defaults.withCredentials = true
 Vue.prototype.$http = axios;
-
 Vue.prototype.$qs = qs;
-Vue.prototype.$cookie = VueCookies;
 
-const store = new Vuex.Store({
+/*const store = new Vuex.Store({
   state: {
     isLogin: false,
   },
@@ -42,7 +41,7 @@ const store = new Vuex.Store({
       window.localStorage.setItem('login', false);
     }
   }
-})
+})*/
 
 
 

@@ -28,7 +28,7 @@
           <el-button type="text" icon="el-icon-user" @click="goToProfile">个人主页</el-button>
         </el-row>
         <el-row>
-          <el-button type="text" icon="el-icon-switch-button" @click="logout">退出</el-button>
+          <el-button type="text" icon="el-icon-switch-button" @click="signout">退出</el-button>
         </el-row>
         <el-button style="margin-top:10px;" slot="reference" icon="el-icon-user-solid" circle></el-button>
       </el-popover>
@@ -66,18 +66,18 @@ export default {
   },
   mounted: function () {},
   methods: {
-    logout: function () {
-      this.$http.delete('/api/account/session').then(
-        response => {
-          console.log(response)
-          this.$message({
-            message: '注销成功',
-            type: 'success'
-          }).catch(e => {
-            console.log(e)
-          })
-        },error=>console.log(error.response)
-      )
+    signout: function ()
+    {
+      this.$store.dispatch('signout')
+      .then( response =>
+      {
+        console.log(response)
+        this.$message.success('注销成功')
+      })
+      .catch(e =>
+      {
+        console.log(e.response)
+      })
     },
     search() {},
     handleSelect() {},
