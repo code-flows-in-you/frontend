@@ -3,23 +3,22 @@
   <el-row :gutter="20">
     <el-col :offset="4" :span="13">
       <el-card class="text item">
-        <div v-for="o in 4" :key="o">
+        <div v-for="item in questionnairesList" :key="item._id">
           <el-row>
             <el-col :span="22">
-              <div class="survey-title" @click="queryDetail( item._id )">标题</div>
+              <div class="survey-title" @click="queryDetail( item.aid )">{{ item.title }}</div>
             </el-col>
             <el-col :span="1">
-              <i class="el-icon-coin"></i>
-
+              <img src="../assets/coin.png" width="20"/>
             </el-col>
-            <el-col :span="1">1</el-col>
+            <el-col :span="1">{{ item.unit }}</el-col>
           </el-row>
           <div class="survey-info">
-            <span class="survey-info">2019-4-11</span>
+            <span class="survey-info">{{ item.startTime.substr(0, 10) }}</span>
             <span>   共5题</span>
             <span>   5份/10份</span>
           </div>
-          <div class="survey-content">content</div>
+          <div class="survey-content">{{ item.description }}</div>
           <el-divider></el-divider>
         </div>
       </el-card>
@@ -75,6 +74,21 @@
 
 <script>
 export default {
+  data() {
+    return {
+      
+      questionnairesList: []
+    }
+  },
+  mounted: function () {
+    this.$http.get('/api/assignment/questionnaire').then(
+      response => {
+        this.questionnairesList = response.data.assignments
+        console.log(response.data.assignments)
+      },
+      response => console.log(response)
+    )
+  },
   methods: {
 
     //发起问卷

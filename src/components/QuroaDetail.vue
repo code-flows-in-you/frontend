@@ -17,7 +17,7 @@
     </el-col>
         <el-col :span="3">
           <el-row>
-            username
+            {{ this.$store.state.user.Nickname }}
           </el-row>
           <el-row>
             2019-04-21

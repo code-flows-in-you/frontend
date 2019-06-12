@@ -6,7 +6,7 @@
         <img src="../assets/avatar.png" height="50px"/>
       </el-col>
         <el-col :span="20">
-          <div style="font-size:28px;">username</div>
+          <div style="font-size:28px;">{{ this.$store.state.user.Nickname }}</div>
           <el-row>
             <el-col :span="6">
               <div>0</div>
@@ -61,8 +61,8 @@
     <el-col :span="6">
       <el-card class="user-info">
         <div>user info</div>
-        <div>姓名：李小涛</div>
-        <div>学号：1234567</div>
+        <div>姓名：{{ this.$store.state.user.RealName }}</div>
+        <div>学号：{{ this.$store.state.user.StudentID }}</div>
         <div>年龄：20</div>
         <div></div>
         <div></div>

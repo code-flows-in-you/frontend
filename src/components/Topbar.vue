@@ -30,7 +30,7 @@
         <el-row>
           <el-button type="text" icon="el-icon-switch-button" @click="signout">退出</el-button>
         </el-row>
-        <el-button style="margin-top:10px;" slot="reference" icon="el-icon-user-solid" circle></el-button>
+        <el-button style="margin-top:10px;" slot="reference" icon="el-icon-user-solid" @click="goToProfile" circle></el-button>
       </el-popover>
     </el-col>
   </el-row>

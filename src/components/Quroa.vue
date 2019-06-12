@@ -9,14 +9,14 @@
               <div class="question-title" @click="queryDetail( item.aid )">{{ item.title }}</div>
             </el-col>
             <el-col :span="1">
-              <i class="el-icon-coin"></i>
+              <img src="../assets/coin.png" width="20"/>
             </el-col>
             <el-col :span="1">{{ item.coin }}</el-col>
           </el-row>
           <div class="question-info">
             <span class="question-info">{{ item.createTime.substr(0, 10) }}</span>
-            <span>   5人已回答</span>
-            <span>   已采纳</span>
+            <span>   {{ item.answerCount }}人已回答</span>
+            <span v-if="item.bestCount === 1">   已采纳</span>
           </div>
           <div class="question-content">{{ item.description }}</div>
           <el-button type="text" mini @click="quroaDetail( item.aid )">更多</el-button>
