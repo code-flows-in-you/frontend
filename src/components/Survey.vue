@@ -24,47 +24,39 @@
       </el-card>
 
     </el-col>
-    <el-col :span="3">
+    <el-col :span="4">
       <el-card>
-        <el-row>
-          <el-col :span="8">
-            <img src="../assets/avatar.png" />
-          </el-col>
-            <el-col :span="16">
-              username
-            </el-col>
+        <el-row type="flex" justify="center">
+          <img src="../assets/avatar.png" style="width:80px; height:80px"/>
         </el-row>
-      </el-card>
-      <el-card>
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <div class="sidebar-num">0</div>
-          </el-col>
-          <el-col :span="8">
-            <div class="sidebar-num">0</div>
-          </el-col>
-          <el-col :span="8">
-            <div class="sidebar-num">0</div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <div class="sidebar-item-text">回答</div>
-          </el-col>
-          <el-col :span="8">
-            <div class="sidebar-item-text">被采纳</div>
-          </el-col>
-          <el-col :span="8">
-            <div class="sidebar-item-text">已求助</div>
-          </el-col>
+        <el-row type="flex" justify="center" style="font-size:20px; font-weight:bold">
+          {{ this.$store.state.user.Nickname }}
         </el-row>
       </el-card>
       <el-card>
         <el-row>
-          <el-button type="text" @click="raisesurvey" icon="el-icon-edit-outline">发起提问</el-button>
+          <div>
+            <img src="../assets/help.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
+            <el-link @click="newQuestion=true" :underline="false" style="font-size:17px">发起求助</el-link>
+          </div>
         </el-row>
         <el-row>
-          <el-button type="text" icon="el-icon-coin">我的余额</el-button>
+          <div>
+            <img src="../assets/问卷库.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
+            <el-link  :underline="false" style="font-size:17px">我的问卷</el-link>
+          </div>
+        </el-row>
+        <el-row>
+          <div>
+            <img src="../assets/icon_提问.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
+            <el-link  :underline="false" style="font-size:17px">我的提问</el-link>
+          </div>
+        </el-row>
+        <el-row>
+          <div>
+            <img src="../assets/余额.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
+            <el-link  :underline="false" style="font-size:17px">我的余额</el-link>
+          </div>
         </el-row>
       </el-card>
     </el-col>

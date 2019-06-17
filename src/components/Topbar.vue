@@ -34,23 +34,9 @@
       </el-popover>
     </el-col>
   </el-row>
-  <el-row :gutter="20" style="margin-bottom:50px;">
+  <el-row :gutter="20" style="margin-bottom:50px; margin-top:20px">
     <el-col :span="19" :offset="3">
-      <el-menu :default-active="$route.path" router mode="horizontal" @select="handleSelect">
-        <el-menu-item index="/quroa/technology">科技</el-menu-item>
-        <el-menu-item index="/quroa/entertainment">娱乐</el-menu-item>
-        <el-menu-item index="/quroa/cate">美食</el-menu-item>
-        <el-menu-item index="/quroa/history">历史</el-menu-item>
-        <el-menu-item index="/quroa/fashion">时尚</el-menu-item>
-        <el-menu-item index="/quroa/sports">体育</el-menu-item>
-        <el-menu-item index="/quroa/society">社会</el-menu-item>
-        <el-submenu index="6">
-          <template slot="title">更多</template>
-          <el-menu-item index="6-1">选项1</el-menu-item>
-          <el-menu-item index="6-2">选项2</el-menu-item>
-          <el-menu-item index="6-3">选项3</el-menu-item>
-        </el-submenu>
-      </el-menu>
+      <hr size=15 color="#99CCFF" style="box-shadow:0px 5px 6px 0px rgba(170, 170, 170, 1);opacity:0.67">
     </el-col>
   </el-row>
 </div>
