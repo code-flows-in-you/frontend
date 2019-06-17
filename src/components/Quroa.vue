@@ -44,19 +44,19 @@
         <el-row>
           <div>
             <img src="../assets/问卷库.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
-            <el-link  :underline="false" style="font-size:17px">我的问卷</el-link>
+            <el-link @click="goToProfile('survey')" :underline="false" style="font-size:17px">我的问卷</el-link>
           </div>
         </el-row>
         <el-row>
           <div>
             <img src="../assets/icon_提问.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
-            <el-link  :underline="false" style="font-size:17px">我的提问</el-link>
+            <el-link @click="goToProfile('question')" :underline="false" style="font-size:17px">我的提问</el-link>
           </div>
         </el-row>
         <el-row>
           <div>
             <img src="../assets/余额.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
-            <el-link  :underline="false" style="font-size:17px">我的余额</el-link>
+            <el-link @click="goToProfile('balance')" :underline="false" style="font-size:17px">我的余额</el-link>
           </div>
         </el-row>
       </el-card>
@@ -127,6 +127,9 @@ export default {
     },
     quroaDetail: function (id) {
       this.$router.push('/quroaDetail/' + id)
+    },
+    goToProfile: function (child) {
+      this.$router.push('/profile/' + child)
     }
   }
 }

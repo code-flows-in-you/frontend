@@ -15,8 +15,7 @@
           </el-row>
           <div class="survey-info">
             <span class="survey-info">{{ item.startTime.substr(0, 10) }}</span>
-            <span>   共5题</span>
-            <span>   5份/10份</span>
+            <span>   {{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
           </div>
           <div class="survey-content">{{ item.description }}</div>
           <el-divider></el-divider>
@@ -43,19 +42,19 @@
         <el-row>
           <div>
             <img src="../assets/问卷库.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
-            <el-link  :underline="false" style="font-size:17px">我的问卷</el-link>
+            <el-link @click="goToProfile('survey')" :underline="false" style="font-size:17px">我的问卷</el-link>
           </div>
         </el-row>
         <el-row>
           <div>
             <img src="../assets/icon_提问.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
-            <el-link  :underline="false" style="font-size:17px">我的提问</el-link>
+            <el-link @click="goToProfile('question')" :underline="false" style="font-size:17px">我的提问</el-link>
           </div>
         </el-row>
         <el-row>
           <div>
             <img src="../assets/余额.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
-            <el-link  :underline="false" style="font-size:17px">我的余额</el-link>
+            <el-link @click="goToProfile('balance')" :underline="false" style="font-size:17px">我的余额</el-link>
           </div>
         </el-row>
       </el-card>
@@ -86,6 +85,9 @@ export default {
     //发起问卷
     raiseSurvey: function () {
 
+    },
+    goToProfile: function (child) {
+      this.$router.push('/profile/' + child)
     }
   }
 }

@@ -69,7 +69,7 @@ export default {
     handleSelect() {},
     //跳转到个人主页
     goToProfile: function () {
-      this.$router.push('/profile')
+      this.$router.push('/profile/all')
     }
   },
 }
