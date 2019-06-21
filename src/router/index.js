@@ -8,6 +8,8 @@ import quroa from '../components/Quroa.vue'
 import quroaDetail from '../components/QuroaDetail.vue'
 
 import survey from '../components/Survey.vue'
+import questionareDetail from '../components/QuestionareDetail.vue'
+
 //profile 的 子组件
 
 import allProfile from '../components/children/allProfile.vue'
@@ -49,11 +51,12 @@ export default new Router({
           component:balanceProfile
         }
       ]
-  
+
   },
     { path: '/quroa/:type?', components: { default: quroa, topbar: topbar } },
     { path: '/quroaDetail/:id', components: { default: quroaDetail, topbar: topbar } },
     { path: '/survey/:type?', components: { default: survey, topbar: topbar } },
+    { path: '/questionareDetail/:id', components: { default: questionareDetail, topbar: topbar } },
 
     { path: '*', redirect: '/' }
   ]
