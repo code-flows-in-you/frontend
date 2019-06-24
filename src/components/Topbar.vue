@@ -16,7 +16,7 @@
     </el-col> -->
     <el-col :span="4">
       <el-menu :default-active="$route.path" router mode="horizontal" @select="handleSelect">
-        <el-menu-item index="/">全部</el-menu-item>
+        <el-menu-item index="/all">全部</el-menu-item>
         <el-menu-item index="/quroa">问答</el-menu-item>
         <el-menu-item index="/survey">问卷</el-menu-item>
       </el-menu>
