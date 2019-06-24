@@ -90,7 +90,6 @@ export default {
       this.$router.push('/profile/' + child)
     },
     goToQuestionareDetail: function (aid){
-      console.error(aid)
       this.$router.push('/questionareDetail/' + aid)
     }
   }
