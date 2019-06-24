@@ -8,7 +8,7 @@
               <el-col :span="22">
                 <div
                   class="survey-title"
-                  @click="goToQuestionareDetail( item.aid )"
+                  @click="goToQuestionnaireDetail( item.aid )"
                 >{{ item.title }}</div>
               </el-col>
               <el-col :span="1">
@@ -18,7 +18,7 @@
             </el-row>
             <div class="survey-info">
               <span class="survey-info">{{ item.startTime.substr(0, 10) }}</span>
-              <span>{{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
+              <span>&nbsp;&nbsp;&nbsp;{{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
             </div>
             <div class="survey-content">{{ item.description }}</div>
             <el-divider></el-divider>
@@ -91,8 +91,7 @@
 export default {
   data() {
     return {
-      questionnairesList: [],
-      userInfo: {}
+      questionnairesList: []
     };
   },
   mounted: function() {
@@ -110,9 +109,8 @@ export default {
     goToProfile: function(child) {
       this.$router.push("/profile/" + child);
     },
-    goToQuestionareDetail: function(aid) {
-      console.error(aid);
-      this.$router.push("/questionareDetail/" + aid);
+    goToQuestionnaireDetail: function(aid) {
+      this.$router.push("/QuestionnaireDetail/" + aid);
     }
   }
 };
@@ -123,55 +121,39 @@ export default {
   color: #175199;
   cursor: pointer;
 }
-
 .el-row {
   margin-right: 0px;
 }
-
 .article-underline {
   height: 1px;
   width: 80px;
   background: #545455;
   margin: 80px auto 0;
 }
-
 .el-card {
   margin-bottom: 20px;
 }
-
 .sidebar-num {
   font-size: 48px;
 }
-
 .sidebar-item-text {
   color: rgba(102, 102, 102, 1);
   font-size: 22px;
   font-family: SourceHanSansSC-regular;
 }
-
 .survey-title {
   color: rgba(41, 64, 87, 1);
-  font-size: 28px;
+  font-size: 25px;
   font-family: Roboto;
 }
-
 .survey-info {
   color: rgba(204, 204, 204, 1);
+  font-size: 17px;
   font-family: Roboto;
 }
-
 .survey-content {
   color: rgba(16, 16, 16, 1);
-  font-size: 22px;
+  font-size: 19px;
   font-family: Roboto;
-}
-
-.vcard-username {
-  color: #666;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 24px;
-  margin: 10px;
 }
 </style>

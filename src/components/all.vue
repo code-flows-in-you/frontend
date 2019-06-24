@@ -3,22 +3,35 @@
   <el-row :gutter="20">
     <el-col :offset="4" :span="13">
       <el-card class="text item">
-        <div v-for="item in questionsList" :key="item._id">
-          <el-row>
+        <div v-for="item in tasksList" :key="item._id">
+          <el-row v-if="item.type == 'qa'">
             <el-col :span="22">
-              <div class="question-title" @click="quroaDetail( item.aid )">{{ item.title }}</div>
+              <div class="title" @click="quroaDetail( item.aid )">{{ item.title }}</div>
             </el-col>
             <el-col :span="1">
               <img src="../assets/coin.png" width="20"/>
             </el-col>
             <el-col :span="1">{{ item.coin }}</el-col>
           </el-row>
-          <div class="question-info">
-            <span class="question-info">{{ item.createTime.substr(0, 10) }}</span>
+          <el-row v-else-if="item.type == 'questionnaire'">
+            <el-col :span="22">
+              <div class="title" @click="goToQuestionareDetail( item.aid )">{{ item.title }}</div>
+            </el-col>
+            <el-col :span="1">
+              <img src="../assets/coin.png" width="20"/>
+            </el-col>
+            <el-col :span="1">{{ item.unit }}</el-col>
+          </el-row>
+          <div class="info" v-if="item.type == 'qa'">
+            <span class="info">{{ item.createTime.substr(0, 10) }}</span>
             <span>&nbsp;&nbsp;&nbsp; {{ item.answerCount }}人已回答</span>
             <span v-if="item.bestCount === 1">&nbsp;&nbsp;&nbsp;已采纳</span>
           </div>
-          <div class="question-content">{{ item.description }}</div>
+          <div class="info" v-else-if="item.type == 'questionnaire'">
+            <span class="info">{{ item.startTime.substr(0, 10) }}</span>
+            <span>&nbsp;&nbsp;&nbsp;{{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
+          </div>
+          <div class="content">{{ item.description }}</div>
           <el-divider></el-divider>
         </div>
       </el-card>
@@ -27,9 +40,9 @@
     <el-col :span="4">
       <el-card>
         <el-row type="flex" justify="center">
-           <el-image :src="this.$store.state.user.Avatar" style="width:200px; height:200px"></el-image>
+          <img src="../assets/avatar.png" style="width:80px; height:80px"/>
         </el-row>
-        <el-row type="flex" justify="center" class="vcard-username">
+        <el-row type="flex" justify="center" style="font-size:20px; font-weight:bold">
           {{ this.$store.state.user.Nickname }}
         </el-row>
       </el-card>
@@ -37,7 +50,7 @@
         <el-row>
           <div>
             <img src="../assets/help.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
-            <el-link @click="newQuestion=true" :underline="false" style="font-size:17px">发起求助</el-link>
+            <el-link @click="newTask=true" :underline="false" style="font-size:17px">发起求助</el-link>
           </div>
         </el-row>
         <el-row>
@@ -61,6 +74,15 @@
       </el-card>
     </el-col>
   </el-row>
+  <el-dialog :visible.sync="newTask" width="20%" center>
+    <el-row type="flex" justify="center" style="font-size:20px">
+			请选择求助类型
+		</el-row>
+		<span slot="footer" class="dialog-footer">
+			<el-button @click="newQuestion=true;newTask=false;" size="small" type="primary">发起提问</el-button>
+			<el-button @click="newTask=false;" size="small" type="primary">发起问卷</el-button>
+		</span>
+  </el-dialog>
   <el-dialog title="提问" :visible.sync="newQuestion" width="30%" :before-close="clearInput">
 
     <el-input placeholder="用一句话描述你的问题" v-model="newQuestionTitle" maxlength="20" show-word-limit style="margin-bottom:15px" clearable></el-input>
@@ -69,14 +91,6 @@
       <img v-if="imageUrl" :src="imageUrl" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
     </el-upload> -->
-    <el-date-picker
-      v-model="time"
-      type="datetimerange"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
-      style="width:100%; margin-bottom:15px">
-    </el-date-picker>
     <div style="text-align:right;">
       <img src="../assets/coin.png" width="20" style="vertical-align:middle;margin-right:10px"/>
       <el-input placeholder="输入悬赏金额" v-model="newQuestionBonus" clearable style="width:50%;"></el-input>
@@ -92,19 +106,19 @@
 export default {
   data() {
     return {
-      newQuestion: false,
+			newQuestion: false,
+			newTask: false,
       payforQuestion: false,
       newQuestionDescription: '',
-      newQuestionTitle: '',
-      newQuestionBonus: '',
-      time: [new Date, new Date],
-      questionsList: []
+			newQuestionTitle: '',
+			newQuestionBonus: '',
+      tasksList: []
     }
   },
   mounted: function () {
-    this.$http.get('/api/assignment/qa').then(
+    this.$http.get('http://118.89.65.154:8765/assignment').then(
       response => {
-        this.questionsList = response.data.assignments
+        this.tasksList = response.data.assignments
         console.log(response.data.assignments)
       },
       response => console.log(response)
@@ -114,7 +128,7 @@ export default {
 
     //发起提问
     raiseQuestion: function () {
-      let content = {
+      content = {
         "title": this.newQuestionTitle, 
         "description": this.newQuestionDescription, 
         "coin": parseInt(this.newQuestionBonus),
@@ -136,11 +150,14 @@ export default {
     goToProfile: function (child) {
       this.$router.push('/profile/' + child)
     },
-    clearInput: function (done) {
+    goToQuestionareDetail: function (aid){
+      console.error(aid)
+      this.$router.push('/questionareDetail/' + aid)
+		},
+		clearInput: function (done) {
       this.newQuestionDescription = ''
       this.newQuestionTitle = ''
       this.newQuestionBonus = ''
-      this.time = [new Date, new Date]
       done()
     }
   }
@@ -148,7 +165,7 @@ export default {
 </script>
 
 <style>
-.question-title:hover
+.title:hover
 {
   color: #175199;
   cursor: pointer;
@@ -181,30 +198,21 @@ export default {
   font-family: SourceHanSansSC-regular;
 }
 
-.question-title {
+.title {
   color: rgba(41, 64, 87, 1);
   font-size: 25px;
   font-family: Roboto;
 }
 
-.question-info {
+.info {
   color: rgba(204, 204, 204, 1);
   font-family: Roboto;
   font-size: 17px;
 }
 
-.question-content {
+.content {
   color: rgba(16, 16, 16, 1);
   font-size: 19px;
   font-family: Roboto;
-}
-
-.vcard-username {
-    color: #666;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 24px;
-    margin: 10px;
 }
 </style>

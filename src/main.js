@@ -14,7 +14,6 @@ import VueCropper from 'vue-cropper'
 
 // import VueResource from 'vue-resource'
 import axios from 'axios'
-import qs from 'qs'
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.use(Vuex)
@@ -24,33 +23,17 @@ Vue.use(VueCropper) //图片裁剪
 
 
 Vue.prototype.$http = axios;
-Vue.prototype.$qs = qs;
-
-/*const store = new Vuex.Store({
-  state: {
-    isLogin: false,
-  },
-  getters: {
-    //获取登录状态
-    isLogin: state => state.isLogin,
-  },
-
-  // 设置属性状态
-  mutations: {
-    //保存登录状态
-    login(state) {
-      state.isLogin = true
-      window.localStorage.setItem('login', true);
-    },
-    logout(state) {
-      state.isLogin = false;
-      window.localStorage.setItem('login', false);
-    }
-  }
-})*/
-
-
-
+Vue.prototype.$dateFormatter = function (date)
+{
+    let year = date.getFullYear()
+    let month = date.getMonth() + 1
+    let day = date.getDate()
+    let hour = date.getHours()
+    let min = date.getMinutes()
+    let second = date.getSeconds()
+    return year + "-" + month + "-" + day + " " +
+           hour + ":" + min + ":" + second
+};
 
 new Vue({
   data: {},
