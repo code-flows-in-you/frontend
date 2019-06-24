@@ -16,3 +16,8 @@ this.$store.getters.isSignedIn
 this.$store.state.user
 ```
 
+## 时间格式化
+```javascript
+this.$dateFormatter(new Date) //Date to String
+Date.parse(dateString)        //String to Date
+```
