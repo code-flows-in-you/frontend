@@ -96,7 +96,7 @@
       <el-input placeholder="输入悬赏金额" v-model="newQuestionBonus" clearable style="width:50%;"></el-input>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="newQuestion=false;" size="small" type="primary">发布问题</el-button>
+      <el-button @click="raiseQuestion();newQuestion=false;" size="small" type="primary">发布问题</el-button>
     </span>
   </el-dialog>
 </div>
@@ -133,8 +133,8 @@ export default {
         "description": this.newQuestionDescription, 
         "coin": parseInt(this.newQuestionBonus),
         "createTime": this.$dateFormatter(new Date),
-        "startTime": this.$dateFormatter(time[0]),
-        "endTime": this.$dateFormatter(time[1]),
+        "startTime": this.$dateFormatter(this.time[0]),
+        "endTime": this.$dateFormatter(this.time[1]),
         "detail": ""}
       this.$http.post('/api/qa/', content).then(
         response => {

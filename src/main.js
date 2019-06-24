@@ -20,7 +20,7 @@ Vue.prototype.$http = axios;
 Vue.prototype.$dateFormatter = function (date)
 {
     let year = date.getFullYear()
-    let month = date.getMonth()
+    let month = date.getMonth() + 1
     let day = date.getDate()
     let hour = date.getHours()
     let min = date.getMinutes()
