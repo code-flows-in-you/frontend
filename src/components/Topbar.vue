@@ -2,7 +2,9 @@
   <div>
     <el-row :gutter="20" style="height:50px;">
       <el-col :span="2" :offset="5">
-        <img src="../assets/logo.png" height="50px">
+        <!-- <img src="../assets/logo.png" height="50px">
+         -->
+          <el-link href="./" :underline="false" ><img src="../assets/logo.png" height="50px"></el-link>
       </el-col>
       <el-col :span="4" :offset="5">
         <el-select
