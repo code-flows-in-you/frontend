@@ -8,7 +8,7 @@ import quroa from '../components/Quroa.vue'
 import quroaDetail from '../components/QuroaDetail.vue'
 
 import survey from '../components/Survey.vue'
-import questionareDetail from '../components/QuestionareDetail.vue'
+import questionnaireDetail from '../components/QuestionnaireDetail.vue'
 
 import all from '../components/all.vue'
 //profile 的 子组件
@@ -57,7 +57,7 @@ export default new Router({
     { path: '/quroa/:type?', components: { default: quroa, topbar: topbar } },
     { path: '/quroaDetail/:id', components: { default: quroaDetail, topbar: topbar } },
     { path: '/survey/:type?', components: { default: survey, topbar: topbar } },
-    { path: '/questionareDetail/:id', components: { default: questionareDetail, topbar: topbar } },
+    { path: '/questionnaireDetail/:id', components: { default: questionnaireDetail, topbar: topbar } },
     { path: '/all', components: { default: all, topbar: topbar } },
     { path: '*', redirect: '/' }
   ]

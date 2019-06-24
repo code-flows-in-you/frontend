@@ -6,7 +6,7 @@
         <div v-for="item in questionnairesList" :key="item._id">
           <el-row>
             <el-col :span="22">
-              <div class="survey-title" @click="goToQuestionareDetail( item.aid )">{{ item.title }}</div>
+              <div class="survey-title" @click="goToQuestionnaireDetail( item.aid )">{{ item.title }}</div>
             </el-col>
             <el-col :span="1">
               <img src="../assets/coin.png" width="20"/>
@@ -89,8 +89,8 @@ export default {
     goToProfile: function (child) {
       this.$router.push('/profile/' + child)
     },
-    goToQuestionareDetail: function (aid){
-      this.$router.push('/questionareDetail/' + aid)
+    goToQuestionnaireDetail: function (aid){
+      this.$router.push('/QuestionnaireDetail/' + aid)
     }
   }
 

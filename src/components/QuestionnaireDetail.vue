@@ -2,93 +2,89 @@
 <div class="card" style="width:70%;margin:auto;">
   <el-card style="margin-top:10px;">
     <el-row>
-      <el-col :span="22">
-        <div class="questionare-title">{{ questionare.title }}</div>
-        <div class="questionare-description">{{ questionare.description }}</div>
+      <el-col :span="22" :offset="1">
+        <div class="questionnaire-title">{{ questionnaire.title }}</div>
+        <div class="questionnaire-description">{{ questionnaire.description }}</div>
       </el-col>
-      <el-col :span="1">
+      <el-col class="money" :span="1">
         <img src="../assets/coin.png" width="20"/>
+        {{ questionnaire.unit }}
       </el-col>
-      <el-col class="money" :span="1">{{ questionare.unit }}/{{ questionare.coin }}</el-col>
-
     </el-row>
-
     <el-divider></el-divider>
-    <!-- body of the questionare -->
+    <!-- body of the questionnaire -->
 
-    <el-form :model="fakeModel" ref = "questionareForm" :rules = "rules"@submit.native.prevent>
-      <div v-for = "question in questions" :key="question.qid">
-        <div v-if = "question.type === 'input'">
-          <el-form-item class = "questionare-form-item" v-bind:label = "question.title" prop = "ques">
-            <el-input class = "input-area" v-model = "answers[question.qid]"></el-input>
-          </el-form-item>
-        </div>
-        <div v-else-if = "question.type === 'single'">
-          <el-form-item class="questionare-form-item" v-bind:label="question.title" prop="ques">
-            <el-radio-group class="question-option-group"  v-model="answers[question.qid]">
-              <el-radio class="question-option-item" v-for="option in options[question.qid]" :key="option.oid" v-bind:label="option.oid">{{option.value}}</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </div>
-          <div v-else-if = "question.type === 'multi'">
-            <el-form-item class="questionare-form-item" v-bind:label="question.title" prop="ques">
-              <el-checkbox-group class="question-option-group" v-model="answers[question.qid]">
-                <el-checkbox class="question-option-item" v-for="option in options[question.qid]" :key="option.oid" v-bind:label="option.oid">{{option.value}}</el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-          </div>
-          <el-divider></el-divider>
-      </div>
+    <el-form v-if="isValid" @submit.native.prevent>
+      <el-form-item v-for="question in questions" :key="question.qid"
+       class="questionnaire-form-item" :label="question.title">
+        <el-input v-if="question.type === 'input'"
+         class="input-area" v-model="answers[question.qid]"></el-input>
+        <el-radio-group v-else-if="question.type === 'single'"
+         class="question-option-group"  v-model="answers[question.qid]">
+          <el-radio v-for="option in options[question.qid]" :key="option.oid"
+          class="question-option-item" :label="option.oid">{{option.value}}</el-radio>
+        </el-radio-group>
+        <el-checkbox-group v-else-if="question.type === 'multi'"
+         class="question-option-group" v-model="answers[question.qid]">
+          <el-checkbox v-for="option in options[question.qid]" :key="option.oid"
+          class="question-option-item" :label="option.oid">{{option.value}}</el-checkbox>
+        </el-checkbox-group>
+        <el-divider></el-divider>
+      </el-form-item>
+
       <el-row type="flex" justify="center">
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit('questionareForm')">提交问卷</el-button>
-        </el-form-item>
+          <el-button type="primary" @click="onSubmit">提交问卷</el-button>
       </el-row>
-    </el-form>
 
+    </el-form>
+    <el-row v-else class="error-msg" type="flex" justify="center">
+      {{ errorMsg }}
+    </el-row>
   </el-card>
 </div>
 </template>
 
 <script>
 export default {
-  name: 'questionareDetail',
+  name: 'questionnaireDetail',
   data() {
     return {
       aid: null,
-      questionare: {},
+      isValid: true,
+      errorMsg: "问卷已结束",
+      questionnaire: {},
       questions: [],
       questionTypes: {},
       answers: {},
       options: {},
-      rules:
-      {
-        ques: [{
-                required: true,
-                message: '请完成该问题',
-                trigger: 'blur'
-              }]
-      },
-      fakeModel : {}
     }
   },
   mounted() {
+
     this.aid = this.$route.params.id
     this.$http.get('/api/questionnaire/' + this.aid)
     .then(response =>
     {
 
-      this.questionare = response.data
-      this.questions = this.questionare.questions
+      this.questionnaire = response.data
+      console.log(this.questionnaire)
+
+      this.isValid = this.questionnaireValidation()
+
+      if (!this.isValid)
+        return
+
+      this.questions = this.questionnaire.questions
 
       let questionIndex = 1;
-      // get questions' type
+
+      // get questions' types
+      // make questions' indexex
       for (let question of this.questions)
       {
         this.questionTypes[question.qid] = question.type
         question.title = String(questionIndex++) + ". " + question.title
       }
-      console.log(this.questions)
 
       // make options' array
       for (let option of response.data.options)
@@ -109,21 +105,15 @@ export default {
     })
     .catch(e =>
     {
+      console.log(e)
       console.log(e.response)
     })
 
   },
   methods:
   {
-    onSubmit: function(questionareForm)
+    onSubmit: function()
     {
-      let isValid = false;
-      this.$refs[questionareForm].validate((valid) => {
-        isValid = valid;
-      })
-
-      if (!isValid)
-        return
 
       let submitContent = this.getSubmitData()
       console.log(submitContent)
@@ -138,6 +128,8 @@ export default {
         console.log(e.response.data.msg)
         if (e.response.data.msg === "already answer")
           this.$message.error('您已填写过该问卷')
+        else
+          this.$message.error('问卷已达到最大填写份数')
       })
     },
     getSubmitData: function()
@@ -145,8 +137,9 @@ export default {
       let submitContent = {}
       submitContent["answers"] = []
       let submitAnswer = submitContent["answers"]
-      let submitTime = new Date(Date.now()).toLocaleString('en-US', { hour12: false })
 
+      let submitTime = this.$dateFormatter(new Date)
+      console.log(submitTime)
       let uid = this.$store.state.user.Uid
 
 
@@ -189,6 +182,26 @@ export default {
       }
 
       return submitContent
+    },
+    questionnaireValidation: function()
+    {
+      console.log
+      let endTime = Date.parse(this.questionnaire.endTime)
+      let now = Date.now()
+      if (endTime < now)
+      {
+        this.errorMsg = "问卷已结束"
+        return false
+      }
+
+      if (this.questionnaire.coin <= 0)
+      {
+        this.errorMsg = "问卷已达到最大填写份数"
+        return false
+      }
+
+      return true
+
     }
 
 
@@ -199,7 +212,7 @@ export default {
 
 <style scoped>
 
-.questionare-title
+.questionnaire-title
 {
   color: #333333;
   line-height: 52px;
@@ -208,7 +221,7 @@ export default {
   text-align: center;
 }
 
-.questionare-description
+.questionnaire-description
 {
   color: #666666;
   line-height: 38px;
@@ -223,17 +236,24 @@ export default {
   color: #FF4343;
 }
 
+.error-msg
+{
+  color: #FF4343;
+  font-size: 22px;
+  font-family: SourceHanSansSC-regular;
+}
+
 .el-form
 {
   margin: 0 auto;
 }
 
-.questionare-form-item
+.questionnaire-form-item
 {
   margin: 0 5%;
 }
 
-.questionare-form-item > :first-child, .questionare-form-item > :nth-child(2)
+.questionnaire-form-item > :first-child, .questionnaire-form-item > :nth-child(2)
 {
   font-size: 22px;
   font-family: SourceHanSansSC-regular;
