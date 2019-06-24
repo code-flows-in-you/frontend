@@ -28,9 +28,9 @@
     <el-col :span="4">
       <el-card>
         <el-row type="flex" justify="center">
-          <img src="../assets/avatar.png" style="width:80px; height:80px"/>
+           <el-image :src="this.$store.state.user.Avatar" style="width:200px; height:200px"></el-image>
         </el-row>
-        <el-row type="flex" justify="center" style="font-size:20px; font-weight:bold">
+        <el-row type="flex" justify="center" class="vcard-username">
           {{ this.$store.state.user.Nickname }}
         </el-row>
       </el-card>
@@ -178,5 +178,14 @@ export default {
   color: rgba(16, 16, 16, 1);
   font-size: 22px;
   font-family: Roboto;
+}
+
+.vcard-username {
+    color: #666;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 24px;
+    margin: 10px;
 }
 </style>

@@ -1,113 +1,131 @@
 <template>
-<div style="margin-top:10px">
-  <el-row :gutter="20">
-    <el-col :offset="4" :span="13">
-      <el-card class="text item">
-        <div v-for="item in questionnairesList" :key="item._id">
-          <el-row>
-            <el-col :span="22">
-              <div class="survey-title" @click="goToQuestionareDetail( item.aid )">{{ item.title }}</div>
-            </el-col>
-            <el-col :span="1">
-              <img src="../assets/coin.png" width="20"/>
-            </el-col>
-            <el-col :span="1">{{ item.unit }}</el-col>
+  <div style="margin-top:10px">
+    <el-row :gutter="20">
+      <el-col :offset="4" :span="13">
+        <el-card class="text item">
+          <div v-for="item in questionnairesList" :key="item._id">
+            <el-row>
+              <el-col :span="22">
+                <div
+                  class="survey-title"
+                  @click="goToQuestionareDetail( item.aid )"
+                >{{ item.title }}</div>
+              </el-col>
+              <el-col :span="1">
+                <img src="../assets/coin.png" width="20">
+              </el-col>
+              <el-col :span="1">{{ item.unit }}</el-col>
+            </el-row>
+            <div class="survey-info">
+              <span class="survey-info">{{ item.startTime.substr(0, 10) }}</span>
+              <span>{{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
+            </div>
+            <div class="survey-content">{{ item.description }}</div>
+            <el-divider></el-divider>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card>
+          <el-row type="flex" justify="center">
+            <el-image :src="this.$store.state.user.Avatar" style="width:200px; height:200px"></el-image>
           </el-row>
-          <div class="survey-info">
-            <span class="survey-info">{{ item.startTime.substr(0, 10) }}</span>
-            <span>   {{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
-          </div>
-          <div class="survey-content">{{ item.description }}</div>
-          <el-divider></el-divider>
-        </div>
-      </el-card>
-
-    </el-col>
-    <el-col :span="4">
-      <el-card>
-        <el-row type="flex" justify="center">
-          <img src="../assets/avatar.png" style="width:80px; height:80px"/>
-        </el-row>
-        <el-row type="flex" justify="center" style="font-size:20px; font-weight:bold">
-          {{ this.$store.state.user.Nickname }}
-        </el-row>
-      </el-card>
-      <el-card>
-        <el-row>
-          <div>
-            <img src="../assets/help.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
-            <el-link @click="newQuestion=true" :underline="false" style="font-size:17px">发起求助</el-link>
-          </div>
-        </el-row>
-        <el-row>
-          <div>
-            <img src="../assets/问卷库.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
-            <el-link @click="goToProfile('survey')" :underline="false" style="font-size:17px">我的问卷</el-link>
-          </div>
-        </el-row>
-        <el-row>
-          <div>
-            <img src="../assets/icon_提问.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
-            <el-link @click="goToProfile('question')" :underline="false" style="font-size:17px">我的提问</el-link>
-          </div>
-        </el-row>
-        <el-row>
-          <div>
-            <img src="../assets/余额.png" style="margin:10px; vertical-align:middle; width:26px; height:26px"/>
-            <el-link @click="goToProfile('balance')" :underline="false" style="font-size:17px">我的余额</el-link>
-          </div>
-        </el-row>
-      </el-card>
-    </el-col>
-  </el-row>
-</div>
+          <el-row
+            type="flex"
+            justify="center"
+            class="vcard-username"
+          >{{ this.$store.state.user.Nickname }}</el-row>
+        </el-card>
+        <el-card>
+          <el-row>
+            <div>
+              <img
+                src="../assets/help.png"
+                style="margin:10px; vertical-align:middle; width:26px; height:26px"
+              >
+              <el-link @click="newQuestion=true" :underline="false" style="font-size:17px">发起求助</el-link>
+            </div>
+          </el-row>
+          <el-row>
+            <div>
+              <img
+                src="../assets/问卷库.png"
+                style="margin:10px; vertical-align:middle; width:26px; height:26px"
+              >
+              <el-link @click="goToProfile('survey')" :underline="false" style="font-size:17px">我的问卷</el-link>
+            </div>
+          </el-row>
+          <el-row>
+            <div>
+              <img
+                src="../assets/icon_提问.png"
+                style="margin:10px; vertical-align:middle; width:26px; height:26px"
+              >
+              <el-link
+                @click="goToProfile('question')"
+                :underline="false"
+                style="font-size:17px"
+              >我的提问</el-link>
+            </div>
+          </el-row>
+          <el-row>
+            <div>
+              <img
+                src="../assets/余额.png"
+                style="margin:10px; vertical-align:middle; width:26px; height:26px"
+              >
+              <el-link
+                @click="goToProfile('balance')"
+                :underline="false"
+                style="font-size:17px"
+              >我的余额</el-link>
+            </div>
+          </el-row>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-
-      questionnairesList: []
-    }
+      questionnairesList: [],
+      userInfo: {}
+    };
   },
-  mounted: function () {
-    this.$http.get('/api/assignment/questionnaire').then(
+  mounted: function() {
+    this.$http.get("/api/assignment/questionnaire").then(
       response => {
-        this.questionnairesList = response.data.assignments
-        console.log(response.data.assignments)
+        this.questionnairesList = response.data.assignments;
+        console.log(response.data.assignments);
       },
       response => console.log(response)
-    )
+    );
   },
   methods: {
-
     //发起问卷
-    raiseSurvey: function () {
-
+    raiseSurvey: function() {},
+    goToProfile: function(child) {
+      this.$router.push("/profile/" + child);
     },
-    goToProfile: function (child) {
-      this.$router.push('/profile/' + child)
-    },
-    goToQuestionareDetail: function (aid){
-      console.error(aid)
-      this.$router.push('/questionareDetail/' + aid)
+    goToQuestionareDetail: function(aid) {
+      console.error(aid);
+      this.$router.push("/questionareDetail/" + aid);
     }
   }
-
-}
+};
 </script>
 
 <style>
-.survey-title:hover
-{
+.survey-title:hover {
   color: #175199;
   cursor: pointer;
 }
 
 .el-row {
   margin-right: 0px;
-
 }
 
 .article-underline {
@@ -123,7 +141,6 @@ export default {
 
 .sidebar-num {
   font-size: 48px;
-
 }
 
 .sidebar-item-text {
@@ -147,5 +164,14 @@ export default {
   color: rgba(16, 16, 16, 1);
   font-size: 22px;
   font-family: Roboto;
+}
+
+.vcard-username {
+  color: #666;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 24px;
+  margin: 10px;
 }
 </style>

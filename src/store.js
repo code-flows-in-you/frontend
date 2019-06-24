@@ -29,6 +29,9 @@ export default new Vuex.Store({
       state.status = ''
       state.user = {}
     },
+    update_avatar(state,url){
+      state.user.Avatar = url;
+    }
   },
   actions:
   {
@@ -91,6 +94,9 @@ export default new Vuex.Store({
           reject(err)
         })
       })
+    },
+    updateAvatar({commit},url){
+      commit('update_avatar',url)
     },
     getUserInfo({commit})
     {
