@@ -150,7 +150,8 @@ export default {
     };
   },
   mounted: function() {
-    this.$http.get("http://118.89.65.154:8765/assignment").then(
+    // 为什么要这样硬编码？
+    this.$http.get("http://118.89.65.154:8765/assignment").then( 
       response => {
         this.tasksList = response.data.assignments;
         console.log(response.data.assignments);
