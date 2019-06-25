@@ -1,14 +1,51 @@
 <template>
-  <div>
-    我的问卷
+   <div style="margin-top:15px;">
+    <el-timeline>
+      <el-timeline-item
+        v-for="item in mySurveys"
+        :key="item._id"
+        :timestamp="item.startTime.substr(0, 10)"
+        placement="top"
+      >
+        <el-card  shadow="never">
+          <el-button type="text" @click="goToQuestionareDetail( item.aid )">{{ item.title}}</el-button>
+          <p>{{ item.description }}</p>
+          <span>{{ item.copy-item.coin/item.unit}}/{{ item.copy }}份</span>
+        </el-card>
+      </el-timeline-item>
+    </el-timeline>
   </div>
 </template>
 
 <script>
 export default {
-  
+  name:'surveyProfile',
+  data () {
+    return {
+      mySurveys:[],
+    }
+  },
+  methods: {
+    getMySurvey:function () {
+      this.$http.get("/api/assignment/self/questionnaire").then(
+        response => {
+          console.log(response.data.assignments);
+          this.mySurveys = response.data.assignments;
+        },
+        e => console.log(e)
+      );
+    },
+    //跳转到问卷结果
+    goToSurveyResult:function (aid) {
+      
+    }
+  },
+  mounted() {
+    this.getMySurvey();
+  },
 }
 </script>
+
 
 
 <style scoped>

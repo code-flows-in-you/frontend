@@ -1,10 +1,9 @@
 <template>
   <div style="margin-left:200px;margin-right:200px;">
-    <el-card class="box-card">
+    <el-card class="box-card" shadow="never">
       <el-row>
         <el-col :span="4">
           <!-- <img src="../assets/avatar.png" height="50px"/> -->
-
           <el-upload
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -53,7 +52,8 @@
     </el-card>
     <el-row :gutter="20">
       <el-col :span="18">
-        <el-card style="height:500px;">
+        
+        <el-card style="height:600px;" shadow="never">
           <el-menu
             :default-active="$route.path"
             router
@@ -72,7 +72,7 @@
       </el-col>
 
       <el-col :span="6">
-        <el-card class="user-info">
+        <el-card class="user-info" shadow="never">
           <div>user info</div>
           <div>姓名：{{ this.$store.state.user.RealName }}</div>
           <div>学号：{{ this.$store.state.user.StudentID }}</div>
@@ -94,6 +94,7 @@ export default {
     return {
       activeIndex: "1",
       userInfo: {}
+
     };
   },
   methods: {
@@ -101,14 +102,11 @@ export default {
     // 获取用户信息
     getUserData: function() {
       this.userInfo = this.$store.state.user;
-      console.log(this.$store.state.user);
-      console.log(this.userInfo.Avatar);
     },
+
     changeUpload(file) {
       const isJPG = file.raw.type === "image/jpeg";
-      console.log(file.raw.type);
       const isLt2M = file.size / 1024 / 1024 < 2;
-      console.log(isJPG);
       if (!isJPG) {
         this.$message.error("上传头像图片只能是 JPG 格式!");
         return;
@@ -118,18 +116,15 @@ export default {
         return;
       }
       //请求修改头像
-      //请求后台
       const formData = new FormData();
       formData.append("file", file.raw);
       console.log(formData);
       this.$http
         .post("/api/account/avatar", formData)
         .then(response => {
-          console.log(response.data.url);
           this.$message.success("修改成功");
           this.$store.dispatch("updateAvatar",response.data.url);
           this.getUserData();
-          // this.userInfo.Avatar = response.data.url;
         })
         .catch(e => {
           console.log(e);

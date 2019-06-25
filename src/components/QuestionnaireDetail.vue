@@ -37,8 +37,8 @@
       <el-row type="flex" justify="center">
           <el-button type="primary" @click="onSubmit('questionareForm')">提交问卷</el-button>
       </el-row>
-    <!-- error message: time out, copy limit, etc.-->
     </el-form>
+    <!-- error message: time out, copy limit, etc.-->
     <el-row v-else class="error-msg" type="flex" justify="center">
       {{ errorMsg }}
     </el-row>
