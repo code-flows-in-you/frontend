@@ -2,11 +2,11 @@
   <div style="width:70%;margin:auto;">
     <el-card style="margin-top:10px;">
       <div class="question-title">{{ question.title }}</div>
+      <div class="question-data">{{question.startTime}}</div>
+      <el-divider></el-divider>
       <div>{{ question.description }}</div>
       <el-row>
         <!-- <el-button @click="answer=true" size="small" type="primary">我来回答</el-button> -->
-        <el-col :offset="20"><div>{{question.startTime}}</div></el-col>
-        
       </el-row>
     </el-card>
     <!-- 我来回答编辑解界面 -->
@@ -43,7 +43,8 @@
       <div  v-for="item in answers" :key="item._id">
         <el-row>
           <el-col :span="1">
-            <img src="../assets/avatar.png" height="50px">
+            <!-- <img src="../assets/avatar.png" height="50px"> -->
+             <el-avatar size="large" :src="item.avatar"></el-avatar>
           </el-col>
           <el-col :span="4">
             <el-row>{{ item.user }}</el-row>
@@ -118,7 +119,7 @@ export default {
       response => {
         this.question = response.data;
         this.answers = this.question.answers;
-        console.log(this.answer)
+        console.log(this.answers)
         // if(this)
         console.log(response.data);
       },
@@ -134,7 +135,19 @@ export default {
 .question-title {
   line-height: 52px;
   color: rgba(41, 64, 87, 1);
-  font-size: 36px;
+  /* font-size: 36px;
+   */
+   font-size: 21px;
   font-family: Roboto;
+}
+
+
+.question-data{
+  font-size: 12px;
+    color: #5f5f5f;
+}
+
+.answer-meta{
+  font-size: 12px;
 }
 </style>
