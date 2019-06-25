@@ -8,7 +8,7 @@ import VueCookies from 'vue-cookies'
 import store from './store'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueCropper from 'vue-cropper'
-
+import VuePaginate from 'vue-paginate'
 
 
 
@@ -20,6 +20,7 @@ Vue.use(Vuex)
 Vue.use(Element)
 Vue.use(VueCookies)
 Vue.use(VueCropper) //图片裁剪
+Vue.use(VuePaginate)
 
 
 Vue.prototype.$http = axios;
