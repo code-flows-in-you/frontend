@@ -6,7 +6,7 @@
         <div v-for="item in questionsList" :key="item._id">
           <el-row>
             <el-col :span="22">
-              <div class="question-title" @click="queryDetail( item.aid )">{{ item.title }}</div>
+              <div class="question-title" @click="quroaDetail( item.aid )">{{ item.title }}</div>
             </el-col>
             <el-col :span="1">
               <img src="../assets/coin.png" width="20"/>
@@ -15,11 +15,10 @@
           </el-row>
           <div class="question-info">
             <span class="question-info">{{ item.createTime.substr(0, 10) }}</span>
-            <span>   {{ item.answerCount }}人已回答</span>
-            <span v-if="item.bestCount === 1">   已采纳</span>
+            <span>&nbsp;&nbsp;&nbsp; {{ item.answerCount }}人已回答</span>
+            <span v-if="item.bestCount === 1">&nbsp;&nbsp;&nbsp;已采纳</span>
           </div>
           <div class="question-content">{{ item.description }}</div>
-          <el-button type="text" mini @click="quroaDetail( item.aid )">更多</el-button>
           <el-divider></el-divider>
         </div>
       </el-card>
@@ -28,9 +27,9 @@
     <el-col :span="4">
       <el-card>
         <el-row type="flex" justify="center">
-          <img src="../assets/avatar.png" style="width:80px; height:80px"/>
+           <el-image :src="this.$store.state.user.Avatar" style="width:200px; height:200px"></el-image>
         </el-row>
-        <el-row type="flex" justify="center" style="font-size:20px; font-weight:bold">
+        <el-row type="flex" justify="center" class="vcard-username">
           {{ this.$store.state.user.Nickname }}
         </el-row>
       </el-card>
@@ -62,35 +61,29 @@
       </el-card>
     </el-col>
   </el-row>
-  <el-dialog title="提问" :visible.sync="newQuestion">
+  <el-dialog title="提问" :visible.sync="newQuestion" width="30%" :before-close="clearInput">
 
-    <el-input type="textarea" :rows="2" placeholder="用一句话描述你的问题" v-model="newQuestionTitle">
-    </el-input>
-    <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="添加问题背景描述（选填）" v-model="newQuestionDescription">
-    </el-input>
+    <el-input placeholder="用一句话描述你的问题" v-model="newQuestionTitle" maxlength="20" show-word-limit style="margin-bottom:15px" clearable></el-input>
+    <el-input type="textarea" :rows="4" placeholder="添加问题背景描述（选填）" v-model="newQuestionDescription" maxlength="50" show-word-limit style="margin-bottom:15px" clearable></el-input>
     <!-- <el-upload action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
       <img v-if="imageUrl" :src="imageUrl" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
     </el-upload> -->
-    <el-row>
-      <el-col :offset="21">
-        <el-button @click="payforQuestion=true;newQuestion=false;" size="small" type="primary" style="margin-top:10px;">发布问题</el-button>
-      </el-col>
-    </el-row>
-  </el-dialog>
-  <el-dialog title="支付" :visible.sync="payforQuestion">
-    <el-form ref="payForm" :model="payForm" label-width="80px">
-      <el-form-item label="悬赏金额">
-        <el-input v-model="payForm.money"></el-input>
-      </el-form-item>
-       <el-form-item label="支付密码">
-        <el-input v-model="payForm.password"></el-input>
-      </el-form-item>
-      <el-form-item>
-    <el-button type="primary">返回上一步</el-button>
-    <el-button>确认支付</el-button>
-  </el-form-item>
-    </el-form>
+    <el-date-picker
+      v-model="time"
+      type="datetimerange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      style="width:100%; margin-bottom:15px">
+    </el-date-picker>
+    <div style="text-align:right;">
+      <img src="../assets/coin.png" width="20" style="vertical-align:middle;margin-right:10px"/>
+      <el-input placeholder="输入悬赏金额" v-model="newQuestionBonus" clearable style="width:50%;"></el-input>
+    </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="raiseQuestion();newQuestion=false;" size="small" type="primary">发布问题</el-button>
+    </span>
   </el-dialog>
 </div>
 </template>
@@ -103,10 +96,8 @@ export default {
       payforQuestion: false,
       newQuestionDescription: '',
       newQuestionTitle: '',
-      payForm: {
-        money: '',
-        password: ''
-      },
+      newQuestionBonus: '',
+      time: [new Date, new Date],
       questionsList: []
     }
   },
@@ -123,19 +114,46 @@ export default {
 
     //发起提问
     raiseQuestion: function () {
-
+      let content = {
+        "title": this.newQuestionTitle, 
+        "description": this.newQuestionDescription, 
+        "coin": parseInt(this.newQuestionBonus),
+        "createTime": this.$dateFormatter(new Date),
+        "startTime": this.$dateFormatter(this.time[0]),
+        "endTime": this.$dateFormatter(this.time[1]),
+        "detail": ""}
+      this.$http.post('/api/qa/', content).then(
+        response => {
+          this.$message.success('问题发布成功')
+          console.log(response)
+        },
+        response => console.log(response)
+      )
     },
     quroaDetail: function (id) {
       this.$router.push('/quroaDetail/' + id)
     },
     goToProfile: function (child) {
       this.$router.push('/profile/' + child)
+    },
+    clearInput: function (done) {
+      this.newQuestionDescription = ''
+      this.newQuestionTitle = ''
+      this.newQuestionBonus = ''
+      this.time = [new Date, new Date]
+      done()
     }
   }
 }
 </script>
 
 <style>
+.question-title:hover
+{
+  color: #175199;
+  cursor: pointer;
+}
+
 .el-row {
   margin-right: 0px;
 
@@ -165,18 +183,28 @@ export default {
 
 .question-title {
   color: rgba(41, 64, 87, 1);
-  font-size: 28px;
+  font-size: 25px;
   font-family: Roboto;
 }
 
 .question-info {
   color: rgba(204, 204, 204, 1);
   font-family: Roboto;
+  font-size: 17px;
 }
 
 .question-content {
   color: rgba(16, 16, 16, 1);
-  font-size: 22px;
+  font-size: 19px;
   font-family: Roboto;
+}
+
+.vcard-username {
+    color: #666;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 24px;
+    margin: 10px;
 }
 </style>

@@ -24,7 +24,14 @@
           </el-row>
         </el-col>
     </el-row>
-    <el-input type="text" placeholder="请输入内容"  maxlength="10" show-word-limit>
+    <!-- <el-input type="text" placeholder="请输入内容"  maxlength="10" show-word-limit> -->
+        <quill-editor v-model="content"
+                ref="myQuillEditor"
+                :options="editorOption"
+                @blur="onEditorBlur($event)"
+                @focus="onEditorFocus($event)"
+                @ready="onEditorReady($event)">
+  </quill-editor>
     </el-input>
     <el-row>
       <el-col :offset="21">
@@ -65,15 +72,51 @@
 </template>
 
 <script>
+
+// import { quillEditor } from 'vue-quill-editor'
+
 export default {
   name: 'quroaDetail',
+  components: {
+    // quillEditor
+  },
   data() {
     return {
       answer: false,
       question: {},
-      answers: []
+      answers: [],
+      content: '<h2>I am Example</h2>',
+      editorOption: {
+          modules: {
+            toolbar: [
+              [{ 'size': ['small', false, 'large'] }],
+              ['bold', 'italic'],
+              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+              ['link', 'image']
+            ],
+            history: {
+              delay: 1000,
+              maxStack: 50,
+              userOnly: false
+            },
+            imageDrop: true,
+            imageResize: {
+              displayStyles: {
+                backgroundColor: 'black',
+                border: 'none',
+                color: 'white'
+              },
+              modules: [ 'Resize', 'DisplaySize', 'Toolbar' ]
+            }
+          }
+        }
     }
   },
+   computed: {
+      editor() {
+        return this.$refs.myQuillEditor.quill
+      }
+    },
   mounted() {
     let aid = this.$route.params.id
     this.$http.get('/api/qa/' + aid).then(

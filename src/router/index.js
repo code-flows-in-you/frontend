@@ -10,6 +10,7 @@ import quroaDetail from '../components/QuroaDetail.vue'
 import survey from '../components/Survey.vue'
 import questionnaireDetail from '../components/QuestionnaireDetail.vue'
 
+import all from '../components/all.vue'
 //profile 的 子组件
 
 import allProfile from '../components/children/allProfile.vue'
@@ -24,7 +25,7 @@ export default new Router({
   mode: 'history',
   base: './',
   routes: [
-    { path: '/', redirect:  '/quroa' },
+    { path: '/', redirect:  '/all' },
     { path: '/signin', component: signin },
     { path: '/signup', component: signup },
     //嵌套路由
@@ -57,7 +58,7 @@ export default new Router({
     { path: '/quroaDetail/:id', components: { default: quroaDetail, topbar: topbar } },
     { path: '/survey/:type?', components: { default: survey, topbar: topbar } },
     { path: '/questionnaireDetail/:id', components: { default: questionnaireDetail, topbar: topbar } },
-
-
+    { path: '/all', components: { default: all, topbar: topbar } },
+    { path: '*', redirect: '/' }
   ]
 })

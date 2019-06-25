@@ -7,6 +7,10 @@ import Element from 'element-ui'
 import VueCookies from 'vue-cookies'
 import store from './store'
 import 'element-ui/lib/theme-chalk/index.css'
+import VueCropper from 'vue-cropper'
+
+
+
 
 // import VueResource from 'vue-resource'
 import axios from 'axios'
@@ -15,12 +19,14 @@ Vue.use(VueRouter)
 Vue.use(Vuex)
 Vue.use(Element)
 Vue.use(VueCookies)
+Vue.use(VueCropper) //图片裁剪
+
 
 Vue.prototype.$http = axios;
 Vue.prototype.$dateFormatter = function (date)
 {
     let year = date.getFullYear()
-    let month = date.getMonth()
+    let month = date.getMonth() + 1
     let day = date.getDate()
     let hour = date.getHours()
     let min = date.getMinutes()
