@@ -13,29 +13,31 @@
     </el-row>
     <el-divider></el-divider>
     <!-- body of the questionnaire -->
-
-    <el-form v-if="isValid" @submit.native.prevent>
-      <el-form-item v-for="question in questions" :key="question.qid"
-       class="questionnaire-form-item" :label="question.title">
-        <el-input v-if="question.type === 'input'"
-         class="input-area" v-model="answers[question.qid]"></el-input>
-        <el-radio-group v-else-if="question.type === 'single'"
-         class="question-option-group"  v-model="answers[question.qid]">
-          <el-radio v-for="option in options[question.qid]" :key="option.oid"
-          class="question-option-item" :label="option.oid">{{option.value}}</el-radio>
-        </el-radio-group>
-        <el-checkbox-group v-else-if="question.type === 'multi'"
-         class="question-option-group" v-model="answers[question.qid]">
-          <el-checkbox v-for="option in options[question.qid]" :key="option.oid"
-          class="question-option-item" :label="option.oid">{{option.value}}</el-checkbox>
-        </el-checkbox-group>
+    <el-form v-if="isValid" :model="answers" :rules="rules"
+     ref="questionareForm" @submit.native.prevent>
+      <div v-for="question in questions" :key="question.qid">
+        <el-form-item :prop="String(question.qid)" :label="question.title"
+         class="questionnaire-form-item">
+          <el-input v-if="question.type === 'input'"
+           class="input-area" v-model="answers[question.qid]"></el-input>
+          <el-radio-group v-else-if="question.type === 'single'"
+           class="question-option-group"  v-model="answers[question.qid]">
+            <el-radio v-for="option in options[question.qid]" :key="option.oid"
+            class="question-option-item" :label="option.oid">{{option.value}}</el-radio>
+          </el-radio-group>
+          <el-checkbox-group v-else-if="question.type === 'multi'"
+           class="question-option-group" v-model="answers[question.qid]">
+            <el-checkbox v-for="option in options[question.qid]" :key="option.oid"
+            class="question-option-item" :label="option.oid">{{option.value}}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
         <el-divider></el-divider>
-      </el-form-item>
-
+      </div>
+      <!-- submit button -->
       <el-row type="flex" justify="center">
-          <el-button type="primary" @click="onSubmit">提交问卷</el-button>
+          <el-button type="primary" @click="onSubmit('questionareForm')">提交问卷</el-button>
       </el-row>
-
+    <!-- error message: time out, copy limit, etc.-->
     </el-form>
     <el-row v-else class="error-msg" type="flex" justify="center">
       {{ errorMsg }}
@@ -57,6 +59,7 @@ export default {
       questionTypes: {},
       answers: {},
       options: {},
+      rules: {}
     }
   },
   mounted() {
@@ -86,6 +89,8 @@ export default {
         question.title = String(questionIndex++) + ". " + question.title
       }
 
+
+
       // make options' array
       for (let option of response.data.options)
       {
@@ -101,7 +106,19 @@ export default {
         //add reactive property
         if (this.questionTypes[qid] == 'multi')
           this.$set(this.answers, qid, [])
+        else
+          this.$set(this.answers, qid, "")
       }
+
+      for (let question of this.questions)
+      {
+        this.$set(this.rules, String(question.qid),
+          { required: true, message: '请完成该问题', trigger: ['blur', 'change'] })
+      }
+      console.log(this.answers)
+      console.log(this.rules)
+
+
     })
     .catch(e =>
     {
@@ -112,8 +129,19 @@ export default {
   },
   methods:
   {
-    onSubmit: function()
+    onSubmit: function(ruleForm)
     {
+      let isFilled = false;
+      this.$refs[ruleForm].validate((valid) =>
+      {
+        isFilled = valid
+      });
+
+      if (!isFilled)
+      {
+        this.$message.error('请完成全部问题')
+        return
+      }
 
       let submitContent = this.getSubmitData()
       console.log(submitContent)
@@ -255,6 +283,7 @@ export default {
 
 .questionnaire-form-item > :first-child, .questionnaire-form-item > :nth-child(2)
 {
+  color: black;
   font-size: 22px;
   font-family: SourceHanSansSC-regular;
   vertical-align: middle;
@@ -288,9 +317,5 @@ export default {
   padding: 0 15px;
 }
 
-.el-form-item__error
-{
-  transform: scale(10);
-}
 
 </style>
