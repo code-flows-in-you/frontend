@@ -15,7 +15,7 @@
           placeholder="请输入关键词"
         ></el-select>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="3">
         <el-menu :default-active="$route.path" router mode="horizontal" @select="handleSelect">
           <el-menu-item index="/all">全部</el-menu-item>
           <el-menu-item index="/quroa">问答</el-menu-item>
@@ -38,11 +38,12 @@
     </el-row>
     <el-row :gutter="20" style="margin-bottom:50px; margin-top:20px">
       <el-col :span="19" :offset="3">
-        <hr
+        <!-- <hr
           size="15"
           color="#99CCFF"
           style="box-shadow:0px 5px 6px 0px rgba(170, 170, 170, 1);opacity:0.67"
-        >
+        > -->
+      <el-divider></el-divider>
       </el-col>
     </el-row>
   </div>

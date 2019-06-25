@@ -1,6 +1,6 @@
 <template>
-  <div style="width:70%;margin:auto;">
-    <el-card style="margin-top:10px;">
+  <div style="width:60%;margin:auto;">
+    <el-card shadow="never" style="margin-top:10px;">
       <div class="question-title">{{ question.title }}</div>
       <div class="question-data">{{question.startTime}}</div>
       <el-divider></el-divider>
@@ -10,7 +10,7 @@
       </el-row>
     </el-card>
     <!-- 我来回答编辑解界面 -->
-    <el-card>
+    <el-card shadow="never">
       <!-- markown 编辑器 -->
       <el-row>
         <el-col :span="1">
@@ -39,25 +39,24 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-card v-if="answers.length">
+    <el-card v-if="answers.length" shadow="never">
       <div  v-for="item in answers" :key="item._id">
         <el-row>
           <el-col :span="1">
-            <!-- <img src="../assets/avatar.png" height="50px"> -->
              <el-avatar size="large" :src="item.avatar"></el-avatar>
           </el-col>
           <el-col :span="4">
-            <el-row>{{ item.user }}</el-row>
-            <el-row>{{ item.timestamp.substr(0, 10) }}</el-row>
+            <el-row class="answser-user">{{ item.user }}</el-row>
           </el-col>
         </el-row>
-        <div>{{ item.answer }}</div>
-        <el-col :offset="10">
+        <div class="answer-content">{{ item.answer }}</div>
+         <el-row><div class="answer-meta">{{ item.timestamp.substr(0, 10) }}</div></el-row>
+        <!-- <el-col :offset="10">
           <el-button type="text" size="mini" style="margin:auto;">
             展开显示全文
             <i class="el-icon-arrow-down"></i>
           </el-button>
-        </el-col>
+        </el-col> -->
         <el-divider></el-divider>
       </div>
     </el-card>
@@ -149,5 +148,15 @@ export default {
 
 .answer-meta{
   font-size: 12px;
+}
+
+.answer-content{
+  color: #313131;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.answser-user{
+  margin-top:5%;
+  margin-left:5%;
 }
 </style>
