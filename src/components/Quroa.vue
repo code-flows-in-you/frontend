@@ -154,7 +154,8 @@ export default {
   },
   methods: {
     //发起提问
-    raiseQuestion: function() {
+    raiseQuestion: function()
+    {
       if (this.newQuestionTitle.trim() == "") {
         this.$message.error("问题标题不能为空");
         return;
