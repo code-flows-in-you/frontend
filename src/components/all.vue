@@ -125,6 +125,15 @@
       <img v-if="imageUrl" :src="imageUrl" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>-->
+      <el-date-picker
+        v-model="time"
+        type="datetimerange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        style="width:100%; margin-bottom:15px"
+        :picker-options="pickerBeginDateAfter"
+      ></el-date-picker>
       <div style="text-align:right;">
         <img src="../assets/coin.png" width="20" style="vertical-align:middle;margin-right:10px">
         <el-input placeholder="输入悬赏金额" v-model="newQuestionBonus" clearable style="width:50%;"></el-input>
@@ -146,12 +155,17 @@ export default {
       newQuestionDescription: "",
       newQuestionTitle: "",
       newQuestionBonus: "",
-      tasksList: []
+      time: "",
+      tasksList: [],
+      pickerBeginDateAfter: {
+        disabledDate: time => {
+          return time.getTime() <= Date.now() - 8.64e7;
+        }
+      }
     };
   },
   mounted: function() {
-    // 为什么要这样硬编码？
-    this.$http.get("http://118.89.65.154:8765/assignment").then( 
+    this.$http.get("/api/assignment/").then(
       response => {
         this.tasksList = response.data.assignments;
         console.log(response.data.assignments);
@@ -162,6 +176,18 @@ export default {
   methods: {
     //发起提问
     raiseQuestion: function() {
+      if (this.newQuestionTitle.trim() == "") {
+        this.$message.error("问题标题不能为空");
+        return;
+      }
+      if (Object.prototype.toString.call(this.time) != "[object Array]") {
+        this.$message.error("必须选择开始与结束时间");
+        return;
+      }
+      if (!/^\d+$/.test(this.newQuestionBonus)) {
+        this.$message.error("悬赏金额不能为空且必须为正整数");
+        return;
+      }
       content = {
         title: this.newQuestionTitle,
         description: this.newQuestionDescription,
@@ -193,6 +219,7 @@ export default {
       this.newQuestionDescription = "";
       this.newQuestionTitle = "";
       this.newQuestionBonus = "";
+      this.time = "";
       done();
     }
   }
