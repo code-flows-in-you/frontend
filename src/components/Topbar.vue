@@ -31,8 +31,8 @@
           <el-row>
             <el-button type="text" icon="el-icon-switch-button" @click="signout">退出</el-button>
           </el-row>
-          <el-button style="margin-top:10px;" slot="reference" icon="el-icon-user-solid" @click="goToProfile" circle></el-button>
-          <!-- <el-image :src="this.$store.state.user.Avatar" ></el-image> -->
+          <!-- <el-button style="margin-top:10px;" slot="reference" icon="el-icon-user-solid" @click="goToProfile" circle></el-button> -->
+            <el-avatar size="large" slot="reference" style="margin-top:10px;" :src="this.$store.state.user.Avatar"></el-avatar>
         </el-popover>
       </el-col>
     </el-row>
