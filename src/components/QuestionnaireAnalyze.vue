@@ -13,45 +13,37 @@
     </el-row>
     <el-divider></el-divider>
     <!-- body of the questionnaire -->
-    <div>
-  </div>
-    <el-form>
-      <div v-for="question in questions" :key="question.qid">
-        <el-form-item  :label="question.title" class="questionnaire-form-item">
-          <div v-if="question.type === 'input'">
-            <el-input v-model="answers[question.qid]"
-             class="input-area"></el-input>
-             {{ data[options[question.qid][0].oid]  }}
-           </div>
-          <el-radio-group v-else-if="question.type === 'single'"
-           class="question-option-group" v-model="answers[question.qid]">
-            <div v-for="option in options[question.qid]" :key="option.oid">
-              <el-radio
-              class="question-option-item" :label="option.oid">{{option.value}}</el-radio>
-              <el-progress  :stroke-width="18" class="progress-bar" :text-inside="true"
-              :percentage="getPercentage(option.oid)"></el-progress>
-              <span class="fraction">{{ data[option.oid].length }} / {{ numOfAnswers }}</span>
-              {{ data[option.oid] }}
-              <br />
-              {{ option.oid }}
-            </div>
-          </el-radio-group>
-          <el-checkbox-group v-else-if="question.type === 'multi'"
-           class="question-option-group" v-model="answers[question.qid]">
-           <div v-for="option in options[question.qid]" :key="option.oid">
-            <el-checkbox
-            class="question-option-item" :label="option.oid">{{option.value}}</el-checkbox>
-            <el-progress  :stroke-width="14" class="progress-bar"
-              :percentage="getPercentage(option.oid)"></el-progress>
-            {{ data[option.oid] }}
-            <br />
-            {{ data[option.oid] }}
-          </div>
-          </el-checkbox-group>
-        </el-form-item>
-        <el-divider></el-divider>
+
+    <div v-for="(question, index) in questions" :key="question.qid">
+      <p>{{ String(index+1) }}. {{ question.title }}</p>
+      {{options[index]}}
+      <div v-if="question.type === 'input'">
+        <input placeholder="示例输入框" class="sample-input"></input>
+        <div v-for="(reply, replyIndex) in data[options[question.qid][0].oid]" :key="replyIndex">
+          {{ replyIndex+1  }}. {{reply.value}}
+        </div>
+
       </div>
-    </el-form>
+      <div v-else> <!-- single and multi -->
+        <div v-for="option in options[question.qid]" :key="option.oid">
+          <img src="../assets/单选-选中.png" class="menu-img"
+           v-if="question.type === 'single'">
+          <img src="../assets/多选-选中.png" class="menu-img"
+           v-else>
+          <p>
+            <span style="margin: 0 10px">{{option.value}}</span>
+          </p>
+
+          <el-progress  :stroke-width="18" class="progress-bar" :text-inside="true"
+           :percentage="getPercentage(option.oid)"></el-progress>
+          <span class="fraction">{{ data[option.oid].length }} / {{ numOfAnswers }}</span>
+
+        </div>
+      </div>
+
+
+      <el-divider></el-divider>
+    </div>
   </el-card>
 </div>
 </template>
@@ -81,23 +73,16 @@ export default {
     {
 
       this.questionnaire = response.data
-      this.numOfAnswers = (this.questionnaire.copy - this.questionnaire.coin) /
-                          this.questionnaire.unit
-      console.log(this.questionnaire)
+      this.numOfAnswers = (this.questionnaire.copy - this.questionnaire.coin/this.questionnaire.unit)
 
-      if (!this.isValid)
-        return
+      console.log(this.questionnaire)
 
       this.questions = this.questionnaire.questions
 
-      let questionIndex = 1;
-
       // get questions' types
-      // make questions' indexex
       for (let question of this.questions)
       {
         this.questionTypes[question.qid] = question.type
-        question.title = String(questionIndex++) + ". " + question.title
       }
 
       // make options' array
@@ -108,6 +93,8 @@ export default {
         else
           this.options[option.qid].push(option)
       }
+
+      console.log(this.options)
 
       // make answers' container
       for (let qid in this.options)
@@ -148,109 +135,144 @@ export default {
 </script>
 
 
-<style>
-.input-area input.el-input__inner
-{
-    border: 0.5px black solid;
-    border-radius: 0;
-    color: black
-}
-</style>
+
 
 <style scoped>
 
-.questionnaire-title
+input
 {
-  color: #333333;
-  line-height: 52px;
-  font-size: 36px;
-  font-family: -apple-system, "SF UI Text", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif;
-  text-align: center;
+  padding: 0px 10px;
+  font-size: 17px;
 }
 
-.questionnaire-description
+p
 {
+  font-size: 17px;
+}
+
+.title-input
+{
+  display: block;
+  height: 66px;
+  width: 360px;
+  margin: 5px auto;
+  font-size: 22px;
+  text-align: center;
+  border-radius: 6px;
+  border: solid #CCCCCC 1px;
+}
+
+.description-input
+{
+  display: block;
+  height: 66px;
+  width: 90%;
+  margin: 10px auto;
   color: #666666;
-  line-height: 38px;
-  font-size: 26px;
-  font-family: -apple-system, "SF UI Text", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif;
-  text-align: center;
-  margin: 21px 0 0 0;
-}
-
-.money
-{
-  color: #FF4343;
-}
-
-.error-msg
-{
-  color: #FF4343;
   font-size: 22px;
-  font-family: -apple-system, "SF UI Text", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif;
+  padding: 0 5px;
+  border: none;
 }
 
-.el-form
+.click-img-button:hover
 {
-  margin: 0 auto;
+  cursor: pointer;
 }
 
-.questionnaire-form-item
-{
-  margin: 0 5%;
-}
-
-.questionnaire-form-item > :first-child, .questionnaire-form-item > :nth-child(2)
-{
-  color: black;
-  font-size: 22px;
-  font-family: -apple-system, "SF UI Text", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif;
-  vertical-align: middle;
-}
-
-.question-option-group
-{
-  width: 100%;
-  display: inline-block;
-  zoom: 130%;
-  font-size: 14px;
-  font-family: -apple-system, "SF UI Text", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif;
-  line-height: 20px;
-  padding: 0 15px;
-}
-
-.question-option-item
+.question-input
 {
   display: block;
+  height: 40px;
+  width: 56.5%;
+  margin: 10px auto;
 }
 
-.progress-bar
-{
- width: 40%;
- margin: 10px;
- display: inline-block;
-}
-
-.input-area
+.sample-input
 {
   display: block;
-  zoom: 130%;
-  font-family: -apple-system, "SF UI Text", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif;
-  width: 40%;
+  height: 40px;
+  width: 60%;
+  margin: 10px 20px;
+}
+
+.option-input
+{
+  height: 40px;
+  width: 80%;
+}
+
+.option-input-group
+{
+  width: 60%;
   margin: 10px 0;
-  padding: 0 15px;
 }
 
-
-
-.fraction
+.show-hide-button
 {
-  color: #409EFF;
+  color: white;
+  width: 100%;
+  margin: 10px 0 0 0;
+  background: #99CCFF;
+  border-radius: 0;
 }
 
-.el-radio, .el-checkbox
+.show-hide-button:hover
+{
+  background: #F8F8F8;
+}
+
+.edit-area
+{
+  background: #F8F8F8;
+  width: 95%;
+  margin: 0 auto;
+  padding: 10px 0 0 0;
+}
+
+.menu-img
+{
+  margin:10px;
+  vertical-align: middle;
+  width:26px;
+  height:26px;
+}
+
+.menu-text
 {
   color: black;
+  font-size:17px
+}
+
+.menu-title
+{
+  color: black;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.option-box
+{
+  display: flex;
+  align-items:center;
+}
+
+
+.el-row
+{
+  margin-right: 0px;
+}
+
+.article-underline
+{
+  height: 1px;
+  width: 80px;
+  background: #545455;
+  margin: 80px auto 0;
+}
+
+.el-card
+{
+  margin-bottom: 20px;
 }
 
 

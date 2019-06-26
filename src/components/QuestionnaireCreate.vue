@@ -3,59 +3,79 @@
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
         <el-card>
-          <el-form>
-            <el-form-item label=""
-            class="questionnaire-form-item questionnaire-title">
-              <el-input class="input-area" v-model="questionnaire.title"></el-input>
-            </el-form-item>
-            <el-form-item label=""
-            class="questionnaire-form-item questionnaire-description">
-              <el-input class="input-area" v-model="questionnaire.description"></el-input>
-            </el-form-item>
-            <el-divider></el-divider>
-            <!-- body of the questionnaire -->
+          <input v-model="questionnaire.title" placeholder="输入问卷名称"
+          class="title-input"></input>
+          <input v-model="questionnaire.description" placeholder="添加问卷说明"
+          class="description-input"></input>
+          <el-divider></el-divider>
+          <!-- body of the questionnaire -->
 
-            <div v-for="(question, index) in displayQuestions" :key="question.qid">
-              <p>{{ String(index+1) }}. {{ question.title }}</p>
-
-              <div v-if="question.type === 'input'">
-                <div style="border:1px black solid">单项填空</div>
+          <div v-for="(question, index) in displayQuestions" :key="question.qid">
+            <p>
+              {{ String(index+1) }}.
+              <span v-show="question.title==''">标题</span>
+              {{ question.title }}
+            </p>
+            <div v-if="question.type === 'input'">
+              <input placeholder="示例输入框" class="sample-input"></input>
+            </div>
+            <div v-else> <!-- single and multi -->
+              <div v-for="(option, oid) in displayOptions[index]" :key="oid"
+               class="option-box">
+                <img src="../assets/单选-选中.png" class="menu-img"
+                 v-if="question.type === 'single'">
+                <img src="../assets/多选-选中.png" class="menu-img"
+                 v-else>
+                <p>
+                  <span v-show="option.value==''">标题 {{ String(oid + 1) }}</span>
+                  <span style="margin: 0 10px">{{option.value}}</span>
+                </p>
               </div>
-              <div v-else> <!-- single and multi -->
-                <div v-for="option in displayOptions[index]" :key="option._id"
-                 class="option-box">
-                  <img src="../assets/单选-选中.png" v-if="question.type === 'single'">
-                  <img src="../assets/多选-选中.png" v-else>
-                  <span>{{option.value}}</span>
-                </div>
-              </div>
-
-              <el-collapse v-model="activateNames" accordion>
-                <el-collapse-item title="编辑" name="edit">
-                  <el-form-item label="请输入标题">
-                     <el-input v-model="question.title"></el-input>
-                  </el-form-item>
-
-                  <el-button type="primary" @click="addOption(index)">添加选项</el-button>
-
-                  <el-form-item v-for="option in displayOptions[index]"
-                  label="请输入标题">
-                    <el-input v-model="option.value"></el-input>
-                  </el-form-item>
-
-                </el-collapse-item>
-              </el-collapse>
-              <el-divider></el-divider>
             </div>
 
+            <el-button @click="beginEdit(index)" v-show="!isEdit[index]"
+             class="show-hide-button">▼编辑</el-button>
+
+            <div v-show="isEdit[index]" class="edit-area">
+              <input v-model="question.title" placeholder="请输入问题标题"
+               class="question-input"></input>
 
 
+              <div v-if="question.type !== 'input'">
 
+                <el-row type="flex" justify="center">
+                  <img src="../assets/加.png" @click="addOption(index)"
+                   class="click-img-button">
+                </el-row>
 
+                <el-row type="flex" justify="center"
+                 v-for="(option, oid) in displayOptions[index]" :key="oid">
+                  <div class="option-input-group">
+                    <input v-model="option.value" :placeholder="'选项'+(oid+1)"
+                     class="option-input"></input>
+                     <img src="../assets/删除.png" @click="deleteOption(index)"
+                      class="click-img-button menu-img">
+                  </div>
+                </el-row>
+              </div>
+
+              <el-button @click="finishEdit(index)" class="show-hide-button">▲ 完成编辑</el-button>
+            </div>
+
+            <el-row type="flex" justify="center">
+              <img src="../assets/删除.png" @click="deleteQuestion(index)"
+               class="click-img-button menu-img">
+            </el-row>
+
+            <el-divider></el-divider>
+          </div>
+
+          <el-row type="flex" justify="center">
             <el-button type="primary" @click="showDialog">完成编辑</el-button>
-          </el-form>
+          </el-row>
         </el-card>
       </el-col>
+
       <el-col :span="4">
         <el-card>
           <el-row type="flex" justify="center">
@@ -66,21 +86,21 @@
           <el-row>
             <div>
               <img src="../assets/单选-选中.png" class="menu-img">
-              <el-link @click="addSingleGroup" :underline="false"
+              <el-link @click="addQuestion('single')" :underline="false"
                class="menu-text">单选</el-link>
             </div>
           </el-row>
           <el-row>
             <div>
               <img src="../assets/多选-选中.png" class="menu-img">
-              <el-link @click="addMultiGroup" :underline="false"
+              <el-link @click="addQuestion('multi')" :underline="false"
                class="menu-text">多选</el-link>
             </div>
           </el-row>
           <el-row>
             <div>
               <img src="../assets/填空题.png" class="menu-img">
-              <el-link @click="addInput" :underline="false"
+              <el-link @click="addQuestion('input')" :underline="false"
                class="menu-text">单项填空</el-link>
             </div>
           </el-row>
@@ -88,22 +108,23 @@
       </el-col>
     </el-row>
 
-
     <el-dialog title="问卷" :visible.sync="isShowMoneyDialog" width="30%" :before-close="clearInput">
       <el-input
+        type="Number"
+        min="1"
+        prefix-icon="el-icon-edit-outline"
         placeholder="输入问卷份数"
         v-model="questionnaire.copy"
-        maxlength="20"
-        show-word-limit
         style="margin-bottom:15px"
         clearable
       ></el-input>
       <el-input
         :rows="4"
+        type="Number"
+        min="1"
+        prefix-icon="el-icon-coin"
         placeholder="输入每份问卷悬赏金额"
         v-model="questionnaire.coin"
-        maxlength="50"
-        show-word-limit
         style="margin-bottom:15px"
         clearable
       ></el-input>
@@ -140,7 +161,7 @@ export default {
       displayOptions: {},
       answers: {},
       time: "",
-      activateNames: ['edit'],
+      isEdit: {},
       isShowMoneyDialog: false,
       questionnaire:{
         title: "",
@@ -165,32 +186,42 @@ export default {
 
   },
   methods: {
-    addInput: function()
-    {
-      let question = {title: "请输入标题", type: 'input'}
-      this.displayQuestions.push(question)
-    },
-    addSingleGroup: function()
+    addQuestion: function(questionType)
     {
       let qid = this.displayQuestions.length
-      let question = {title: "请输入标题", type: 'single'}
+      let question = {title: "", type: questionType}
       this.displayQuestions.push(question)
-      this.$set(this.displayOptions, qid, [])
-      this.addOption(qid)
-    },
-    addMultiGroup: function()
-    {
-      let qid = this.displayQuestions.length
-      let question = {title: "请输入标题", type: 'multi'}
-      this.displayQuestions.push(question)
-      this.$set(this.displayOptions, qid, [])
-      this.addOption(qid)
+
+      this.$set(this.isEdit, qid, true)
+
+      if (questionType != 'input')
+      {
+        this.$set(this.displayOptions, qid, [])
+        this.addOption(qid)
+      }
     },
     addOption(qid)
     {
-      let option = {questionIndex: qid, value: "选项标题"}
+      let option = {questionIndex: qid, value: ""}
       this.displayOptions[qid].push(option)
-
+    },
+    deleteQuestion(qid)
+    {
+      this.displayQuestions.splice(qid, 1)
+      this.$set(this.displayOptions, qid, [])
+    },
+    deleteOption(qid, oid)
+    {
+      this.displayOptions[qid].splice(oid, 1)
+    },
+    beginEdit: function(qid)
+    {
+      this.isEdit[qid] = true
+    },
+    finishEdit: function(qid)
+    {
+      this.isEdit[qid] = false
+      console.log(this.isEdit)
     },
     showDialog: function()
     {
@@ -206,21 +237,22 @@ export default {
     {
       this.questionnaire.questions = this.displayQuestions
 
-      //convert questions to the form server desires
-      /*for (let question of this.displayQuestions)
-      {
-        let submitQuestion = {title: question.title, type:question.type}
-        this.questionnaire.questions.push(submitQuestion)
-      }*/
-
       console.log(this.displayOptions)
       //convert options to the form server desires
       for (let qid in this.displayQuestions)
       {
-        for (let option of this.displayOptions[qid])
+        if (this.questionnaire.questions[qid].type == 'input')
         {
-          option.questionIndex = qid
+          let option = {questionIndex: Number(qid), value: "0"}
           this.questionnaire.options.push(option)
+        }
+        else
+        {
+          for (let option of this.displayOptions[qid])
+          {
+            option.questionIndex = Number(qid)
+            this.questionnaire.options.push(option)
+          }
         }
       }
 
@@ -243,39 +275,119 @@ export default {
         this.$message.error("悬赏金额不能为空且必须为正整数");
         return;
       }*/
-      /*
-      this.$http.post('/api/questionnaire')
+
+      this.$http.post('/api/questionnaire/', this.questionnaire)
       .then(response =>
       {
-        this.$http.success("问卷已发布")
+        this.$message.success("问卷已发布")
       })
       .catch(e =>
       {
         console.log(e)
         console.log(e.response)
-      })*/
+      })
     }
   }
 };
 </script>
 
 
-<style>
+<style scoped>
 
-.edit-board-form-item,
+input
 {
-  background: red !important;
+  padding: 0px 10px;
+  font-size: 17px;
 }
 
-</style>
+p
+{
+  font-size: 17px;
+}
 
+.title-input
+{
+  display: block;
+  height: 66px;
+  width: 360px;
+  margin: 5px auto;
+  font-size: 22px;
+  text-align: center;
+  border-radius: 6px;
+  border: solid #CCCCCC 1px;
+}
 
-<style scoped>
+.description-input
+{
+  display: block;
+  height: 66px;
+  width: 90%;
+  margin: 10px auto;
+  color: #666666;
+  font-size: 22px;
+  padding: 0 5px;
+  border: none;
+}
+
+.click-img-button:hover
+{
+  cursor: pointer;
+}
+
+.question-input
+{
+  display: block;
+  height: 40px;
+  width: 56.5%;
+  margin: 10px auto;
+}
+
+.sample-input
+{
+  display: block;
+  height: 40px;
+  width: 60%;
+  margin: 10px 20px;
+}
+
+.option-input
+{
+  height: 40px;
+  width: 80%;
+}
+
+.option-input-group
+{
+  width: 60%;
+  margin: 10px 0;
+}
+
+.show-hide-button
+{
+  color: white;
+  width: 100%;
+  margin: 10px 0 0 0;
+  background: #99CCFF;
+  border-radius: 0;
+}
+
+.show-hide-button:hover
+{
+  background: #F8F8F8;
+}
+
+.edit-area
+{
+  background: #F8F8F8;
+  width: 95%;
+  margin: 0 auto;
+  padding: 10px 0 0 0;
+}
 
 .menu-img
 {
   margin:10px;
-  vertical-align:middle;
+  vertical-align: middle;
   width:26px;
   height:26px;
 }

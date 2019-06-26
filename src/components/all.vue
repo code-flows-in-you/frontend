@@ -107,7 +107,7 @@
       <el-row type="flex" justify="center" style="font-size:20px">请选择求助类型</el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="newQuestion=true;newTask=false;" size="small" type="primary">发起提问</el-button>
-        <el-button @click="newTask=false;" size="small" type="primary">发起问卷</el-button>
+        <el-button @click="raiseQuestionnaire" size="small" type="primary">发起问卷</el-button>
       </span>
     </el-dialog>
     <el-dialog title="提问" :visible.sync="newQuestion" width="30%" :before-close="clearInput">
@@ -227,6 +227,10 @@ export default {
         },
         response => console.log(response)
       );
+    },
+    raiseQuestionnaire: function()
+    {
+      this.$router.push("/questionnaireCreate");
     },
     quroaDetail: function(id) {
       this.$router.push("/quroaDetail/" + id);
