@@ -15,64 +15,44 @@
             <el-divider></el-divider>
             <!-- body of the questionnaire -->
 
-            <div v-for="question in displayQuestions" :key="question.qid">
-              <el-form-item  :label="String(question.qid+1) + '. ' +question.title" class="questionnaire-form-item">
+            <div v-for="(question, index) in displayQuestions" :key="question.qid">
+              <p>{{ String(index+1) }}. {{ question.title }}</p>
 
-                <div v-if="question.type === 'input'">
-                  <el-input v-model="answers[question.qid]" class="input-area"></el-input>
-
-                  <el-collapse accordion>
-                    <el-collapse-item title="编辑">
-                      <el-form-item label="请输入标题" class="edit-board-form-item">
-                         <el-input v-model="question.title" class="input-area"></el-input>
-                      </el-form-item>
-                    </el-collapse-item>
-                  </el-collapse>
+              <div v-if="question.type === 'input'">
+                <div style="border:1px black solid">单项填空</div>
+              </div>
+              <div v-else> <!-- single and multi -->
+                <div v-for="option in displayOptions[index]" :key="option._id"
+                 class="option-box">
+                  <img src="../assets/单选-选中.png" v-if="question.type === 'single'">
+                  <img src="../assets/多选-选中.png" v-else>
+                  <span>{{option.value}}</span>
                 </div>
+              </div>
 
-                <div v-else-if="question.type === 'single'">
-                  <el-radio-group
-                   class="question-option-group" v-model="answers[question.qid]">
-                    <div v-for="option in displayOptions[question.qid]" :key="option.oid">
-                      <el-radio class="question-option-item" :label="option.oid">
-                        {{option.value}}
-                      </el-radio>
-                    </div>
-                  </el-radio-group>
+              <el-collapse v-model="activateNames" accordion>
+                <el-collapse-item title="编辑" name="edit">
+                  <el-form-item label="请输入标题">
+                     <el-input v-model="question.title"></el-input>
+                  </el-form-item>
 
-                  <el-collapse accordion>
-                    <el-collapse-item title="编辑">
+                  <el-button type="primary" @click="addOption(index)">添加选项</el-button>
 
-                      <el-form-item label="请输入标题" class="questionnaire-form-item">
-                        <el-input v-model="question.title" class="input-area"></el-input>
-                      </el-form-item>
+                  <el-form-item v-for="option in displayOptions[index]"
+                  label="请输入标题">
+                    <el-input v-model="option.value"></el-input>
+                  </el-form-item>
 
-                      <el-button type="primary" @click="addOption(question.qid)">添加选项</el-button>
-
-                      <el-form-item v-for="option in displayOptions[question.qid]"
-                      label="请输入标题" class="questionnaire-form-item">
-                        <el-input v-model="option.value" class="input-area"></el-input>
-                      </el-form-item>
-
-                    </el-collapse-item>
-                  </el-collapse>
-
-                </div>
-
-
-                <el-checkbox-group v-else-if="question.type === 'multi'"
-                 class="question-option-group" v-model="answers[question.qid]">
-                 <div v-for="option in displayOptions[question.qid]" :key="option.oid">
-                  <el-checkbox
-                  class="question-option-item" :label="option.oid">{{option.value}}</el-checkbox>
-
-
-                </div>
-                </el-checkbox-group>
-              </el-form-item>
+                </el-collapse-item>
+              </el-collapse>
               <el-divider></el-divider>
             </div>
-            <el-button type="primary" @click="showDialog">发布问卷</el-button>
+
+
+
+
+
+            <el-button type="primary" @click="showDialog">完成编辑</el-button>
           </el-form>
         </el-card>
       </el-col>
@@ -85,7 +65,7 @@
           </el-row>
           <el-row>
             <div>
-              <img src="../assets/单选框 选中.png" class="menu-img">
+              <img src="../assets/单选-选中.png" class="menu-img">
               <el-link @click="addSingleGroup" :underline="false"
                class="menu-text">单选</el-link>
             </div>
@@ -160,6 +140,7 @@ export default {
       displayOptions: {},
       answers: {},
       time: "",
+      activateNames: ['edit'],
       isShowMoneyDialog: false,
       questionnaire:{
         title: "",
@@ -186,14 +167,13 @@ export default {
   methods: {
     addInput: function()
     {
-      let qid = this.displayQuestions.length
-      let question = {title: "请输入标题", type: 'input', qid: qid}
+      let question = {title: "请输入标题", type: 'input'}
       this.displayQuestions.push(question)
     },
     addSingleGroup: function()
     {
       let qid = this.displayQuestions.length
-      let question = {title: "请输入标题", type: 'single', qid: qid}
+      let question = {title: "请输入标题", type: 'single'}
       this.displayQuestions.push(question)
       this.$set(this.displayOptions, qid, [])
       this.addOption(qid)
@@ -201,7 +181,7 @@ export default {
     addMultiGroup: function()
     {
       let qid = this.displayQuestions.length
-      let question = {title: "请输入标题", type: 'multi', qid: qid}
+      let question = {title: "请输入标题", type: 'multi'}
       this.displayQuestions.push(question)
       this.$set(this.displayOptions, qid, [])
       this.addOption(qid)
@@ -224,12 +204,14 @@ export default {
     },
     submitQuestionnaire: function()
     {
+      this.questionnaire.questions = this.displayQuestions
+
       //convert questions to the form server desires
-      for (let question of this.displayQuestions)
+      /*for (let question of this.displayQuestions)
       {
         let submitQuestion = {title: question.title, type:question.type}
         this.questionnaire.questions.push(submitQuestion)
-      }
+      }*/
 
       console.log(this.displayOptions)
       //convert options to the form server desires
@@ -237,6 +219,7 @@ export default {
       {
         for (let option of this.displayOptions[qid])
         {
+          option.questionIndex = qid
           this.questionnaire.options.push(option)
         }
       }
@@ -310,47 +293,30 @@ export default {
   font-weight: bold;
 }
 
-
-
-
-.survey-title:hover
+.option-box
 {
-  color: #175199;
-  cursor: pointer;
+  display: flex;
+  align-items:center;
 }
-.el-row {
+
+
+.el-row
+{
   margin-right: 0px;
 }
-.article-underline {
+
+.article-underline
+{
   height: 1px;
   width: 80px;
   background: #545455;
   margin: 80px auto 0;
 }
-.el-card {
+
+.el-card
+{
   margin-bottom: 20px;
 }
-.sidebar-num {
-  font-size: 48px;
-}
-.sidebar-item-text {
-  color: rgba(102, 102, 102, 1);
-  font-size: 22px;
-  font-family: SourceHanSansSC-regular;
-}
-.survey-title {
-  color: rgba(41, 64, 87, 1);
-  font-size: 25px;
-  font-family: Roboto;
-}
-.survey-info {
-  color: rgba(204, 204, 204, 1);
-  font-size: 17px;
-  font-family: Roboto;
-}
-.survey-content {
-  color: rgba(16, 16, 16, 1);
-  font-size: 19px;
-  font-family: Roboto;
-}
+
+
 </style>
