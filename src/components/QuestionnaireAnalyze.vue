@@ -19,22 +19,21 @@
       {{options[index]}}
       <div v-if="question.type === 'input'">
         <input placeholder="示例输入框" class="sample-input"></input>
-        <div v-for="(reply, replyIndex) in data[options[question.qid][0].oid]" :key="replyIndex">
-          {{ replyIndex+1  }}. {{reply.value}}
+        <div v-for="(reply, replyIndex) in data[options[question.qid][0].oid]" :key="replyIndex"
+        class="reply">
+        <p>{{ replyIndex+1  }}. {{reply.value}}</p>
         </div>
 
       </div>
       <div v-else> <!-- single and multi -->
-        <div v-for="option in options[question.qid]" :key="option.oid">
+        <div v-for="option in options[question.qid]" :key="option.oid" class="option-box">
           <img src="../assets/单选-选中.png" class="menu-img"
            v-if="question.type === 'single'">
           <img src="../assets/多选-选中.png" class="menu-img"
            v-else>
-          <p>
-            <span style="margin: 0 10px">{{option.value}}</span>
-          </p>
+          <p><span style="margin: 0 10px">{{option.value}}</span></p>
 
-          <el-progress  :stroke-width="18" class="progress-bar" :text-inside="true"
+          <el-progress  :stroke-width="22" class="progress-bar" :text-inside="true"
            :percentage="getPercentage(option.oid)"></el-progress>
           <span class="fraction">{{ data[option.oid].length }} / {{ numOfAnswers }}</span>
 
@@ -150,41 +149,9 @@ p
   font-size: 17px;
 }
 
-.title-input
+.reply
 {
-  display: block;
-  height: 66px;
-  width: 360px;
-  margin: 5px auto;
-  font-size: 22px;
-  text-align: center;
-  border-radius: 6px;
-  border: solid #CCCCCC 1px;
-}
-
-.description-input
-{
-  display: block;
-  height: 66px;
-  width: 90%;
-  margin: 10px auto;
-  color: #666666;
-  font-size: 22px;
-  padding: 0 5px;
-  border: none;
-}
-
-.click-img-button:hover
-{
-  cursor: pointer;
-}
-
-.question-input
-{
-  display: block;
-  height: 40px;
-  width: 56.5%;
-  margin: 10px auto;
+  margin: 10px 20px;
 }
 
 .sample-input
@@ -195,40 +162,6 @@ p
   margin: 10px 20px;
 }
 
-.option-input
-{
-  height: 40px;
-  width: 80%;
-}
-
-.option-input-group
-{
-  width: 60%;
-  margin: 10px 0;
-}
-
-.show-hide-button
-{
-  color: white;
-  width: 100%;
-  margin: 10px 0 0 0;
-  background: #99CCFF;
-  border-radius: 0;
-}
-
-.show-hide-button:hover
-{
-  background: #F8F8F8;
-}
-
-.edit-area
-{
-  background: #F8F8F8;
-  width: 95%;
-  margin: 0 auto;
-  padding: 10px 0 0 0;
-}
-
 .menu-img
 {
   margin:10px;
@@ -237,25 +170,11 @@ p
   height:26px;
 }
 
-.menu-text
-{
-  color: black;
-  font-size:17px
-}
-
-.menu-title
-{
-  color: black;
-  font-size: 17px;
-  font-weight: bold;
-}
-
 .option-box
 {
   display: flex;
   align-items:center;
 }
-
 
 .el-row
 {
@@ -275,5 +194,43 @@ p
   margin-bottom: 20px;
 }
 
+.progress-bar
+{
+ width: 40%;
+ margin: 10px;
+ display: inline-block;
+}
 
+.questionnaire-title
+{
+  color: #333333;
+  line-height: 52px;
+  font-size: 36px;
+  text-align: center;
+}
+.questionnaire-description
+{
+  color: #666666;
+  line-height: 38px;
+  font-size: 26px;
+
+  text-align: center;
+  margin: 21px 0 0 0;
+}
+
+.money
+{
+  color: #FF4343;
+}
+
+.error-msg
+{
+  color: #FF4343;
+  font-size: 22px;
+}
+
+.fraction
+{
+  color: #409EFF;
+}
 </style>
