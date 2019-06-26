@@ -34,6 +34,14 @@
             <div class="content">{{ item.description }}</div>
             <el-divider></el-divider>
           </div>
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="20"
+            layout="total, prev, pager, next, jumper"
+            :total="tasksNum"
+            style="text-align:center"
+          ></el-pagination>
         </el-card>
       </el-col>
       <el-col :span="4">
@@ -157,6 +165,8 @@ export default {
       newQuestionBonus: "",
       time: "",
       tasksList: [],
+      tasksNum: 0,
+      currentPage: 1,
       pickerBeginDateAfter: {
         disabledDate: time => {
           return time.getTime() <= Date.now() - 8.64e7;
@@ -165,15 +175,28 @@ export default {
     };
   },
   mounted: function() {
-    this.$http.get("/api/assignment/").then(
+    this.$http.get("/api/assignment/" + this.currentPage).then(
       response => {
         this.tasksList = response.data.assignments;
-        console.log(response.data.assignments);
+        this.tasksNum = response.data.asgCount;
+        console.log(response.data);
       },
       response => console.log(response)
     );
   },
   methods: {
+    handleCurrentChange: function(val) {
+      this.currentPage = val;
+      this.$http.get("/api/assignment/" + this.currentPage).then(
+        response => {
+          this.tasksList = response.data.assignments;
+          this.tasksNum = response.data.asgCount;
+          console.log(response.data);
+        },
+        response => console.log(response)
+      );
+      console.log(`当前页: ${val}`);
+    },
     //发起提问
     raiseQuestion: function() {
       if (this.newQuestionTitle.trim() == "") {

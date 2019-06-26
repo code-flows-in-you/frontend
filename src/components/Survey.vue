@@ -23,6 +23,14 @@
             <div class="survey-content">{{ item.description }}</div>
             <el-divider></el-divider>
           </div>
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="20"
+            layout="total, prev, pager, next, jumper"
+            :total="questionnairesNum"
+            style="text-align:center"
+          ></el-pagination>
         </el-card>
       </el-col>
       <el-col :span="4">
@@ -91,19 +99,34 @@
 export default {
   data() {
     return {
-      questionnairesList: []
+      questionnairesList: [],
+      questionnairesNum: 0,
+      currentPage: 1
     };
   },
   mounted: function() {
-    this.$http.get("/api/assignment/questionnaire").then(
+    this.$http.get("/api/assignment/questionnaire/" + this.currentPage).then(
       response => {
         this.questionnairesList = response.data.assignments;
-        console.log(response.data.assignments);
+        this.questionnairesNum = response.data.asgCount;
+        console.log(response.data);
       },
       response => console.log(response)
     );
   },
   methods: {
+    handleCurrentChange: function(val) {
+      this.currentPage = val;
+      this.$http.get("/api/assignment/questionnaire/" + this.currentPage).then(
+        response => {
+          this.questionnairesList = response.data.assignments;
+          this.questionnairesNum = response.data.asgCount;
+          console.log(response.data);
+        },
+        response => console.log(response)
+      );
+      console.log(`当前页: ${val}`);
+    },
     //发起问卷
     raiseSurvey: function() {},
     goToProfile: function(child) {

@@ -3,29 +3,32 @@
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
         <el-card class="text item">
-          <paginate name='questions' :list='questionsList' :per='3' class="paginate-list">
-            <div v-for="item in paginated('questions')" :key="item._id">
-              <el-row>
-                <el-col :span="22">
-                  <div class="question-title" @click="quroaDetail( item.aid )">{{ item.title }}</div>
-                </el-col>
-                <el-col :span="1">
-                  <img src="../assets/coin.png" width="20">
-                </el-col>
-                <el-col :span="1">{{ item.coin }}</el-col>
-              </el-row>
-              <div class="question-info">
-                <span class="question-info">{{ item.createTime.substr(0, 10) }}</span>
-                <span>&nbsp;&nbsp;&nbsp; {{ item.answerCount }}人已回答</span>
-                <span v-if="item.bestCount === 1">&nbsp;&nbsp;&nbsp;已采纳</span>
-              </div>
-              <div class="question-content">{{ item.description }}</div>
-              <el-divider></el-divider>
+          <div v-for="item in questionsList" :key="item._id">
+            <el-row>
+              <el-col :span="22">
+                <div class="question-title" @click="quroaDetail( item.aid )">{{ item.title }}</div>
+              </el-col>
+              <el-col :span="1">
+                <img src="../assets/coin.png" width="20">
+              </el-col>
+              <el-col :span="1">{{ item.coin }}</el-col>
+            </el-row>
+            <div class="question-info">
+              <span class="question-info">{{ item.createTime.substr(0, 10) }}</span>
+              <span>&nbsp;&nbsp;&nbsp; {{ item.answerCount }}人已回答</span>
+              <span v-if="item.bestCount === 1">&nbsp;&nbsp;&nbsp;已采纳</span>
             </div>
-          </paginate>
-          <div class="el-pagination">
-            <paginate-links for="questions" :limit="2" :show-step-links="true"></paginate-links>
+            <div class="question-content">{{ item.description }}</div>
+            <el-divider></el-divider>
           </div>
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="20"
+            layout="total, prev, pager, next, jumper"
+            :total="questionsNum"
+            style="text-align:center"
+          ></el-pagination>
         </el-card>
       </el-col>
       <el-col :span="4">
@@ -141,7 +144,8 @@ export default {
       newQuestionBonus: "",
       time: "",
       questionsList: [],
-      paginate: ['questions'],
+      questionsNum: 0,
+      currentPage: 1,
       pickerBeginDateAfter: {
         disabledDate: time => {
           return time.getTime() <= Date.now() - 8.64e7;
@@ -150,18 +154,30 @@ export default {
     };
   },
   mounted: function() {
-    this.$http.get("/api/assignment/qa").then(
+    this.$http.get("/api/assignment/qa/" + this.currentPage).then(
       response => {
         this.questionsList = response.data.assignments;
-        console.log(response.data.assignments);
+        this.questionsNum = response.data.asgCount;
+        console.log(response.data);
       },
       response => console.log(response)
     );
   },
   methods: {
+    handleCurrentChange: function(val) {
+      this.currentPage = val;
+      this.$http.get("/api/assignment/qa/" + this.currentPage).then(
+        response => {
+          this.questionsList = response.data.assignments;
+          this.questionsNum = response.data.asgCount;
+          console.log(response.data);
+        },
+        response => console.log(response)
+      );
+      console.log(`当前页: ${val}`);
+    },
     //发起提问
-    raiseQuestion: function()
-    {
+    raiseQuestion: function() {
       if (this.newQuestionTitle.trim() == "") {
         this.$message.error("问题标题不能为空");
         return;
