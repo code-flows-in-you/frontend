@@ -3,8 +3,7 @@
     <el-row :gutter="20" style="height:50px;">
       <el-col :span="2" :offset="5">
         <el-link href="/" :underline="false">
-          <!-- <img src="../assets/logo.png" height="50px"> -->
-          
+          <img src="../assets/logo.png" height="50px">
         </el-link>
       </el-col>
       <el-col :span="4" :offset="5">
@@ -39,11 +38,6 @@
     </el-row>
     <el-row :gutter="20" style="margin-bottom:50px; margin-top:20px">
       <el-col :span="19" :offset="3">
-        <!-- <hr
-          size="15"
-          color="#99CCFF"
-          style="box-shadow:0px 5px 6px 0px rgba(170, 170, 170, 1);opacity:0.67"
-        > -->
       <el-divider></el-divider>
       </el-col>
     </el-row>
