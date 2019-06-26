@@ -8,7 +8,7 @@
         placement="top"
       >
         <el-card  shadow="never">
-          <el-button type="text" @click="goToQuestionareDetail( item.aid )">{{ item.title}}</el-button>
+          <el-button type="text" @click="goToSurveyResult( item.aid )">{{ item.title}}</el-button>
           <p>{{ item.description }}</p>
           <span>{{ item.copy-item.coin/item.unit}}/{{ item.copy }}份</span>
         </el-card>
@@ -37,7 +37,7 @@ export default {
     },
     //跳转到问卷结果
     goToSurveyResult:function (aid) {
-      
+      this.$router.push("/questionnaireAnalyze/" + aid);
     }
   },
   mounted() {

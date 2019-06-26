@@ -40,9 +40,9 @@
         </div>
       </div>
 
-
       <el-divider></el-divider>
     </div>
+
   </el-card>
 </div>
 </template>
@@ -53,15 +53,14 @@ export default {
   data() {
     return {
       aid: null,
-      isValid: true,
-      errorMsg: "问卷已结束",
       questionnaire: {},
       questions: [],
       questionTypes: {},
       answers: {},
       options: {},
       data: {},
-      numOfAnswers: 0
+      numOfAnswers: 0,
+      errorMsg: "您不是问卷创建者, 没有查看问卷数据的权限",
     }
   },
   mounted() {
@@ -73,6 +72,8 @@ export default {
 
       this.questionnaire = response.data
       this.numOfAnswers = (this.questionnaire.copy - this.questionnaire.coin/this.questionnaire.unit)
+      if (this.numOfAnswers === 0)
+        this.$message.info("该问卷暂时未被填写")
 
       console.log(this.questionnaire)
 
@@ -114,8 +115,9 @@ export default {
     })
     .catch(e =>
     {
-      console.log(e)
       console.log(e.response)
+
+      this.$message.error(this.errorMsg)
     })
 
   },
