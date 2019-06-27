@@ -71,7 +71,7 @@
                 src="../assets/help.png"
                 style="margin:10px; vertical-align:middle; width:26px; height:26px"
               >
-              <el-link @click="newTask=true" :underline="false" style="font-size:17px">发布任务</el-link>
+              <el-link @click="newTask=true" :underline="false" style="font-size:17px">发起求助</el-link>
             </div>
           </el-row>
           <el-row>
@@ -138,10 +138,6 @@
         style="margin-bottom:15px"
         clearable
       ></el-input>
-      <!-- <el-upload action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-      <img v-if="imageUrl" :src="imageUrl" class="avatar">
-      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>-->
       <div style="text-align:right;">
         <img src="../assets/coin.png" width="20" style="vertical-align:middle;margin-right:10px">
         <el-input placeholder="输入悬赏金额" v-model="newQuestionBonus" clearable style="width:50%;"></el-input>
@@ -274,23 +270,47 @@ export default {
   font-family: SourceHanSansSC-regular;
 }
 
-.title {
+/* .title {
   color: rgba(41, 64, 87, 1);
   font-size: 25px;
   font-family: Roboto;
+} */
+
+.title{
+  display: inline-block;
+  color: rgba(41, 64, 87, 1);
+  font-size: 25px;
+  font-weight: 500;
+  border-bottom: 1px solid white;
+  cursor: pointer;
 }
 
-.info {
+.title:hover {
+  border-bottom: 1px solid #222;
+}
+
+/* .info {
   color: rgba(204, 204, 204, 1);
   font-family: Roboto;
   font-size: 17px;
-}
+} */
 
+.info{
+  
+  color: #999;
+  font-size: 14px;
+  padding-top: 8px;
+
+}
 .content {
-  color: rgba(16, 16, 16, 1);
+  /* color: rgba(16, 16, 16, 1);
   font-size: 19px;
   font-family: Roboto;
-  margin-top: 20px;
+  margin-top: 20px; */
+   text-align: left;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 16px;
 }
 
 .survey-footer {
@@ -308,4 +328,20 @@ export default {
 .coin {
   color: rgba(255, 67, 67, 1);
 }
+.post-all:hover {
+  color: white;
+  background: #000;
+  font-weight: 600;
+}
+
+
+.post-button {
+  display: inline-block;
+  padding: 3px 12px;
+  border: 2px solid #222;
+  color: #222;
+  font-size: 14px;
+  cursor: pointer;
+}
+
 </style>

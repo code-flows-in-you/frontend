@@ -7,7 +7,7 @@
             <el-row>
               <el-col :span="22">
                 <div
-                  class="survey-title"
+                  class="title"
                   @click="goToQuestionnaireDetail( item.aid )"
                 >{{ item.title }}</div>
               </el-col>
@@ -16,13 +16,13 @@
               </el-col>
               <el-col :span="1" class="coin">{{ item.unit }}</el-col>
             </el-row>
-            <div class="survey-info">
+            <div class="info">
               <span
-                class="survey-info"
+                class="info"
               >{{ item.startTime.split(" ")[0] }}~{{ item.endTime.split(" ")[0] }}</span>
               <span>&nbsp;&nbsp;&nbsp;{{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
             </div>
-            <div class="survey-content">{{ item.description }}</div>
+            <div class="content">{{ item.description }}</div>
             <div
               v-if="now > item.endTime"
               @click="goToQuestionnaireDetail(item.aid)"

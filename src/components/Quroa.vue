@@ -6,19 +6,19 @@
           <div v-for="item in questionsList" :key="item._id">
             <el-row>
               <el-col :span="22">
-                <div class="question-title" @click="quroaDetail( item.aid )">{{ item.title }}</div>
+                <div class="title" @click="quroaDetail( item.aid )">{{ item.title }}</div>
               </el-col>
               <el-col :span="1">
                 <img src="../assets/coin.png" width="20">
               </el-col>
               <el-col :span="1" class="coin">{{ item.coin }}</el-col>
             </el-row>
-            <div class="question-info">
-              <span class="question-info">{{ item.createTime.split(" ")[0] }}</span>
+            <div class="info">
+              <span class="info">{{ item.createTime.split(" ")[0] }}</span>
               <span>&nbsp;&nbsp;&nbsp; {{ item.answerCount }}人已回答</span>
               <span v-if="item.bestCount === 1">&nbsp;&nbsp;&nbsp;已采纳</span>
             </div>
-            <div class="question-content">{{ item.description }}</div>
+            <div class="content">{{ item.description }}</div>
             <el-divider></el-divider>
           </div>
           <el-pagination
