@@ -2,12 +2,12 @@
   <div style="margin-top:10px">
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
-        <el-card class="text item">
+        <el-card class="text item" shadow="never" v-loading="loading">
           <div v-for="item in questionnairesList" :key="item._id">
             <el-row>
               <el-col :span="22">
                 <div
-                  class="survey-title"
+                  class="title"
                   @click="goToQuestionnaireDetail( item.aid )"
                 >{{ item.title }}</div>
               </el-col>
@@ -16,13 +16,13 @@
               </el-col>
               <el-col :span="1" class="coin">{{ item.unit }}</el-col>
             </el-row>
-            <div class="survey-info">
+            <div class="info">
               <span
-                class="survey-info"
+                class="info"
               >{{ item.startTime.split(" ")[0] }}~{{ item.endTime.split(" ")[0] }}</span>
               <span>&nbsp;&nbsp;&nbsp;{{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
             </div>
-            <div class="survey-content">{{ item.description }}</div>
+            <div class="content">{{ item.description }}</div>
             <div
               v-if="now > item.endTime"
               @click="goToQuestionnaireDetail(item.aid)"
@@ -110,15 +110,19 @@ export default {
       questionnairesList: [],
       questionnairesNum: 0,
       currentPage: 1,
-      now: this.$dateFormatter(new Date())
+      now: this.$dateFormatter(new Date()),
+      loading:true,
     };
   },
   mounted: function() {
+    this.loading = true;
     this.$http.get("/api/assignment/questionnaire/" + this.currentPage).then(
       response => {
         this.questionnairesList = response.data.assignments;
         this.questionnairesNum = response.data.asgCount;
         console.log(response.data);
+    this.loading = false;
+
       },
       response => console.log(response)
     );
@@ -126,11 +130,14 @@ export default {
   methods: {
     handleCurrentChange: function(val) {
       this.currentPage = val;
+         this.loading = true;
       this.$http.get("/api/assignment/questionnaire/" + this.currentPage).then(
         response => {
           this.questionnairesList = response.data.assignments;
           this.questionnairesNum = response.data.asgCount;
           console.log(response.data);
+            this.loading = false;
+
         },
         response => console.log(response)
       );
