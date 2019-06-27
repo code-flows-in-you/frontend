@@ -166,14 +166,21 @@ export default {
         endTime: this.$dateFormatter(new Date()),
         detail: ""
       };
-      this.$http.post("/api/qa/", content).then(
-        response => {
-          this.$message.success("问题发布成功");
-          console.log(response);
-          this.fetchData(1);
-        },
-        response => console.log(response)
-      );
+      this.$http
+        .post("/api/qa/", content)
+        .then(
+          response => {
+            this.$message.success("问题发布成功");
+            console.log(response);
+            this.fetchData(1);
+          }
+        )
+        .catch(e => {
+          let feedback = e.response.data.msg;
+          if (feedback == "not enough coin") {
+            this.$message.error("余额不足");
+          }
+        });
     },
     quroaDetail: function(id) {
       this.$router.push("/quroaDetail/" + id);
@@ -197,9 +204,10 @@ export default {
           this.questionsNum = response.data.asgCount;
           console.log(response.data);
           this.loading = false;
-        },
-        response => console.log(response)
-      );
+        }).catch(e => {
+          let feedback = e.response.data.msg;
+          this.$message.error(feedback);
+        });
     }
   }
 };

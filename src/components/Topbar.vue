@@ -101,7 +101,8 @@ export default {
           this.$router.push("/signin");
         })
         .catch(e => {
-          console.log(e.response);
+          let feedback = e.response.data.msg;
+          this.$message.error(feedback);
         });
     },
     search() {},

@@ -201,18 +201,22 @@ export default {
     },
     acceptAnswer: function(qaid) {
       let aid = this.$route.params.id;
-      this.$http.put("/api/qa/" + aid + "/" + qaid).then(
-        response => {
+      this.$http
+        .put("/api/qa/" + aid + "/" + qaid)
+        .then(response => {
           this.$message.success("采纳成功");
           this.fetchData();
-        },
-        response => console.log(response)
-      );
+        })
+        .catch(e => {
+          let feedback = e.response.data.msg;
+          this.$message.error(feedback);
+        });
     },
     fetchData: function() {
       let aid = this.$route.params.id;
-      this.$http.get("/api/qa/" + aid).then(
-        response => {
+      this.$http
+        .get("/api/qa/" + aid)
+        .then(response => {
           this.question = response.data;
           this.answers = this.question.answers;
           this.pid = this.question.pid;
@@ -230,9 +234,11 @@ export default {
             let uid = answer.user.substr(0, uidLength);
             if (uid == userUid) this.isAnswered = true;
           }
-        },
-        response => console.log(response)
-      );
+        })
+        .catch(e => {
+          let feedback = e.response.data.msg;
+          this.$message.error(feedback);
+        });
     },
     goBack: function() {
       this.$router.back(-1);

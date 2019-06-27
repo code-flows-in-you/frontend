@@ -194,14 +194,17 @@ export default {
         endTime: this.$dateFormatter(new Date()),
         detail: ""
       };
-      this.$http.post("/api/qa/", content).then(
-        response => {
+      this.$http
+        .post("/api/qa/", content)
+        .then(response => {
           this.$message.success("问题发布成功");
           this.fetchData(1);
           console.log(response);
-        },
-        response => console.log(response)
-      );
+        })
+        .catch(e => {
+          let feedback = e.response.data.msg;
+          this.$message.error(feedback);
+        });
     },
     raiseQuestionnaire: function() {
       this.$router.push("/questionnaireCreate");
@@ -225,15 +228,18 @@ export default {
     fetchData: function(page) {
       this.loading = true;
       this.currentPage = page;
-      this.$http.get("/api/assignment/" + this.currentPage).then(
-        response => {
+      this.$http
+        .get("/api/assignment/" + this.currentPage)
+        .then(response => {
           this.tasksList = response.data.assignments;
           this.tasksNum = response.data.asgCount;
           console.log(response.data);
           this.loading = false;
-        },
-        response => console.log(response)
-      );
+        })
+        .catch(e => {
+          let feedback = e.response.data.msg;
+          this.$message.error(feedback);
+        });
     }
   }
 };
@@ -276,7 +282,7 @@ export default {
   font-family: Roboto;
 } */
 
-.title{
+.title {
   display: inline-block;
   color: rgba(41, 64, 87, 1);
   font-size: 25px;
@@ -295,19 +301,17 @@ export default {
   font-size: 17px;
 } */
 
-.info{
-  
+.info {
   color: #999;
   font-size: 14px;
   padding-top: 8px;
-
 }
 .content {
   /* color: rgba(16, 16, 16, 1);
   font-size: 19px;
   font-family: Roboto;
   margin-top: 20px; */
-   text-align: left;
+  text-align: left;
   padding-top: 20px;
   padding-bottom: 20px;
   font-size: 16px;
@@ -334,7 +338,6 @@ export default {
   font-weight: 600;
 }
 
-
 .post-button {
   display: inline-block;
   padding: 3px 12px;
@@ -343,5 +346,4 @@ export default {
   font-size: 14px;
   cursor: pointer;
 }
-
 </style>
