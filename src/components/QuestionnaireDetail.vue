@@ -242,19 +242,15 @@ export default {
 
 .questionnaire-title
 {
-  color: #333333;
-  line-height: 52px;
-  font-size: 36px;
-  font-family: Roboto;
+  color: black;
+  font-size: 25px;
   text-align: center;
 }
 
 .questionnaire-description
 {
   color: #666666;
-  line-height: 38px;
-  font-size: 26px;
-  font-family: Roboto;
+  font-size: 19px;
   text-align: center;
   margin: 21px 0 0 0;
 }
@@ -267,8 +263,7 @@ export default {
 .error-msg
 {
   color: #FF4343;
-  font-size: 22px;
-  font-family: SourceHanSansSC-regular;
+  font-size: 19px;
 }
 
 .el-form
@@ -281,11 +276,11 @@ export default {
   margin: 0 5%;
 }
 
-.questionnaire-form-item > :first-child, .questionnaire-form-item > :nth-child(2)
+.questionnaire-form-item > :first-child,
+.questionnaire-form-item > :nth-child(2)
 {
   color: black;
-  font-size: 22px;
-  font-family: SourceHanSansSC-regular;
+  font-size: 16px;
   vertical-align: middle;
 }
 
@@ -293,10 +288,9 @@ export default {
 {
   width: 100%;
   display: inline-block;
-  zoom: 130%;
+  zoom: 114%;
   /*transform: scale(3);
   transform-origin: 0 0;*/
-  font-family: SourceHanSansSC-regular;
   line-height: 20px;
   padding: 0 15px;
 }
@@ -310,8 +304,7 @@ export default {
 .input-area
 {
   display: block;
-  zoom: 130%;
-  font-family: SourceHanSansSC-regular;
+  zoom: 114%;
   width: 40%;
   margin: 10px 0;
   padding: 0 15px;
