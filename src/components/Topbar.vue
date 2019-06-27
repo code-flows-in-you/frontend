@@ -49,7 +49,8 @@
       </el-col>
     </el-row>
     <el-dialog :visible.sync="rechargeVisible" width="20%" center>
-      <el-input placeholder="输入充值金额" v-model="reChargeNum" clearable ></el-input>
+      <el-input placeholder="输入充值金额" v-model="reChargeNum"
+      type="Number" min="0" clearable ></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="recharge" size="small" type="primary">确认</el-button>
         <el-button @click="rechargeVisible = false" size="small" type="primary">取消</el-button>
@@ -71,7 +72,7 @@ export default {
   mounted: function() {},
   methods: {
     recharge: function() {
-      if (!/^\d+$/.test(this.reChargeNum)) {
+      if (this.reChargeNum == ""|| this.reChargeNum <= 0){
         this.$message.error("充值金额不能为空且必须为正整数");
         return;
       }
@@ -88,7 +89,7 @@ export default {
           this.$message.error("充值失败");
            reChargeNum=""
         }
-        
+
       );
       this.rechargeVisible = false
     },
