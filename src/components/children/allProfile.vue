@@ -1,6 +1,6 @@
 <template>
   <!-- <el-card shadow="never"> -->
-  <div style="margin-top:15px;width:800px;height:600px;">
+  <div style="margin-top:15px;width:800px;">
       <el-timeline  v-loading="loading">
         <el-timeline-item
           v-for="item in myassignments"

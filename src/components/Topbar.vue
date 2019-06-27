@@ -6,7 +6,7 @@
           <img src="../assets/logo.png" height="50px">
         </el-link>
       </el-col>
-      <el-col :span="4" :offset="5">
+      <el-col :span="4" :offset="4">
         <el-select
           style="margin-top:10px;"
           v-model="searchText"
@@ -15,7 +15,7 @@
           placeholder="请输入关键词"
         ></el-select>
       </el-col>
-      <el-col :span="3">
+      <el-col :span="4">
         <el-menu :default-active="$route.path" router mode="horizontal" @select="handleSelect">
           <el-menu-item index="/all">全部</el-menu-item>
           <el-menu-item index="/quroa">问答</el-menu-item>
@@ -82,6 +82,7 @@ export default {
           this.$message.success("充值成功");
           console.log(response);
           reChargeNum:""
+          this.$store.dispatch("getUserInfo");
         },
         response => {console.log(response)
           this.$message.error("充值失败");

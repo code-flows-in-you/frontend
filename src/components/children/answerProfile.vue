@@ -36,7 +36,6 @@ export default {
     getMyAnswers: function() {
       this.$http.get("/api/assignment/self/answer").then(
         response => {
-          console.log("answers:" + response.data.assignments);
           this.myAnswers = response.data.assignments;
           this.loading = false;
         },
