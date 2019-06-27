@@ -209,7 +209,7 @@ export default {
     goToProfile: function(child) {
       this.$router.push("/profile/" + child);
     },
-    goToQuestionareDetail: function(aid) {
+    goToQuestionnaireDetail: function(aid) {
       console.error(aid);
        this.$router.push("/QuestionnaireDetail/" + aid);
     },
