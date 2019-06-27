@@ -22,9 +22,9 @@
             <div v-else> <!-- single and multi -->
               <div v-for="(option, oid) in displayOptions[index]" :key="oid"
                class="option-box">
-                <img src="../assets/单选-选中.png" class="menu-img"
+                <img src="../assets/单选-选中.png" class="option-img"
                  v-if="question.type === 'single'">
-                <img src="../assets/多选-选中.png" class="menu-img"
+                <img src="../assets/多选-选中.png" class="option-img"
                  v-else>
                 <p>
                   <span v-show="option.value==''">标题 {{ String(oid + 1) }}</span>
@@ -71,7 +71,7 @@
           </div>
 
           <el-row type="flex" justify="center">
-            <el-button type="primary" @click="showDialog">完成编辑</el-button>
+            <el-button type="primary" @click="showDialog">发布问卷</el-button>
           </el-row>
         </el-card>
       </el-col>
@@ -141,12 +141,8 @@
         style="width:100%; margin-bottom:15px"
         :picker-options="pickerBeginDateAfter"
       ></el-date-picker>
-      <!--<div style="text-align:right;">
-        <img src="../assets/coin.png" width="20" style="vertical-align:middle;margin-right:10px">
-        <el-input placeholder="输入悬赏金额" clearable style="width:50%;"></el-input>
-      </div>-->
       <span slot="footer" class="dialog-footer">
-        <el-button @click="submitQuestionnaire();isShowMoneyDialog=false;" size="small" type="primary">发布问卷</el-button>
+        <el-button @click="submitQuestionnaire();isShowMoneyDialog=false;" size="small" type="primary">确认</el-button>
       </span>
     </el-dialog>
 
@@ -237,6 +233,12 @@ export default {
     {
       this.questionnaire.questions = this.displayQuestions
 
+      for (let question of this.questionnaire.questions)
+      {
+        if (question.title == "")
+          question.title == "问题"
+      }
+
       console.log(this.displayOptions)
       //convert options to the form server desires
       for (let qid in this.displayQuestions)
@@ -248,33 +250,47 @@ export default {
         }
         else
         {
+          if (this.displayOptions[qid].length == 0)
+          {
+            this.$message.error("问题" + qid + "必须包含至少一个选项");
+            return;
+          }
+
           for (let option of this.displayOptions[qid])
           {
+            if (option.title == "")
+              option.title = "选项"
             option.questionIndex = Number(qid)
             this.questionnaire.options.push(option)
           }
         }
       }
 
+      //validation
+
+      if (this.questionnaire.copy.trim() == "")
+      {
+        this.$message.error("问卷分数不能为空");
+        return;
+      }
+
+      if (this.questionnaire.coin.trim() == "" || Number(this.questionnaire.coin) < 0)
+      {
+        this.$message.error("悬赏金额不能为空且必须为正整数");
+        return;
+      }
+
+      if (Object.prototype.toString.call(this.time) != "[object Array]") {
+        this.$message.error("必须选择开始与结束时间");
+        return;
+      }
+
+
       this.questionnaire.copy = Number(this.questionnaire.copy)
       this.questionnaire.coin = Number(this.questionnaire.coin)
       this.questionnaire.createTime = this.$dateFormatter(new Date)
       this.questionnaire.startTime = this.$dateFormatter(this.time[0])
       this.questionnaire.endTime = this.$dateFormatter(this.time[1])
-
-      console.log(this.questionnaire)
-      /*if (this.newQuestionTitle.trim() == "") {
-        this.$message.error("问题标题不能为空");
-        return;
-      }
-      if (Object.prototype.toString.call(this.time) != "[object Array]") {
-        this.$message.error("必须选择开始与结束时间");
-        return;
-      }
-      if (!/^\d+$/.test(this.newQuestionBonus)) {
-        this.$message.error("悬赏金额不能为空且必须为正整数");
-        return;
-      }*/
 
       this.$http.post('/api/questionnaire/', this.questionnaire)
       .then(response =>
@@ -297,21 +313,21 @@ export default {
 input
 {
   padding: 0px 10px;
-  font-size: 17px;
+  font-size: 16px;
 }
 
 p
 {
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .title-input
 {
   display: block;
-  height: 66px;
+  height: 36px;
   width: 360px;
   margin: 5px auto;
-  font-size: 22px;
+  font-size: 25px;
   text-align: center;
   border-radius: 6px;
   border: solid #CCCCCC 1px;
@@ -320,11 +336,11 @@ p
 .description-input
 {
   display: block;
-  height: 66px;
+  height: 26px;
   width: 90%;
   margin: 10px auto;
   color: #666666;
-  font-size: 22px;
+  font-size: 19px;
   padding: 0 5px;
   border: none;
 }
@@ -359,7 +375,7 @@ p
 .option-input-group
 {
   width: 60%;
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
 .show-hide-button
@@ -392,6 +408,14 @@ p
   height:26px;
 }
 
+.option-img
+{
+  margin: 5px;
+  vertical-align: middle;
+  width:20px;
+  height:20px;
+}
+
 .menu-text
 {
   color: black;
@@ -407,6 +431,7 @@ p
 
 .option-box
 {
+  height: 40px;
   display: flex;
   align-items:center;
 }

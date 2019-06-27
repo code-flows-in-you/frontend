@@ -27,9 +27,9 @@
       </div>
       <div v-else> <!-- single and multi -->
         <div v-for="option in options[question.qid]" :key="option.oid" class="option-box">
-          <img src="../assets/单选-选中.png" class="menu-img"
+          <img src="../assets/单选-选中.png" class="option-img"
            v-if="question.type === 'single'">
-          <img src="../assets/多选-选中.png" class="menu-img"
+          <img src="../assets/多选-选中.png" class="option-img"
            v-else>
           <p><span style="margin: 0 10px">{{option.value}}</span></p>
 
@@ -139,16 +139,9 @@ export default {
 
 
 <style scoped>
-
-input
-{
-  padding: 0px 10px;
-  font-size: 17px;
-}
-
 p
 {
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .reply
@@ -172,10 +165,20 @@ p
   height:26px;
 }
 
+.option-img
+{
+  margin: 5px;
+  vertical-align: middle;
+  width:20px;
+  height:20px;
+}
+
 .option-box
 {
+  height: 40px;
   display: flex;
   align-items:center;
+  margin: 10px;
 }
 
 .el-row
@@ -205,17 +208,15 @@ p
 
 .questionnaire-title
 {
-  color: #333333;
-  line-height: 52px;
-  font-size: 36px;
+  color: black;
+  font-size: 25px;
   text-align: center;
 }
+
 .questionnaire-description
 {
   color: #666666;
-  line-height: 38px;
-  font-size: 26px;
-
+  font-size: 19px;
   text-align: center;
   margin: 21px 0 0 0;
 }
@@ -228,7 +229,7 @@ p
 .error-msg
 {
   color: #FF4343;
-  font-size: 22px;
+  font-size: 19px;
 }
 
 .fraction

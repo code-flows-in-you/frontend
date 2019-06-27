@@ -223,18 +223,17 @@ export default {
 
 <style scoped>
 .question-title {
-  line-height: 36px;
   color: rgba(41, 64, 87, 1);
   /* font-size: 36px;
    */
-  font-size: 26px;
+  font-size: 25px;
   font-family: Roboto;
 }
 
 .question-description
 {
   color: #666666;
-  font-size: 17px;
+  font-size: 19px;
   font-family: Roboto;
   margin: 21px 0 0 0;
 }
