@@ -1,6 +1,8 @@
 <template>
 <div class="card" style="width:70%;margin:auto;">
-  <el-card style="margin-top:10px;">
+    <el-page-header @back="goBack">
+</el-page-header>
+  <el-card style="margin-top:10px;" shadow="never">
     <el-row>
       <el-col :span="22" :offset="1">
         <div class="questionnaire-title">{{ questionnaire.title }}</div>
@@ -18,7 +20,7 @@
       <p>{{ String(index+1) }}. {{ question.title }}</p>
       {{options[index]}}
       <div v-if="question.type === 'input'">
-        <input placeholder="示例输入框" class="sample-input"></input>
+        <el-input placeholder="示例输入框" class="sample-input"></el-input>
         <div v-for="(reply, replyIndex) in data[options[question.qid][0].oid]" :key="replyIndex"
         class="reply">
         <p>{{ replyIndex+1  }}. {{reply.value}}</p>
@@ -129,6 +131,10 @@ export default {
       if (this.numOfAnswers != 0)
         result = this.data[oid].length / this.numOfAnswers * 100
       return Math.round(result)
+    },
+    goBack:function () {
+       this.$router.back(-1);
+      
     }
   }
 

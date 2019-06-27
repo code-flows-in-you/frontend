@@ -8,7 +8,23 @@
         placement="top"
       >
         <el-card  shadow="never">
-          <el-button icon="el-icon-s-order" type="text" @click="goToSurveyResult( item.aid )">{{ item.title}}</el-button>
+         
+          
+          <el-row>
+            <el-col :span="20">
+              <el-button
+                icon="el-icon-s-order"
+                type="text"
+                @click="goToQuestionnaireAnalyze( item.aid )"
+              >{{ item.title}}</el-button>
+            </el-col>
+            <el-col :span="1">
+              <img src="../../assets/coin.png" width="15">
+            </el-col>
+            <el-col :span="1">
+              <span class="coin">{{ item.coin }}</span>
+            </el-col>
+          </el-row>
           <p>{{ item.description }}</p>
           <span>{{ item.copy-item.coin/item.unit}}/{{ item.copy }}份</span>
         </el-card>
@@ -40,9 +56,10 @@ export default {
       );
     },
     //跳转到问卷结果
-    goToSurveyResult:function (aid) {
+     goToQuestionnaireAnalyze: function(aid) {
       this.$router.push("/questionnaireAnalyze/" + aid);
     }
+    
   },
   mounted() {
       this.loading = true;

@@ -19,7 +19,7 @@
           </el-upload>
         </el-col>
         <el-col :span="16" :offset="2">
-          <div style="font-size:28px;">{{ this.$store.state.user.Nickname }}</div>
+          <div class="vcard-username">{{ this.$store.state.user.Nickname }}</div>
           <el-row style="margin-top:5%">
             <el-col :span="3">
               <div class="amount-num">{{amountData.answerCount}}</div>
@@ -40,7 +40,7 @@
               <el-divider direction="vertical"></el-divider>
             </el-col>
             <el-col :span="3">
-              <div class="amount-num">{{amountData.coin }}</div>
+              <div class="amount-num">{{ this.$store.state.coin }}</div>
             </el-col>
           </el-row>
           <el-row>
@@ -90,9 +90,7 @@
           <div slot="header" class="clearfix">
             <span>我的信息</span>
           </div>
-          <!-- <div>姓名：{{ userInfo.RealName }}</div>
-          <div>学号：{{ userInfo.StudentID }}</div>
-          <div>年龄：20</div>-->
+
           <el-form
             :model="userInfo"
             status-icon

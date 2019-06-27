@@ -2,23 +2,23 @@
   <div style="margin-top:10px">
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
-        <el-card class="text item">
+        <el-card class="text item" shadow="never" v-loading="loading">
           <div v-for="item in questionsList" :key="item._id">
             <el-row>
               <el-col :span="22">
-                <div class="question-title" @click="quroaDetail( item.aid )">{{ item.title }}</div>
+                <div class="title" @click="quroaDetail( item.aid )">{{ item.title }}</div>
               </el-col>
               <el-col :span="1">
                 <img src="../assets/coin.png" width="20">
               </el-col>
               <el-col :span="1" class="coin">{{ item.coin }}</el-col>
             </el-row>
-            <div class="question-info">
-              <span class="question-info">{{ item.createTime.split(" ")[0] }}</span>
+            <div class="info">
+              <span class="info">{{ item.createTime.split(" ")[0] }}</span>
               <span>&nbsp;&nbsp;&nbsp; {{ item.answerCount }}人已回答</span>
               <span v-if="item.bestCount === 1">&nbsp;&nbsp;&nbsp;已采纳</span>
             </div>
-            <div class="question-content">{{ item.description }}</div>
+            <div class="content">{{ item.description }}</div>
             <el-divider></el-divider>
           </div>
           <el-pagination
@@ -135,7 +135,8 @@ export default {
       newQuestionBonus: "",
       questionsList: [],
       questionsNum: 0,
-      currentPage: 1
+      currentPage: 1,
+      loading: true
     };
   },
   mounted: function() {
@@ -165,14 +166,21 @@ export default {
         endTime: this.$dateFormatter(new Date()),
         detail: ""
       };
-      this.$http.post("/api/qa/", content).then(
-        response => {
-          this.$message.success("问题发布成功");
-          console.log(response);
-          this.fetchData(1);
-        },
-        response => console.log(response)
-      );
+      this.$http
+        .post("/api/qa/", content)
+        .then(
+          response => {
+            this.$message.success("问题发布成功");
+            console.log(response);
+            this.fetchData(1);
+          }
+        )
+        .catch(e => {
+          let feedback = e.response.data.msg;
+          if (feedback == "not enough coin") {
+            this.$message.error("余额不足");
+          }
+        });
     },
     quroaDetail: function(id) {
       this.$router.push("/quroaDetail/" + id);
@@ -187,15 +195,19 @@ export default {
       done();
     },
     fetchData: function(page) {
+      this.loading = true;
+
       this.currentPage = page;
       this.$http.get("/api/assignment/qa/" + this.currentPage).then(
         response => {
           this.questionsList = response.data.assignments;
           this.questionsNum = response.data.asgCount;
           console.log(response.data);
-        },
-        response => console.log(response)
-      );
+          this.loading = false;
+        }).catch(e => {
+          let feedback = e.response.data.msg;
+          this.$message.error(feedback);
+        });
     }
   }
 };

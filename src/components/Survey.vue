@@ -2,27 +2,22 @@
   <div style="margin-top:10px">
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
-        <el-card class="text item">
+        <el-card class="text item" shadow="never" v-loading="loading">
           <div v-for="item in questionnairesList" :key="item._id">
             <el-row>
               <el-col :span="22">
-                <div
-                  class="survey-title"
-                  @click="goToQuestionnaireDetail( item.aid )"
-                >{{ item.title }}</div>
+                <div class="title" @click="goToQuestionnaireDetail( item.aid )">{{ item.title }}</div>
               </el-col>
               <el-col :span="1">
                 <img src="../assets/coin.png" width="20">
               </el-col>
               <el-col :span="1" class="coin">{{ item.unit }}</el-col>
             </el-row>
-            <div class="survey-info">
-              <span
-                class="survey-info"
-              >{{ item.startTime.split(" ")[0] }}~{{ item.endTime.split(" ")[0] }}</span>
+            <div class="info">
+              <span class="info">{{ item.startTime.split(" ")[0] }}~{{ item.endTime.split(" ")[0] }}</span>
               <span>&nbsp;&nbsp;&nbsp;{{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
             </div>
-            <div class="survey-content">{{ item.description }}</div>
+            <div class="content">{{ item.description }}</div>
             <div
               v-if="now > item.endTime"
               @click="goToQuestionnaireDetail(item.aid)"
@@ -110,30 +105,41 @@ export default {
       questionnairesList: [],
       questionnairesNum: 0,
       currentPage: 1,
-      now: this.$dateFormatter(new Date())
+      now: this.$dateFormatter(new Date()),
+      loading: true
     };
   },
   mounted: function() {
-    this.$http.get("/api/assignment/questionnaire/" + this.currentPage).then(
-      response => {
+    this.loading = true;
+    this.$http
+      .get("/api/assignment/questionnaire/" + this.currentPage)
+      .then(response => {
         this.questionnairesList = response.data.assignments;
         this.questionnairesNum = response.data.asgCount;
         console.log(response.data);
-      },
-      response => console.log(response)
-    );
+        this.loading = false;
+      })
+      .catch(e => {
+        let feedback = e.response.data.msg;
+        this.$message.error(feedback);
+      });
   },
   methods: {
     handleCurrentChange: function(val) {
       this.currentPage = val;
-      this.$http.get("/api/assignment/questionnaire/" + this.currentPage).then(
-        response => {
+      this.loading = true;
+      this.$http
+        .get("/api/assignment/questionnaire/" + this.currentPage)
+        .then(response => {
           this.questionnairesList = response.data.assignments;
           this.questionnairesNum = response.data.asgCount;
           console.log(response.data);
-        },
-        response => console.log(response)
-      );
+          this.loading = false;
+        })
+        .catch(e => {
+          let feedback = e.response.data.msg;
+          this.$message.error(feedback);
+        });
       console.log(`当前页: ${val}`);
     },
     //发起问卷

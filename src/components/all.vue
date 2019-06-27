@@ -2,7 +2,7 @@
   <div style="margin-top:10px">
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
-        <el-card class="text item" shadow="never">
+        <el-card class="text item" shadow="never" v-loading="loading">
           <div v-for="item in tasksList" :key="item._id">
             <el-row v-if="item.type == 'qa'">
               <el-col :span="22">
@@ -71,7 +71,7 @@
                 src="../assets/help.png"
                 style="margin:10px; vertical-align:middle; width:26px; height:26px"
               >
-              <el-link @click="newTask=true" :underline="false" style="font-size:17px">发布任务</el-link>
+              <el-link @click="newTask=true" :underline="false" style="font-size:17px">发起求助</el-link>
             </div>
           </el-row>
           <el-row>
@@ -113,7 +113,7 @@
       </el-col>
     </el-row>
     <el-dialog :visible.sync="newTask" width="20%" center>
-      <el-row type="flex" justify="center" style="font-size:20px">请选择求助类型</el-row>
+      <el-row type="flex" justify="center" style="font-size:20px">请选择任务类型</el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="newQuestion=true;newTask=false;" size="small" type="primary">发起提问</el-button>
         <el-button @click="raiseQuestionnaire" size="small" type="primary">发起问卷</el-button>
@@ -138,10 +138,6 @@
         style="margin-bottom:15px"
         clearable
       ></el-input>
-      <!-- <el-upload action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-      <img v-if="imageUrl" :src="imageUrl" class="avatar">
-      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>-->
       <div style="text-align:right;">
         <img src="../assets/coin.png" width="20" style="vertical-align:middle;margin-right:10px">
         <el-input placeholder="输入悬赏金额" v-model="newQuestionBonus" clearable style="width:50%;"></el-input>
@@ -166,10 +162,12 @@ export default {
       tasksList: [],
       tasksNum: 0,
       currentPage: 1,
-      now: this.$dateFormatter(new Date())
+      now: this.$dateFormatter(new Date()),
+      loading: true
     };
   },
   mounted: function() {
+    this.loading = true;
     this.fetchData(1);
   },
   methods: {
@@ -196,14 +194,17 @@ export default {
         endTime: this.$dateFormatter(new Date()),
         detail: ""
       };
-      this.$http.post("/api/qa/", content).then(
-        response => {
+      this.$http
+        .post("/api/qa/", content)
+        .then(response => {
           this.$message.success("问题发布成功");
           this.fetchData(1);
           console.log(response);
-        },
-        response => console.log(response)
-      );
+        })
+        .catch(e => {
+          let feedback = e.response.data.msg;
+          this.$message.error(feedback);
+        });
     },
     raiseQuestionnaire: function() {
       this.$router.push("/questionnaireCreate");
@@ -225,15 +226,20 @@ export default {
       done();
     },
     fetchData: function(page) {
+      this.loading = true;
       this.currentPage = page;
-      this.$http.get("/api/assignment/" + this.currentPage).then(
-        response => {
+      this.$http
+        .get("/api/assignment/" + this.currentPage)
+        .then(response => {
           this.tasksList = response.data.assignments;
           this.tasksNum = response.data.asgCount;
           console.log(response.data);
-        },
-        response => console.log(response)
-      );
+          this.loading = false;
+        })
+        .catch(e => {
+          let feedback = e.response.data.msg;
+          this.$message.error(feedback);
+        });
     }
   }
 };
@@ -270,23 +276,45 @@ export default {
   font-family: SourceHanSansSC-regular;
 }
 
-.title {
+/* .title {
   color: rgba(41, 64, 87, 1);
   font-size: 25px;
   font-family: Roboto;
+} */
+
+.title {
+  display: inline-block;
+  color: rgba(41, 64, 87, 1);
+  font-size: 25px;
+  font-weight: 500;
+  border-bottom: 1px solid white;
+  cursor: pointer;
 }
 
-.info {
+.title:hover {
+  border-bottom: 1px solid #222;
+}
+
+/* .info {
   color: rgba(204, 204, 204, 1);
   font-family: Roboto;
   font-size: 17px;
-}
+} */
 
+.info {
+  color: #999;
+  font-size: 14px;
+  padding-top: 8px;
+}
 .content {
-  color: rgba(16, 16, 16, 1);
+  /* color: rgba(16, 16, 16, 1);
   font-size: 19px;
   font-family: Roboto;
-  margin-top: 20px;
+  margin-top: 20px; */
+  text-align: left;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 16px;
 }
 
 .survey-footer {
@@ -303,5 +331,19 @@ export default {
 
 .coin {
   color: rgba(255, 67, 67, 1);
+}
+.post-all:hover {
+  color: white;
+  background: #000;
+  font-weight: 600;
+}
+
+.post-button {
+  display: inline-block;
+  padding: 3px 12px;
+  border: 2px solid #222;
+  color: #222;
+  font-size: 14px;
+  cursor: pointer;
 }
 </style>

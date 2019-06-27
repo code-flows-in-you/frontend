@@ -81,12 +81,12 @@ export default {
         response => {
           this.$message.success("充值成功");
           console.log(response);
-          reChargeNum:""
+          reChargeNum=""
           this.$store.dispatch("getUserInfo");
         },
         response => {console.log(response)
           this.$message.error("充值失败");
-           reChargeNum:""
+           reChargeNum=""
         }
         
       );
@@ -101,7 +101,8 @@ export default {
           this.$router.push("/signin");
         })
         .catch(e => {
-          console.log(e.response);
+          let feedback = e.response.data.msg;
+          this.$message.error(feedback);
         });
     },
     search() {},
