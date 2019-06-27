@@ -20,7 +20,7 @@
       <p>{{ String(index+1) }}. {{ question.title }}</p>
       {{options[index]}}
       <div v-if="question.type === 'input'">
-        <input placeholder="示例输入框" class="sample-input"></input>
+        <el-input placeholder="示例输入框" class="sample-input"></el-input>
         <div v-for="(reply, replyIndex) in data[options[question.qid][0].oid]" :key="replyIndex"
         class="reply">
         <p>{{ replyIndex+1  }}. {{reply.value}}</p>
