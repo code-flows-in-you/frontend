@@ -14,7 +14,7 @@
               <el-col :span="1" class="coin">{{ item.coin }}</el-col>
             </el-row>
             <div class="info">
-              <span class="info">{{ item.createTime.split(" ")[0] }}</span>
+              <span class="info">{{ item.createTime }}</span>
               <span>&nbsp;&nbsp;&nbsp; {{ item.answerCount }}人已回答</span>
               <span v-if="item.bestCount === 1">&nbsp;&nbsp;&nbsp;已采纳</span>
             </div>
@@ -49,7 +49,7 @@
                 src="../assets/help.png"
                 style="margin:10px; vertical-align:middle; width:26px; height:26px"
               >
-              <el-link @click="newQuestion=true" :underline="false" style="font-size:17px">发起求助</el-link>
+              <el-link @click="newQuestion=true" :underline="false" style="font-size:17px">发起提问</el-link>
             </div>
           </el-row>
           <el-row>

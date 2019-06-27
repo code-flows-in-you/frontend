@@ -71,7 +71,7 @@
                 src="../assets/help.png"
                 style="margin:10px; vertical-align:middle; width:26px; height:26px"
               >
-              <el-link @click="newTask=true" :underline="false" style="font-size:17px">发起求助</el-link>
+              <el-link @click="newTask=true" :underline="false" style="font-size:17px">发起任务</el-link>
             </div>
           </el-row>
           <el-row>

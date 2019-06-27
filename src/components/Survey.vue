@@ -54,7 +54,7 @@
                 src="../assets/help.png"
                 style="margin:10px; vertical-align:middle; width:26px; height:26px"
               >
-              <el-link @click="newQuestion=true" :underline="false" style="font-size:17px">发起求助</el-link>
+              <el-link @click="raiseQuestionnaire" :underline="false" style="font-size:17px">发起问卷</el-link>
             </div>
           </el-row>
           <el-row>
@@ -143,7 +143,9 @@ export default {
       console.log(`当前页: ${val}`);
     },
     //发起问卷
-    raiseSurvey: function() {},
+    raiseQuestionnaire: function() {
+      this.$router.push("/questionnaireCreate");
+    },
     goToProfile: function(child) {
       this.$router.push("/profile/" + child);
     },

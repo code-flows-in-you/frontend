@@ -9,7 +9,7 @@
         <div class="questionnaire-description">{{ questionnaire.description }}</div>
       </el-col>
       <el-col class="money" :span="1">
-        <img src="../assets/coin.png" class="menu-img" width="20"/>
+        <img class="menu-img" src="../assets/coin.png" width="20"/>
         {{ questionnaire.unit }}
       </el-col>
     </el-row>
@@ -18,19 +18,21 @@
     <el-form v-if="isValid" :model="answers" :rules="rules"
      ref="questionareForm" @submit.native.prevent>
       <div v-for="question in questions" :key="question.qid">
-        <el-form-item :prop="String(question.qid)" :label="question.title"
-         class="questionnaire-form-item">
-          <el-input v-if="question.type === 'input'"
-           class="input-area" v-model="answers[question.qid]"></el-input>
-          <el-radio-group v-else-if="question.type === 'single'"
-           class="question-option-group"  v-model="answers[question.qid]">
-            <el-radio v-for="option in options[question.qid]" :key="option.oid"
-            class="question-option-item" :label="option.oid">{{option.value}}</el-radio>
+        <el-form-item class="questionnaire-form-item"
+         :prop="String(question.qid)" :label="question.title">
+          <el-input class="input-area"
+           v-if="question.type === 'input'" v-model="answers[question.qid]"></el-input>
+          <el-radio-group class="question-option-group"
+           v-else-if="question.type === 'single'" v-model="answers[question.qid]">
+            <el-radio class="question-option-item"
+             v-for="option in options[question.qid]" :key="option.oid"
+             :label="option.oid">{{option.value}}</el-radio>
           </el-radio-group>
-          <el-checkbox-group v-else-if="question.type === 'multi'"
-           class="question-option-group" v-model="answers[question.qid]">
-            <el-checkbox v-for="option in options[question.qid]" :key="option.oid"
-            class="question-option-item" :label="option.oid">{{option.value}}</el-checkbox>
+          <el-checkbox-group class="question-option-group"
+           v-else-if="question.type === 'multi'" v-model="answers[question.qid]">
+            <el-checkbox class="question-option-item"
+             v-for="option in options[question.qid]" :key="option.oid"
+             :label="option.oid">{{option.value}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-divider></el-divider>
@@ -152,6 +154,7 @@ export default {
       {
         this.$message.success('问卷提交成功')
         console.log(response)
+        this.$router.push("/all")
       })
       .catch(e =>
       {

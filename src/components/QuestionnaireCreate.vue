@@ -3,10 +3,10 @@
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
         <el-card>
-          <el-input v-model="questionnaire.title" placeholder="输入问卷名称"
-          class="title-input"></el-input>
-          <el-input v-model="questionnaire.description" placeholder="添加问卷说明"
-          class="description-input"></el-input>
+          <el-input class="title-input"
+          v-model="questionnaire.title" placeholder="输入问卷名称"></el-input>
+          <el-input class="description-input"
+          v-model="questionnaire.description" placeholder="添加问卷说明"></el-input>
           <el-divider></el-divider>
           <!-- body of the questionnaire -->
 
@@ -17,14 +17,14 @@
               {{ question.title }}
             </p>
             <div v-if="question.type === 'input'">
-              <el-input placeholder="示例输入框" class="sample-input"></el-input>
+              <el-input class="sample-input" placeholder="示例输入框" ></el-input>
             </div>
             <div v-else> <!-- single and multi -->
-              <div v-for="(option, oid) in displayOptions[index]" :key="oid"
-               class="option-box">
-                <img src="../assets/单选-选中.png" class="option-img"
+              <div class="option-box"
+               v-for="(option, oid) in displayOptions[index]" :key="oid">
+                <img class="option-img" src="../assets/单选-选中.png"
                  v-if="question.type === 'single'">
-                <img src="../assets/多选-选中.png" class="option-img"
+                <img class="option-img" src="../assets/多选-选中.png"
                  v-else>
                 <p>
                   <span v-show="option.value==''">标题 {{ String(oid + 1) }}</span>
@@ -33,38 +33,38 @@
               </div>
             </div>
 
-            <el-button @click="beginEdit(index)" v-show="!isEdit[index]"
-             class="show-hide-button">▼编辑</el-button>
+            <el-button class="show-hide-button"
+             @click="beginEdit(index)" v-show="!isEdit[index]">▼编辑</el-button>
 
             <div v-show="isEdit[index]" class="edit-area">
-              <el-input v-model="question.title" placeholder="请输入问题标题"
-               class="question-input"></el-input>
+              <el-input class="question-input"
+               v-model="question.title" placeholder="请输入问题标题"></el-input>
 
 
               <div v-if="question.type !== 'input'">
 
                 <el-row type="flex" justify="center">
-                  <img src="../assets/加.png" @click="addOption(index)"
-                   class="click-img-button">
+                  <img class="click-img-button"
+                   src="../assets/加.png" @click="addOption(index)">
                 </el-row>
 
                 <el-row type="flex" justify="center"
                  v-for="(option, oid) in displayOptions[index]" :key="oid">
                   <div class="option-input-group">
-                    <el-input v-model="option.value" :placeholder="'选项'+(oid+1)"
-                     class="option-input"></el-input>
-                     <img src="../assets/删除.png" @click="deleteOption(index)"
-                      class="click-img-button menu-img">
+                    <el-input class="option-input"
+                     v-model="option.value" :placeholder="'选项'+(oid+1)"></el-input>
+                     <img class="click-img-button menu-img"
+                      src="../assets/删除.png" @click="deleteOption(index)">
                   </div>
                 </el-row>
               </div>
 
-              <el-button @click="finishEdit(index)" class="show-hide-button">▲ 完成编辑</el-button>
+              <el-button class="show-hide-button" @click="finishEdit(index)">▲ 完成编辑</el-button>
             </div>
 
             <el-row type="flex" justify="center">
-              <img src="../assets/删除.png" @click="deleteQuestion(index)"
-               class="click-img-button menu-img">
+              <img class="click-img-button menu-img"
+               src="../assets/删除.png" @click="deleteQuestion(index)">
             </el-row>
 
             <el-divider></el-divider>
@@ -86,22 +86,22 @@
           <el-row>
             <div>
               <img src="../assets/单选-选中.png" class="menu-img">
-              <el-link @click="addQuestion('single')" :underline="false"
-               class="menu-text">单选</el-link>
+              <el-link class="menu-text"
+               @click="addQuestion('single')" :underline="false">单选</el-link>
             </div>
           </el-row>
           <el-row>
             <div>
               <img src="../assets/多选-选中.png" class="menu-img">
-              <el-link @click="addQuestion('multi')" :underline="false"
-               class="menu-text">多选</el-link>
+              <el-link class="menu-text"
+               @click="addQuestion('multi')" :underline="false">多选</el-link>
             </div>
           </el-row>
           <el-row>
             <div>
               <img src="../assets/填空题.png" class="menu-img">
-              <el-link @click="addQuestion('input')" :underline="false"
-               class="menu-text">单项填空</el-link>
+              <el-link class="menu-text"
+               @click="addQuestion('input')" :underline="false">单项填空</el-link>
             </div>
           </el-row>
         </el-card>
@@ -128,10 +128,6 @@
         style="margin-bottom:15px"
         clearable
       ></el-input>
-      <!-- <el-upload action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-      <img v-if="imageUrl" :src="imageUrl" class="avatar">
-      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>-->
       <el-date-picker
         v-model="time"
         type="datetimerange"
@@ -141,7 +137,7 @@
         style="width:100%; margin-bottom:15px"
         :picker-options="pickerBeginDateAfter"
       ></el-date-picker>
-      <span slot="footer" class="dialog-footer">
+      <span class="dialog-footer" slot="footer" >
         <el-button @click="submitQuestionnaire();" size="small" type="primary">确认</el-button>
         <el-button @click="isShowMoneyDialog=false" size="small" >取消</el-button>
       </span>
@@ -155,16 +151,16 @@ export default {
   data() {
     return {
       displayQuestions: [],
-      displayOptions: {},
+      displayOptions: [],
       answers: {},
       time: "",
-      isEdit: {},
+      isEdit: [],
       isShowMoneyDialog: false,
       questionnaire:{
         title: "",
         description: "",
-        coin:"0",
-        copy: "0",
+        coin:"",
+        copy: "",
         createTime: "",
         startTime: "",
         endTime: "",
@@ -205,7 +201,8 @@ export default {
     deleteQuestion(qid)
     {
       this.displayQuestions.splice(qid, 1)
-      this.$set(this.displayOptions, qid, [])
+      this.isEdit.splice(qid, 1)
+      this.displayOptions.splice(qid, 1)
     },
     deleteOption(qid, oid)
     {
@@ -213,16 +210,15 @@ export default {
     },
     beginEdit: function(qid)
     {
-      this.isEdit[qid] = true
+      this.$set(this.isEdit, qid, true)
     },
     finishEdit: function(qid)
     {
-      this.isEdit[qid] = false
-      console.log(this.isEdit)
+      this.$set(this.isEdit, qid, false)
     },
     showDialog: function()
     {
-      if(!validateQuestionnaire())
+      if(!this.validateQuestionnaire())
         return
       this.isShowMoneyDialog = true
     },
@@ -234,7 +230,11 @@ export default {
     },
     validateQuestionnaire: function()
     {
-
+      if (this.questionnaire.title == "")
+      {
+        this.$message.error("请填写问卷标题");
+        return false;
+      }
 
       if (this.displayQuestions.length == 0)
       {
@@ -244,13 +244,17 @@ export default {
 
       for (let qid in this.displayQuestions)
       {
-        if (this.displayOptions[qid].length == 0)
+        if (this.displayQuestions[qid].type != 'input')
         {
-          this.$message.error("问题" + qid + "必须包含至少一个选项");
-          return;
+          if (this.displayOptions[qid].length == 0)
+          {
+            this.$message.error("问题" + qid + "必须包含至少一个选项");
+            return false;
+          }
         }
       }
 
+      // auto fill blank
 
       for (let question of this.questionnaire.questions)
       {
@@ -260,8 +264,7 @@ export default {
 
       for (let qid in this.displayQuestions)
       {
-
-        if (this.questionnaire.questions[qid].type != 'input')
+        if (this.displayQuestions[qid].type != 'input')
         {
           for (let option of this.displayOptions[qid])
           {
@@ -270,22 +273,29 @@ export default {
           }
         }
       }
-
+      return true
     },
     submitQuestionnaire: function()
     {
-
-      if (this.questionnaire.copy.trim() == "")
+      // validate
+      if (this.questionnaire.copy == ""|| this.questionnaire.copy <= 0)
       {
-        this.$message.error("问卷份数不能为空");
+        this.$message.error("问卷份数必须为正整数");
+        return;
+      }
+
+      if (this.questionnaire.coin == ""|| this.questionnaire.coin <= 0)
+      {
+        this.$message.error("悬赏金额必须为正整数");
+        return;
+      }
+
+      if (Object.prototype.toString.call(this.time) != "[object Array]") {
+        this.$message.error("必须选择开始与结束时间");
         return;
       }
 
       this.questionnaire.questions = this.displayQuestions
-
-
-
-
 
       console.log(this.displayOptions)
       //convert options to the form server desires
@@ -314,36 +324,6 @@ export default {
         }
       }
 
-      console.log(this.questionnaire.copy)
-        if (this.questionnaire.copy==0||this.questionnaire.copy=="")
-      {
-        this.$message.error("问卷份数必须为正整数");
-        return;
-      }
-      // if (this.questionnaire.copy.trim() == "")
-      // {
-      //   this.$message.error("问卷分数不能为空");
-      //   return;
-      // }
-
-      // if (this.questionnaire.coin.trim() == "" || Number(this.questionnaire.coin) < 0)
-      // {
-      //   this.$message.error("悬赏金额不能为空且必须为正整数");
-      //   return;
-      // }
-
-      if (this.questionnaire.coin == ""|| this.questionnaire.coin <= 0)
-      {
-        this.$message.error("悬赏金额必须为正整数");
-        return;
-      }
-
-      if (Object.prototype.toString.call(this.time) != "[object Array]") {
-        this.$message.error("必须选择开始与结束时间");
-        return;
-      }
-
-
       this.questionnaire.copy = Number(this.questionnaire.copy)
       this.questionnaire.coin = Number(this.questionnaire.coin)
       this.questionnaire.createTime = this.$dateFormatter(new Date)
@@ -355,13 +335,14 @@ export default {
       {
         this.$message.success("问卷已发布")
         this.isShowMoneyDialog=false;
+        this.$router.push("/all")
       })
       .catch(e =>
       {
         console.log(e)
         console.log(e.response)
         if(e.response.data.msg=="not enough coin")
-        this.$message.error("余额不够")
+          this.$message.error("余额不够")
       })
     }
   }

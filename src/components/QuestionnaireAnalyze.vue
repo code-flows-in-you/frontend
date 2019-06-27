@@ -18,24 +18,23 @@
 
     <div v-for="(question, index) in questions" :key="question.qid">
       <p>{{ String(index+1) }}. {{ question.title }}</p>
-      {{options[index]}}
       <div v-if="question.type === 'input'">
         <el-input placeholder="示例输入框" class="sample-input"></el-input>
-        <div v-for="(reply, replyIndex) in data[options[question.qid][0].oid]" :key="replyIndex"
-        class="reply">
-        <p>{{ replyIndex+1  }}. {{reply.value}}</p>
+        <div class="reply"
+         v-for="(reply, replyIndex) in data[options[question.qid][0].oid]" :key="replyIndex">
+        <p>{{ replyIndex+1  }}. {{ reply.value }}</p>
         </div>
 
       </div>
       <div v-else> <!-- single and multi -->
-        <div v-for="option in options[question.qid]" :key="option.oid" class="option-box">
-          <img src="../assets/单选-选中.png" class="option-img"
+        <div class="option-box" v-for="option in options[question.qid]" :key="option.oid" >
+          <img class="option-img" src="../assets/单选-选中.png"
            v-if="question.type === 'single'">
-          <img src="../assets/多选-选中.png" class="option-img"
+          <img class="option-img" src="../assets/多选-选中.png"
            v-else>
-          <p><span style="margin: 0 10px">{{option.value}}</span></p>
+          <p><span style="margin: 0 10px">{{ option.value }}</span></p>
 
-          <el-progress  :stroke-width="22" class="progress-bar" :text-inside="true"
+          <el-progress class="progress-bar" :stroke-width="22"  :text-inside="true"
            :percentage="getPercentage(option.oid)"></el-progress>
           <span class="fraction">{{ data[option.oid].length }} / {{ numOfAnswers }}</span>
 
@@ -134,7 +133,7 @@ export default {
     },
     goBack:function () {
        this.$router.back(-1);
-      
+
     }
   }
 

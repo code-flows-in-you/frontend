@@ -18,9 +18,25 @@ export default {
   created: function ()
   {
     //持久化登录
+
     this.$store.dispatch('getUserInfo')
     .then(response =>
     {
+      this.$router.beforeEach((to, from, next) =>
+      {
+        // router guard
+        if (to.path != '/signin' && to.path != '/signup')
+        {
+          if (this.$store.getters.isSignedIn)
+            next()
+          else
+            // if the user has not signen in,
+            // he can only visit signin and signup
+            next('/signin')
+        }
+        else
+          next()
+      })
       console.log(response)
     })
     .catch(e =>
