@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
 
-        <el-card class="text item">
+        <el-card class="text item" shadow="never">
           <div v-for="item in tasksList" :key="item._id">
             <el-row v-if="item.type == 'qa'">
               <el-col :span="22">
