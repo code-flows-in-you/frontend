@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-top:15px;">
+    <div tyle="margin-top:15px;width:800px;height:600px;">
     <el-timeline v-if="myAnswers.length">
       <el-timeline-item
         v-for="item in myAnswers"
@@ -15,7 +15,7 @@
         </el-card>
       </el-timeline-item>
     </el-timeline>
-    <div v-else>暂无回答</div>
+    <!-- <div v-else style="margin-top:15px;width:800px;height:600px;">暂无回答</div> -->
   </div>
 </template>
 

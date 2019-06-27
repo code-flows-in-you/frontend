@@ -9,7 +9,9 @@ import store from './store'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueCropper from 'vue-cropper'
 import VuePaginate from 'vue-paginate'
-
+import HappyScroll from 'vue-happy-scroll'
+import 'vue-happy-scroll/docs/happy-scroll.css'
+Vue.use(HappyScroll)
 
 
 // import VueResource from 'vue-resource'

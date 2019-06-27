@@ -1,5 +1,5 @@
 <template>
-   <div style="margin-top:15px;">
+   <div style="margin-top:15px;width:800px;height:600px;">
     <el-timeline>
       <el-timeline-item
         v-for="item in myQuestions"
