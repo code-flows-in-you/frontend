@@ -1,12 +1,12 @@
 <template>
-  <div style="margin-left:200px;margin-right:200px;">
+  <div style="margin-left:300px;margin-right:250px;">
     <el-card class="box-card" shadow="never">
       <el-row>
         <el-col :span="4">
           <!-- <img src="../assets/avatar.png" height="50px"/> -->
           <el-upload
             class="avatar-uploader"
-           
+            action="fornone"
             :show-file-list="false"
             :auto-upload="false"
              element-loading-text="拼命上传中"
@@ -78,7 +78,8 @@
             <el-menu-item index="/profile/answer">我的回答</el-menu-item>
             <el-menu-item index="/profile/balance">收益细则</el-menu-item>
           </el-menu>
-          <router-view></router-view>
+          <div style="margin-top:15px;width:800px;height:600px;" > <happy-scroll size="8"><router-view></router-view></happy-scroll></div>
+        
         </el-card>
       </el-col>
 
