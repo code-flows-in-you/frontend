@@ -43,7 +43,7 @@
           <!-- <el-image :src="this.$store.state.user.Avatar" style="height:50px"></el-image> -->
           <el-avatar size="large" :src="this.$store.state.user.Avatar"></el-avatar>
         </el-col>
-        <el-col :span="2" style="margin-left:10px;">
+        <el-col :span="3" style="margin-left:10px;">
           <el-row>{{ this.$store.state.user.Nickname }}</el-row>
           <el-row>{{ this.$dateFormatter(this.time).split(' ')[0] }}</el-row>
         </el-col>
