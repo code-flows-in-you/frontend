@@ -11,7 +11,7 @@
               <el-col :span="1">
                 <img src="../assets/coin.png" width="20">
               </el-col>
-              <el-col :span="1">{{ item.coin }}</el-col>
+              <el-col :span="1" class="coin">{{ item.coin }}</el-col>
             </el-row>
             <el-row v-else-if="item.type == 'questionnaire'">
               <el-col :span="22">
@@ -20,7 +20,7 @@
               <el-col :span="1">
                 <img src="../assets/coin.png" width="20">
               </el-col>
-              <el-col :span="1">{{ item.unit }}</el-col>
+              <el-col :span="1" class="coin">{{ item.unit }}</el-col>
             </el-row>
             <div class="info" v-if="item.type == 'qa'">
               <span class="info">{{ item.createTime.split(" ")[0] }}</span>
@@ -299,5 +299,9 @@ export default {
 .survey-footer:hover {
   color: #175199;
   cursor: pointer;
+}
+
+.coin {
+  color: rgba(255, 67, 67, 1);
 }
 </style>

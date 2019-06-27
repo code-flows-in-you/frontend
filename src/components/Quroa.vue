@@ -11,7 +11,7 @@
               <el-col :span="1">
                 <img src="../assets/coin.png" width="20">
               </el-col>
-              <el-col :span="1">{{ item.coin }}</el-col>
+              <el-col :span="1" class="coin">{{ item.coin }}</el-col>
             </el-row>
             <div class="question-info">
               <span class="question-info">{{ item.createTime.split(" ")[0] }}</span>
@@ -258,5 +258,9 @@ export default {
   font-weight: 300;
   line-height: 24px;
   margin: 10px;
+}
+
+.coin {
+  color: rgba(255, 67, 67, 1);
 }
 </style>

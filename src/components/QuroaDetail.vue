@@ -187,7 +187,7 @@ export default {
         }
         else if (feedback === "already answer")
         {
-            this.$message.error("您已经回答过改问题");
+            this.$message.error("您已经回答过该问题");
         }
       });
     },
