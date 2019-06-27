@@ -19,7 +19,7 @@
           </el-upload>
         </el-col>
         <el-col :span="16" :offset="2">
-          <div class="vcard-username">{{ this.$store.state.user.Nickname }}</div>
+          <div class="vcard-username" style="font-weight:bold;font-size:25px;">{{ this.$store.state.user.Nickname }}</div>
           <el-row style="margin-top:5%">
             <el-col :span="3">
               <div class="amount-num">{{amountData.answerCount}}</div>
@@ -97,7 +97,7 @@
             ref="userForm"
             :rules="rules"
             :disabled="disableForm"
-            label-width="85px"
+            label-width="55px"
             size="small"
             class="demo-ruleForm"
           >
