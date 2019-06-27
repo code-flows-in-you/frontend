@@ -7,7 +7,7 @@
         <div class="questionnaire-description">{{ questionnaire.description }}</div>
       </el-col>
       <el-col class="money" :span="1">
-        <img src="../assets/coin.png" width="20"/>
+        <img src="../assets/coin.png" class="menu-img" width="20"/>
         {{ questionnaire.unit }}
       </el-col>
     </el-row>
@@ -317,5 +317,9 @@ export default {
   padding: 0 15px;
 }
 
+.menu-img
+{
+  vertical-align: middle;
+}
 
 </style>
