@@ -221,6 +221,8 @@ export default {
     },
     showDialog: function()
     {
+      if(!validateQuestionnaire())
+        return
       this.isShowMoneyDialog = true
     },
     clearInput: function(done) {
@@ -229,15 +231,60 @@ export default {
       this.time = ""
       done()
     },
-    submitQuestionnaire: function()
+    validateQuestionnaire: function()
     {
-      this.questionnaire.questions = this.displayQuestions
+
+
+      if (this.displayQuestions.length == 0)
+      {
+        this.$message.error("问卷至少包含一个问题");
+        return false;
+      }
+
+      for (let qid in this.displayQuestions)
+      {
+        if (this.displayOptions[qid].length == 0)
+        {
+          this.$message.error("问题" + qid + "必须包含至少一个选项");
+          return;
+        }
+      }
+
 
       for (let question of this.questionnaire.questions)
       {
         if (question.title == "")
           question.title == "问题"
       }
+
+      for (let qid in this.displayQuestions)
+      {
+
+        if (this.questionnaire.questions[qid].type != 'input')
+        {
+          for (let option of this.displayOptions[qid])
+          {
+            if (option.value == "")
+              option.value = "选项"
+          }
+        }
+      }
+
+    },
+    submitQuestionnaire: function()
+    {
+
+      if (this.questionnaire.copy.trim() == "")
+      {
+        this.$message.error("问卷份数不能为空");
+        return;
+      }
+
+      this.questionnaire.questions = this.displayQuestions
+
+
+
+
 
       console.log(this.displayOptions)
       //convert options to the form server desires
@@ -267,6 +314,7 @@ export default {
       }
 
       //validation
+
 
       if (this.questionnaire.copy.trim() == "")
       {
