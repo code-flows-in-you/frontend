@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state:
   {
     status: '',
-    user : {}
+    user : {},
+    coin: 0
   },
   mutations: {
     signin_request(state)
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     },
     update_avatar(state,url){
       state.user.Avatar = url;
+    },
+    update_coin(state, coin){
+      state.coin = coin;
     }
   },
   actions:
@@ -98,7 +102,7 @@ export default new Vuex.Store({
     updateAvatar({commit},url){
       commit('update_avatar',url)
     },
-    getUserInfo({commit})
+    getUserInfo({commit, dispatch})
     {
       return new Promise((resolve, reject) =>
       {
@@ -106,7 +110,34 @@ export default new Vuex.Store({
         .then(resp =>
         {
           commit('signin_success', resp.data.data)
-          resolve(resp.data.data)
+          dispatch('getUserCoin')
+          .then(resp =>
+          {
+          // get user's info
+            resolve(resp)
+          })
+          .catch(err =>
+          {
+            commit('signin_error')
+            reject(err)
+          })
+
+        })
+        .catch(err =>
+        {
+          reject(err)
+        })
+      })
+    },
+    getUserCoin({commit})
+    {
+      return new Promise((resolve, reject) =>
+      {
+        axios({url: '/api/coin/self', method: 'GET' })
+        .then(resp =>
+        {
+          commit('update_coin', resp.data.coin)
+          resolve(resp.data)
         })
         .catch(err =>
         {

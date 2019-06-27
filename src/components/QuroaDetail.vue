@@ -3,8 +3,32 @@
     <el-page-header @back="goBack">
 </el-page-header>
     <el-card shadow="never" style="margin-top:10px;">
-      <div class="question-title">{{ question.title }}</div>
-      <div class="question-data">{{question.startTime}}</div>
+      <el-row>
+        <el-col :span="22" >
+          <div class="question-title">{{ question.title }}</div>
+        </el-col>
+        <el-col class="money" :span="2">
+          <img src="../assets/coin.png" class="menu-img" width="20"/>
+          {{ question.coin }}
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="20">
+          <el-row>
+            <el-col :span="1">
+              <el-avatar size="large" src=""></el-avatar>
+            </el-col>
+            <el-col :span="4">
+              <el-row class="answser-user">{{ question.creator }}</el-row>
+            </el-col>
+        </el-row>
+        </el-col>
+        <el-col :offset="21" :span="3">
+          <div class="question-data">{{question.createTime}}</div>
+        </el-col>
+      </el-row>
+
       <el-divider></el-divider>
       <div>{{ question.description }}</div>
       <el-row>
@@ -12,7 +36,7 @@
       </el-row>
     </el-card>
     <!-- 我来回答编辑解界面 -->
-    <el-card shadow="never">
+    <el-card v-show="!isAnswered" shadow="never">
       <!-- markown 编辑器 -->
       <el-row>
         <el-col :span="1">
@@ -32,7 +56,6 @@
         maxlength="100"
         show-word-limit
         style="margin-top:20px;"
-        @focus="checkEndTime"
       ></el-input>
       <!-- <quill-editor
         v-model="content"
@@ -94,12 +117,12 @@ export default {
   data() {
     return {
       answer: false,
+      isAnswered: false,
       question: {},
       answers: [],
       time: new Date(),
       content: "",
       pid: 0,
-      endTime: 0,
       editorOption: {
         modules: {
           toolbar: [
@@ -140,8 +163,6 @@ export default {
         this.$message.error("回答不能为空");
         return;
       }
-      if (!this.checkEndTime())
-        return
 
       let aid = this.$route.params.id;
       let content = {
@@ -156,8 +177,8 @@ export default {
           this.content = "";
           this.fetchData();
         },
-        response => console.log(response)
-      ).catch(e =>
+        response => console.log(response))
+      .catch(e =>
       {
         let feedback = e.response.data.msg
         if (feedback === "already have a best answer")
@@ -168,8 +189,7 @@ export default {
         {
             this.$message.error("您已经回答过改问题");
         }
-      })
-      ;
+      });
     },
     fetchData: function() {
       let aid = this.$route.params.id;
@@ -178,26 +198,23 @@ export default {
           this.question = response.data;
           this.answers = this.question.answers;
           this.pid = this.question.pid;
-          this.endTime = this.question.endTime;
           console.log(this.answers);
-          // if(this)
           console.log(response.data);
+
+          let userUid = this.$store.state.user.Uid
+          for (let answer of this.answers)
+          {
+            let uidLength = answer.user.indexOf("@")
+            let uid = answer.user.substr(0, uidLength)
+            if (uid == userUid)
+              this.isAnswered = true
+          }
         },
         response => console.log(response)
       );
     },
     goBack: function(){
       this.$router.back(-1);
-    },
-    checkEndTime: function()
-    {
-      if (Date.parse(this.endTime) < Date.now())
-      {
-        this.$message.error("已过问题截止时间")
-        return false
-      }
-      return true
-
     }
   }
 };
@@ -231,5 +248,15 @@ export default {
 .answser-user {
   margin-top: 5%;
   margin-left: 5%;
+}
+
+.money
+{
+  color: #FF4343;
+}
+
+.menu-img
+{
+  vertical-align: middle;
 }
 </style>
