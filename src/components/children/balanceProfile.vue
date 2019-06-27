@@ -1,6 +1,6 @@
 <template>
 <div style="margin-top:15px;width:800px;height:600px;">
-   <el-timeline>
+   <el-timeline v-loading="loading" >
     <el-timeline-item
       v-for="item in myCoinFlow"
         :key="item._id"
@@ -22,6 +22,7 @@ export default {
   data () {
     return {
       myCoinFlow:[],
+      loading:true,
     }
   },
   methods: {
@@ -30,6 +31,7 @@ export default {
         response => {
           console.log(response.data);
           this.myCoinFlow = response.data.flows;
+          this.loading = false;
         },
         e => console.log(e)
       );
@@ -37,6 +39,7 @@ export default {
     
   },
   mounted() {
+    this.loading = true;
     this.getMyBalance();
   },
 }

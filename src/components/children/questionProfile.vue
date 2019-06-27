@@ -1,6 +1,6 @@
 <template>
    <div style="margin-top:15px;width:800px;height:600px;">
-    <el-timeline>
+    <el-timeline v-loading="loading">
       <el-timeline-item
         v-for="item in myQuestions"
         :key="item._id"
@@ -24,6 +24,7 @@ export default {
   data () {
     return {
       myQuestions:[],
+      loading:true,
     }
   },
   methods: {
@@ -31,6 +32,7 @@ export default {
        this.$http.get("/api/assignment/self/qa").then(
         response => {
           this.myQuestions = response.data.assignments;
+          this.loading = false;
         },
         e => console.log(e)
       );
@@ -40,6 +42,8 @@ export default {
     }
   },
   mounted() {
+          this.loading = true;
+
     this.getMyQuestions();
   },
 }

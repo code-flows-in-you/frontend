@@ -1,8 +1,7 @@
 <template>
   <!-- <el-card shadow="never"> -->
   <div style="margin-top:15px;width:800px;height:600px;">
-
-      <el-timeline>
+      <el-timeline  v-loading="loading">
         <el-timeline-item
           v-for="item in myassignments"
           :key="item._id"
@@ -39,7 +38,8 @@ export default {
   data() {
     return {
       myassignments: [],
-      coin_icon_url: "../../assets/coin.png"
+      coin_icon_url: "../../assets/coin.png",
+      loading:true,
     };
   },
   methods: {
@@ -48,6 +48,7 @@ export default {
         response => {
           console.log(response.data.assignments);
           this.myassignments = response.data.assignments;
+          this.loading = false;
         },
         e => console.log(e)
       );
@@ -60,6 +61,7 @@ export default {
     }
   },
   mounted() {
+    this.loading = true;
     this.getAllData();
   }
 };

@@ -1,6 +1,6 @@
 <template>
     <div tyle="margin-top:15px;width:800px;height:600px;">
-    <el-timeline v-if="myAnswers.length">
+    <el-timeline v-loading="loading" v-if="myAnswers.length">
       <el-timeline-item
         v-for="item in myAnswers"
         :key="item._id"
@@ -24,7 +24,8 @@ export default {
   name: "answerProfile",
   data() {
     return {
-      myAnswers: []
+      myAnswers: [],
+      loading:true,
     };
   },
   methods: {
@@ -33,6 +34,7 @@ export default {
         response => {
           console.log("answers:"+response.data.assignments);
           this.myAnswers = response.data.assignments;
+          this.loading = false;
         },
         e => console.log(e)
       );
@@ -42,6 +44,8 @@ export default {
     }
   },
   mounted() {
+    this.loading = true;
+
     this.getMyAnswers();
   }
 };

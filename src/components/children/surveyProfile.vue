@@ -1,6 +1,6 @@
 <template>
    <div style="margin-top:15px;width:800px;height:600px;">
-    <el-timeline>
+    <el-timeline v-loading="loading">
       <el-timeline-item
         v-for="item in mySurveys"
         :key="item._id"
@@ -23,6 +23,9 @@ export default {
   data () {
     return {
       mySurveys:[],
+      loading:true,
+  
+
     }
   },
   methods: {
@@ -31,6 +34,7 @@ export default {
         response => {
           console.log(response.data.assignments);
           this.mySurveys = response.data.assignments;
+             this.loading = false;
         },
         e => console.log(e)
       );
@@ -41,6 +45,7 @@ export default {
     }
   },
   mounted() {
+      this.loading = true;
     this.getMySurvey();
   },
 }
