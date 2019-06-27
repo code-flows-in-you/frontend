@@ -8,7 +8,7 @@
         placement="top"
       >
         <el-card  shadow="never">
-          <el-button type="text" @click="goToSurveyResult( item.aid )">{{ item.title}}</el-button>
+          <el-button icon="el-icon-s-order" type="text" @click="goToSurveyResult( item.aid )">{{ item.title}}</el-button>
           <p>{{ item.description }}</p>
           <span>{{ item.copy-item.coin/item.unit}}/{{ item.copy }}份</span>
         </el-card>

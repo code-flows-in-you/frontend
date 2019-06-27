@@ -30,17 +30,6 @@
           <el-form-item label="邮箱" prop="email">
             <el-input prefix-icon="el-icon-message" v-model="userForm.email" placeholder="请输入邮箱"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="类别" prop="type">
-          <el-select v-model="userForm.type" placeholder="请选择所属类别">
-            <el-option label="学生" value="student"></el-option>
-            <el-option label="组织" value="origanzation"></el-option>
-          </el-select>
-          </el-form-item>-->
-          <!-- <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="userForm.nickname" placeholder="请输入昵称">
-
-          </el-input>
-          </el-form-item>-->
           <el-form-item>
             <el-button style="width:90%" type="primary" @click="Signup">注册</el-button>
           </el-form-item>

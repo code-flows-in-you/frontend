@@ -8,7 +8,7 @@
         placement="top"
       >
         <el-card  shadow="never">
-          <el-button type="text" @click="quroaDetail( item.aid )">{{ item.title}}</el-button>
+          <el-button icon="el-icon-question" type="text" @click="quroaDetail( item.aid )">{{ item.title}}</el-button>
           <p>{{ item.description }}</p>
           <span>{{ item.answerCount }}人已回答</span>
           <span v-if="item.bestCount === 1">已采纳</span>
