@@ -16,7 +16,7 @@
             </el-row>
             <el-row v-else-if="item.type == 'questionnaire'">
               <el-col :span="22">
-                <div class="title" @click="goToQuestionareDetail( item.aid )">{{ item.title }}</div>
+                <div class="title" @click="goToQuestionnaireDetail( item.aid )">{{ item.title }}</div>
               </el-col>
               <el-col :span="1">
                 <img src="../assets/coin.png" width="20">
@@ -241,9 +241,8 @@ export default {
     goToProfile: function(child) {
       this.$router.push("/profile/" + child);
     },
-    goToQuestionareDetail: function(aid) {
-      console.error(aid);
-      this.$router.push("/questionareDetail/" + aid);
+    goToQuestionnaireDetail: function(aid) {
+      this.$router.push("/questionnaireDetail/" + aid);
     },
     clearInput: function(done) {
       this.newQuestionDescription = "";

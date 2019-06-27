@@ -191,7 +191,7 @@ export default {
     },
     checkEndTime: function()
     {
-      if (new Date(this.endTime) < new Date)
+      if (Date.parse(this.endTime) < Date.now())
       {
         this.$message.error("已过问题截止时间")
         return false
