@@ -2,7 +2,7 @@
   <div style="margin-top:10px">
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
-        <el-card class="text item" shadow="never">
+        <el-card class="text item" shadow="never" v-loading="loading">
           <div v-for="item in tasksList" :key="item._id">
             <el-row v-if="item.type == 'qa'">
               <el-col :span="22">
@@ -166,10 +166,12 @@ export default {
       tasksList: [],
       tasksNum: 0,
       currentPage: 1,
-      now: this.$dateFormatter(new Date())
+      now: this.$dateFormatter(new Date()),
+      loading: true
     };
   },
   mounted: function() {
+    this.loading = true;
     this.fetchData(1);
   },
   methods: {
@@ -225,12 +227,14 @@ export default {
       done();
     },
     fetchData: function(page) {
+      this.loading = true;
       this.currentPage = page;
       this.$http.get("/api/assignment/" + this.currentPage).then(
         response => {
           this.tasksList = response.data.assignments;
           this.tasksNum = response.data.asgCount;
           console.log(response.data);
+          this.loading = false;
         },
         response => console.log(response)
       );

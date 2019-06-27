@@ -2,7 +2,7 @@
   <div style="margin-top:10px">
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
-        <el-card class="text item">
+        <el-card class="text item" shadow="never" v-loading="loading">
           <div v-for="item in questionnairesList" :key="item._id">
             <el-row>
               <el-col :span="22">
@@ -110,15 +110,19 @@ export default {
       questionnairesList: [],
       questionnairesNum: 0,
       currentPage: 1,
-      now: this.$dateFormatter(new Date())
+      now: this.$dateFormatter(new Date()),
+      loading:true,
     };
   },
   mounted: function() {
+    this.loading = true;
     this.$http.get("/api/assignment/questionnaire/" + this.currentPage).then(
       response => {
         this.questionnairesList = response.data.assignments;
         this.questionnairesNum = response.data.asgCount;
         console.log(response.data);
+    this.loading = false;
+
       },
       response => console.log(response)
     );
@@ -126,11 +130,14 @@ export default {
   methods: {
     handleCurrentChange: function(val) {
       this.currentPage = val;
+         this.loading = true;
       this.$http.get("/api/assignment/questionnaire/" + this.currentPage).then(
         response => {
           this.questionnairesList = response.data.assignments;
           this.questionnairesNum = response.data.asgCount;
           console.log(response.data);
+            this.loading = false;
+
         },
         response => console.log(response)
       );
