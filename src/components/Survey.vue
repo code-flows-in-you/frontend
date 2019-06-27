@@ -6,10 +6,10 @@
           <div v-for="item in questionnairesList" :key="item._id">
             <el-row>
               <el-col :span="22">
-                <div
-                  class="survey-title"
-                  @click="goToQuestionnaireDetail( item.aid )"
-                >{{ item.title }}</div>
+                <div class="survey-title" @click="goToQuestionnaireDetail( item.aid )">
+                  {{ item.title }}
+                  <span v-if="now > item.endTime">【已结束】</span>
+                </div>
               </el-col>
               <el-col :span="1">
                 <img src="../assets/coin.png" width="20">
@@ -17,7 +17,9 @@
               <el-col :span="1">{{ item.unit }}</el-col>
             </el-row>
             <div class="survey-info">
-              <span class="survey-info">{{ item.startTime.substr(0, 10) }}</span>
+              <span
+                class="survey-info"
+              >开始时间：{{ item.startTime.split(" ")[0] }}&nbsp;&nbsp;&nbsp;结束时间：{{ item.endTime.split(" ")[0] }}</span>
               <span>&nbsp;&nbsp;&nbsp;{{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
             </div>
             <div class="survey-content">{{ item.description }}</div>
@@ -101,7 +103,8 @@ export default {
     return {
       questionnairesList: [],
       questionnairesNum: 0,
-      currentPage: 1
+      currentPage: 1,
+      now: this.$dateFormatter(new Date())
     };
   },
   mounted: function() {

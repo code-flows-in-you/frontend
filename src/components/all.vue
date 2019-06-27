@@ -16,7 +16,10 @@
             </el-row>
             <el-row v-else-if="item.type == 'questionnaire'">
               <el-col :span="22">
-                <div class="title" @click="goToQuestionareDetail( item.aid )">{{ item.title }}</div>
+                <div class="title" @click="goToQuestionnaireDetail( item.aid )">
+                  {{ item.title }}
+                  <span v-if="now > item.endTime">【已结束】</span>
+                </div>
               </el-col>
               <el-col :span="1">
                 <img src="../assets/coin.png" width="20">
@@ -24,12 +27,12 @@
               <el-col :span="1">{{ item.unit }}</el-col>
             </el-row>
             <div class="info" v-if="item.type == 'qa'">
-              <span class="info">{{ item.createTime.substr(0, 10) }}</span>
+              <span class="info">{{ item.createTime.split(" ")[0] }}</span>
               <span>&nbsp;&nbsp;&nbsp; {{ item.answerCount }}人已回答</span>
               <span v-if="item.bestCount === 1">&nbsp;&nbsp;&nbsp;已采纳</span>
             </div>
             <div class="info" v-else-if="item.type == 'questionnaire'">
-              <span class="info">{{ item.startTime.substr(0, 10) }}</span>
+              <span class="info">开始时间：{{ item.startTime.split(" ")[0] }}&nbsp;&nbsp;&nbsp;结束时间：{{ item.endTime.split(" ")[0] }}</span>
               <span>&nbsp;&nbsp;&nbsp;{{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
             </div>
             <div class="content">{{ item.description }}</div>
@@ -135,15 +138,6 @@
       <img v-if="imageUrl" :src="imageUrl" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>-->
-      <el-date-picker
-        v-model="time"
-        type="datetimerange"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        style="width:100%; margin-bottom:15px"
-        :picker-options="pickerBeginDateAfter"
-      ></el-date-picker>
       <div style="text-align:right;">
         <img src="../assets/coin.png" width="20" style="vertical-align:middle;margin-right:10px">
         <el-input placeholder="输入悬赏金额" v-model="newQuestionBonus" clearable style="width:50%;"></el-input>
@@ -166,48 +160,24 @@ export default {
       newQuestionDescription: "",
       newQuestionTitle: "",
       newQuestionBonus: "",
-      time: "",
       tasksList: [],
       tasksNum: 0,
       currentPage: 1,
-      pickerBeginDateAfter: {
-        disabledDate: time => {
-          return time.getTime() <= Date.now() - 8.64e7;
-        }
-      }
+      now: this.$dateFormatter(new Date())
     };
   },
   mounted: function() {
-    this.$http.get("/api/assignment/" + this.currentPage).then(
-      response => {
-        this.tasksList = response.data.assignments;
-        this.tasksNum = response.data.asgCount;
-        console.log(response.data);
-      },
-      response => console.log(response)
-    );
+    this.fetchData(1);
   },
   methods: {
     handleCurrentChange: function(val) {
-      this.currentPage = val;
-      this.$http.get("/api/assignment/" + this.currentPage).then(
-        response => {
-          this.tasksList = response.data.assignments;
-          this.tasksNum = response.data.asgCount;
-          console.log(response.data);
-        },
-        response => console.log(response)
-      );
+      this.fetchData(val);
       console.log(`当前页: ${val}`);
     },
     //发起提问
     raiseQuestion: function() {
       if (this.newQuestionTitle.trim() == "") {
         this.$message.error("问题标题不能为空");
-        return;
-      }
-      if (Object.prototype.toString.call(this.time) != "[object Array]") {
-        this.$message.error("必须选择开始与结束时间");
         return;
       }
       if (!/^\d+$/.test(this.newQuestionBonus)) {
@@ -219,8 +189,8 @@ export default {
         description: this.newQuestionDescription,
         coin: parseInt(this.newQuestionBonus),
         createTime: this.$dateFormatter(new Date()),
-        startTime: this.$dateFormatter(this.time[0]),
-        endTime: this.$dateFormatter(this.time[1]),
+        startTime: this.$dateFormatter(new Date()),
+        endTime: this.$dateFormatter(new Date()),
         detail: ""
       };
       this.$http.post("/api/qa/", content).then(
@@ -249,8 +219,18 @@ export default {
       this.newQuestionDescription = "";
       this.newQuestionTitle = "";
       this.newQuestionBonus = "";
-      this.time = "";
       done();
+    },
+    fetchData: function(page) {
+      this.currentPage = page;
+      this.$http.get("/api/assignment/" + this.currentPage).then(
+        response => {
+          this.tasksList = response.data.assignments;
+          this.tasksNum = response.data.asgCount;
+          console.log(response.data);
+        },
+        response => console.log(response)
+      );
     }
   }
 };
