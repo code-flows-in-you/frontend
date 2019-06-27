@@ -9,18 +9,20 @@
         placement="top"
       >
         <el-card v-if="item.type == 'qa'" shadow="never">
-          <el-button type="text" @click="quroaDetail( item.aid )">{{ item.title}}</el-button>
+          <el-button icon="el-icon-question" type="text" @click="quroaDetail( item.aid )">{{ item.title}}</el-button>
           <p>{{ item.description }}</p>
           <span>{{ item.answerCount }}人已回答</span>
           <span v-if="item.bestCount === 1">已采纳</span>
         </el-card>
         <el-card v-else-if="item.type == 'questionnaire'" shadow="never">
-          <el-button type="text" @click="goToQuestionareDetail( item.aid )">{{ item.title}}</el-button>
+
+          <el-button icon="el-icon-s-order" type="text" @click="goToQuestionareDetail( item.aid )">{{ item.title}}</el-button>
           <p>{{ item.description }}</p>
           <span>{{ item.copy-item.coin/item.unit}}/{{ item.copy }}份</span>
         </el-card>
       </el-timeline-item>
     </el-timeline>
+    
   </div>
   <!-- </el-card> -->
 </template>
@@ -48,7 +50,6 @@ export default {
       this.$router.push("/quroaDetail/" + id);
     },
     goToQuestionareDetail: function(aid) {
-      // con
       this.$router.push("/questionareDetail/" + aid);
     }
   },
