@@ -1,9 +1,8 @@
 <template>
-  <div style="margin-left:300px;margin-right:250px;">
+  <div style="margin-left:200px;margin-right:200px;">
     <el-card class="box-card" shadow="never">
       <el-row>
         <el-col :span="4">
-          <!-- <img src="../assets/avatar.png" height="50px"/> -->
           <el-upload
             class="avatar-uploader"
             action="fornone"
@@ -19,7 +18,7 @@
             </el-tooltip>
           </el-upload>
         </el-col>
-        <el-col :span="20">
+        <el-col :span="16" :offset="2">
           <div style="font-size:28px;">{{ this.$store.state.user.Nickname }}</div>
           <el-row style="margin-top:5%">
             <el-col :span="3">
