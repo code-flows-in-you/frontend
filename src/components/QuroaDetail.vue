@@ -26,7 +26,7 @@
               <el-avatar size="large" :src="question.avatar"></el-avatar>
             </el-col>
             <el-col :span="4">
-              <el-row class="answser-user">{{ question.creator }}</el-row>
+              <el-row class="creator-user">{{ question.creator }}</el-row>
             </el-col>
         </el-row>
         </el-col>
@@ -223,19 +223,18 @@ export default {
 
 <style scoped>
 .question-title {
-  line-height: 52px;
+  line-height: 36px;
   color: rgba(41, 64, 87, 1);
   /* font-size: 36px;
    */
-  font-size: 36px;
+  font-size: 26px;
   font-family: Roboto;
 }
 
 .question-description
 {
   color: #666666;
-  line-height: 38px;
-  font-size: 26px;
+  font-size: 17px;
   font-family: Roboto;
   margin: 21px 0 0 0;
 }
@@ -257,6 +256,12 @@ export default {
 .answser-user {
   margin-top: 5%;
   margin-left: 5%;
+}
+
+.creator-user
+{
+  margin-top: 7%;
+  margin-left: 15%;
 }
 
 .money
