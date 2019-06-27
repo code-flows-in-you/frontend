@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from '../store'
 import Router from 'vue-router'
 import signin from '../components/Signin.vue'
 import signup from '../components/Signup.vue'
@@ -24,7 +25,7 @@ import balanceProfile from '../components/children/balanceProfile.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: './',
   routes: [
@@ -67,3 +68,7 @@ export default new Router({
     { path: '*', redirect: '/' }
   ]
 })
+
+
+
+export default router

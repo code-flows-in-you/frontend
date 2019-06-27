@@ -71,7 +71,7 @@
                 src="../assets/help.png"
                 style="margin:10px; vertical-align:middle; width:26px; height:26px"
               >
-              <el-link @click="newTask=true" :underline="false" style="font-size:17px">发起求助</el-link>
+              <el-link @click="newTask=true" :underline="false" style="font-size:17px">发起任务</el-link>
             </div>
           </el-row>
           <el-row>
@@ -140,7 +140,8 @@
       ></el-input>
       <div style="text-align:right;">
         <img src="../assets/coin.png" width="20" style="vertical-align:middle;margin-right:10px">
-        <el-input placeholder="输入悬赏金额" v-model="newQuestionBonus" clearable style="width:50%;"></el-input>
+        <el-input placeholder="输入悬赏金额" v-model="newQuestionBonus"
+         clearable type="Number" min="0" style="width:50%;"></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="raiseQuestion();newQuestion=false;" size="small" type="primary">发布问题</el-button>
@@ -181,7 +182,7 @@ export default {
         this.$message.error("问题标题不能为空");
         return;
       }
-      if (!/^\d+$/.test(this.newQuestionBonus)) {
+      if (this.newQuestionBonus == ""|| this.newQuestionBonus <= 0){
         this.$message.error("悬赏金额不能为空且必须为正整数");
         return;
       }

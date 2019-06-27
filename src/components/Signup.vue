@@ -131,16 +131,23 @@ export default {
       };
 
       //请求后台
-      this.$http
-        .post("/api/account/", user)
-        .then(response => {
-          console.log(response);
-          this.$message.success("注册成功");
-          this.$router.push("/signin");
-        })
-        .catch(e => {
-          console.log(e.response);
-        });
+      this.$store.dispatch("signup", user)
+      .then(response => {
+        console.log(response);
+        this.$message.success("注册成功");
+        this.$router.push("/signin");
+      })
+      .catch(e => {
+        console.log(e.response);
+        console.log(e.response.data.msg);
+        if (e.response.data.msg == "repeat email")
+        {
+          this.$message.error("邮箱已被注册");
+        }
+      });
+
+
+
     },
     goToSignin: function() {
       this.$router.push("/signin");

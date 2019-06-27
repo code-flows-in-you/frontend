@@ -113,8 +113,9 @@ export default new Vuex.Store({
           dispatch('getUserCoin')
           .then(resp =>
           {
-          // get user's info
+            // get user's info
             resolve(resp)
+
           })
           .catch(err =>
           {
