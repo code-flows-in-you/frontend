@@ -5,7 +5,7 @@
         <el-timeline-item
           v-for="item in myassignments"
           :key="item._id"
-          :timestamp="item.startTime.substr(0, 10)"
+          :timestamp="item.startTime.split(' ')[0]"
           placement="top"
         >
           <el-card v-if="item.type == 'qa'" shadow="never">
