@@ -29,18 +29,33 @@
             <el-button type="text" icon="el-icon-user" @click="goToProfile">个人主页</el-button>
           </el-row>
           <el-row>
+            <el-button type="text" icon="el-icon-coin" @click="rechargeVisible = true">充值</el-button>
+          </el-row>
+          <el-row>
             <el-button type="text" icon="el-icon-switch-button" @click="signout">退出</el-button>
           </el-row>
-          <!-- <el-button style="margin-top:10px;" slot="reference" icon="el-icon-user-solid" @click="goToProfile" circle></el-button> -->
-            <el-avatar size="large" slot="reference" style="margin-top:10px;" :src="this.$store.state.user.Avatar"></el-avatar>
+          <el-avatar
+            size="large"
+            slot="reference"
+            style="margin-top:10px;"
+            :src="this.$store.state.user.Avatar"
+          ></el-avatar>
         </el-popover>
       </el-col>
     </el-row>
     <el-row :gutter="20" style="margin-bottom:50px; margin-top:20px">
       <el-col :span="19" :offset="3">
-      <el-divider></el-divider>
+        <el-divider></el-divider>
       </el-col>
     </el-row>
+    <el-dialog :visible.sync="rechargeVisible" width="20%" center>
+      <!-- <el-row type="flex" justify="center" style="font-size:20px">请输入充值金额</el-row> -->
+      <el-input placeholder="输入充值金额" v-model="reChargeNum" clearable ></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="recharge" size="small" type="primary">确认</el-button>
+        <el-button @click="rechargeVisible = false" size="small" type="primary">取消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -49,11 +64,27 @@ export default {
   name: "topbar",
   data() {
     return {
-      searchText: ""
+      searchText: "",
+      rechargeVisible: false,
+      reChargeNum: ""
     };
   },
   mounted: function() {},
   methods: {
+    recharge: function() {
+      if (!/^\d+$/.test(this.reChargeNum)) {
+        this.$message.error("充值金额不能为空且必须为正整数");
+        return;
+      }
+      this.$http.post("/api/coin/self", this.reChargeNum).then(
+        response => {
+          this.$message.success("充值成功");
+          console.log(response);
+          reChargeNum:""
+        },
+        response => console.log(response)
+      );
+    },
     signout: function() {
       this.$store
         .dispatch("signout")

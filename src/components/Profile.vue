@@ -6,47 +6,57 @@
           <!-- <img src="../assets/avatar.png" height="50px"/> -->
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+           
             :show-file-list="false"
             :auto-upload="false"
+             element-loading-text="拼命上传中"
+          element-loading-spinner="el-icon-loading"
+            v-loading="avatarLoading"
             :on-change="changeUpload"
           >
             <el-tooltip class="item" effect="dark" content="更换头像" placement="top-start">
               <img :src="userInfo.Avatar" class="avatar">
             </el-tooltip>
-            <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
           </el-upload>
         </el-col>
         <el-col :span="20">
           <div style="font-size:28px;">{{ this.$store.state.user.Nickname }}</div>
-          <el-row>
-            <el-col :span="5">
-              <div>0</div>
+          <el-row style="margin-top:5%">
+            <el-col :span="3">
+              <div class="amount-num">{{amountData.answerCount}}</div>
+            </el-col>
+            <el-col :span="3">
                <el-divider direction="vertical"></el-divider>
             </el-col>
-            
-            <el-col :span="6">
-              <div>0</div>
+            <el-col :span="3">
+              <div class="amount-num">{{amountData.bestCount}}</div>
             </el-col>
-            <el-col :span="6">
-              <div>0</div>
+              <el-col :span="3">
+               <el-divider direction="vertical"></el-divider>
             </el-col>
-            <el-col :span="6">
-              <div>1</div>
+            <el-col :span="3">
+              <div  class="amount-num">{{amountData.assignmentCount}}</div>
+            </el-col>
+              <el-col :span="3">
+               <el-divider direction="vertical"></el-divider>
+            </el-col>
+            <el-col :span="3">
+              <div  class="amount-num">{{amountData.coin}}</div>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="6">
-              <div>回答数</div>
+              <div class="amount-item">回答数</div>
+            </el-col>
+           
+            <el-col :span="6">
+              <div class="amount-item">被采纳</div>
             </el-col>
             <el-col :span="6">
-              <div>被采纳</div>
+              <div class="amount-item">已求助</div>
             </el-col>
             <el-col :span="6">
-              <div>已求助</div>
-            </el-col>
-            <el-col :span="6">
-              <div>我的余额</div>
+              <div class="amount-item">我的余额</div>
             </el-col>
           </el-row>
         </el-col>
@@ -132,6 +142,7 @@ export default {
     return {
       activeIndex: "1",
       userInfo: {},
+      amountData:{},
       userForm: {},
       disableForm: true,
       infoButtonText: "修改信息",
@@ -160,7 +171,8 @@ export default {
         StudentID: [
           { pattern: /^\d{8}$/, message: "请输入合法的学号", trigger: "blur" }
         ]
-      }
+      },
+      avatarLoading:false,
     };
   },
   methods: {
@@ -219,6 +231,7 @@ export default {
         return;
       }
       //请求修改头像
+      this.avatarLoading = true
       const formData = new FormData();
       formData.append("file", file.raw);
       console.log(formData);
@@ -228,16 +241,28 @@ export default {
           this.$message.success("修改成功");
           this.$store.dispatch("updateAvatar", response.data.url);
           this.getUserData();
+           this.avatarLoading = false;
         })
         .catch(e => {
           console.log(e);
         });
 
       return isJPG && isLt2M;
+    },
+    getAmountData:function () {
+       this.$http.get("/api/account/self/amount").then(
+        response => {
+          console.log(response.data)
+          this.amountData = response.data
+          console.log(response);
+        },
+        response => console.log(response)
+      );
     }
   },
   mounted() {
     this.getUserData();
+    this.getAmountData();
   }
 };
 </script>
@@ -282,5 +307,17 @@ export default {
 .cropper {
   width: auto;
   height: 300px;
+}
+
+.amount-item{
+  font-size: 18px;
+  color: #606266;
+}
+
+
+.amount-num{
+  margin-left:15px;
+  font-size: 18px;
+  color: #303133;
 }
 </style>
