@@ -1,11 +1,11 @@
 <template>
   <!-- <el-card shadow="never"> -->
-  <div style="margin-top:15px;width:800px;height:600px;">
+  <div style="margin-top:15px;width:800px;">
       <el-timeline  v-loading="loading">
         <el-timeline-item
           v-for="item in myassignments"
           :key="item._id"
-          :timestamp="item.startTime.substr(0, 10)"
+          :timestamp="item.startTime.split(' ')[0]"
           placement="top"
         >
           <el-card v-if="item.type == 'qa'" shadow="never">

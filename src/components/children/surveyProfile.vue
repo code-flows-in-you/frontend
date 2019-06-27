@@ -4,7 +4,7 @@
       <el-timeline-item
         v-for="item in mySurveys"
         :key="item._id"
-        :timestamp="item.startTime.substr(0, 10)"
+        :timestamp="item.startTime.split(' ')[0]"
         placement="top"
       >
         <el-card  shadow="never">

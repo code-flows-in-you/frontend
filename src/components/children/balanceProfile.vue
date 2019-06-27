@@ -4,7 +4,7 @@
     <el-timeline-item
       v-for="item in myCoinFlow"
         :key="item._id"
-      :timestamp="item.timestamp.substr(0, 10)">
+      :timestamp="item.timestamp.split(' ')[0]">
      
      <el-row>
        <el-col :span="20">{{item.title}}</el-col>

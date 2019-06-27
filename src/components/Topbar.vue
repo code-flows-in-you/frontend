@@ -6,7 +6,7 @@
           <img src="../assets/logo.png" height="50px">
         </el-link>
       </el-col>
-      <el-col :span="4" :offset="5">
+      <el-col :span="4" :offset="4">
         <el-select
           style="margin-top:10px;"
           v-model="searchText"
@@ -15,7 +15,7 @@
           placeholder="请输入关键词"
         ></el-select>
       </el-col>
-      <el-col :span="3">
+      <el-col :span="4">
         <el-menu :default-active="$route.path" router mode="horizontal" @select="handleSelect">
           <el-menu-item index="/all">全部</el-menu-item>
           <el-menu-item index="/quroa">问答</el-menu-item>
@@ -49,7 +49,6 @@
       </el-col>
     </el-row>
     <el-dialog :visible.sync="rechargeVisible" width="20%" center>
-      <!-- <el-row type="flex" justify="center" style="font-size:20px">请输入充值金额</el-row> -->
       <el-input placeholder="输入充值金额" v-model="reChargeNum" clearable ></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="recharge" size="small" type="primary">确认</el-button>
@@ -76,14 +75,22 @@ export default {
         this.$message.error("充值金额不能为空且必须为正整数");
         return;
       }
-      this.$http.post("/api/coin/self", this.reChargeNum).then(
+      var data = {'coin':parseInt(this.reChargeNum)};
+      console.log(data)
+      this.$http.post("/api/coin/self", data).then(
         response => {
           this.$message.success("充值成功");
           console.log(response);
           reChargeNum:""
+          this.$store.dispatch("getUserInfo");
         },
-        response => console.log(response)
+        response => {console.log(response)
+          this.$message.error("充值失败");
+           reChargeNum:""
+        }
+        
       );
+      this.rechargeVisible = false
     },
     signout: function() {
       this.$store
