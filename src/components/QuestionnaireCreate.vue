@@ -17,7 +17,7 @@
               {{ question.title }}
             </p>
             <div v-if="question.type === 'input'">
-              <input placeholder="示例输入框" class="sample-input"></input>
+              <el-input placeholder="示例输入框" class="sample-input"></el-input>
             </div>
             <div v-else> <!-- single and multi -->
               <div v-for="(option, oid) in displayOptions[index]" :key="oid"
@@ -37,8 +37,8 @@
              class="show-hide-button">▼编辑</el-button>
 
             <div v-show="isEdit[index]" class="edit-area">
-              <input v-model="question.title" placeholder="请输入问题标题"
-               class="question-input"></input>
+              <el-input v-model="question.title" placeholder="请输入问题标题"
+               class="question-input"></el-input>
 
 
               <div v-if="question.type !== 'input'">
@@ -51,8 +51,8 @@
                 <el-row type="flex" justify="center"
                  v-for="(option, oid) in displayOptions[index]" :key="oid">
                   <div class="option-input-group">
-                    <input v-model="option.value" :placeholder="'选项'+(oid+1)"
-                     class="option-input"></input>
+                    <el-input v-model="option.value" :placeholder="'选项'+(oid+1)"
+                     class="option-input"></el-input>
                      <img src="../assets/删除.png" @click="deleteOption(index)"
                       class="click-img-button menu-img">
                   </div>
