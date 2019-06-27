@@ -4,10 +4,12 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
+const STATUS_ID = "status"
+
 export default new Vuex.Store({
   state:
   {
-    status: '',
+    status: localStorage.getItem(STATUS_ID),
     user : {},
     coin: 0
   },
@@ -91,6 +93,7 @@ export default new Vuex.Store({
         .then(resp =>
         {
           commit('signout')
+          localStorage.setItem(STATUS_ID, "")
           resolve(resp)
         })
         .catch(err =>
@@ -110,6 +113,7 @@ export default new Vuex.Store({
         .then(resp =>
         {
           commit('signin_success', resp.data.data)
+          localStorage.setItem(STATUS_ID, "success")
           dispatch('getUserCoin')
           .then(resp =>
           {
