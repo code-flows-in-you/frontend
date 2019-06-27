@@ -19,7 +19,7 @@
           </el-upload>
         </el-col>
         <el-col :span="16" :offset="2">
-          <div style="font-size:28px;">{{ this.$store.state.user.Nickname }}</div>
+          <div class="vcard-username">{{ this.$store.state.user.Nickname }}</div>
           <el-row style="margin-top:5%">
             <el-col :span="3">
               <div class="amount-num">{{amountData.answerCount}}</div>

@@ -8,14 +8,28 @@
         placement="top"
       >
         <el-card shadow="never">
-          <el-button
-            icon="el-icon-question"
-            type="text"
-            @click="quroaDetail( item.aid )"
-          >{{ item.title}}</el-button>
+          <el-row>
+            <el-col :span="20">
+              <el-button
+                icon="el-icon-question"
+                type="text"
+                @click="quroaDetail( item.aid )"
+              >{{ item.title}}</el-button>
+            </el-col>
+            <el-col :span="1">
+              <img src="../../assets/coin.png" width="15">
+            </el-col>
+            <el-col :span="1">
+              <span class="coin">{{ item.coin }}</span>
+            </el-col>
+          </el-row>
+
           <p>{{ item.description }}</p>
-          <span>{{ item.answerCount }}人已回答</span>
-          <span v-if="item.bestCount === 1">已采纳</span>
+          <span style="margin-right:10px;">{{ item.answerCount }}人已回答</span>
+
+          <span v-if="item.bestCount === 1">
+            <i class="el-icon-medal"></i>已采纳
+          </span>
         </el-card>
       </el-timeline-item>
     </el-timeline>
