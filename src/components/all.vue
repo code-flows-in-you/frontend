@@ -288,7 +288,7 @@ export default {
   display: inline-block;
   color: rgba(41, 64, 87, 1);
   font-size: 25px;
-  font-weight: 500;
+  font-weight: bold;
   border-bottom: 1px solid white;
   cursor: pointer;
 }
