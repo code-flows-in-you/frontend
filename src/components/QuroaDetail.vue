@@ -29,7 +29,7 @@
           </el-row>
         </el-col>
         <el-col :offset="21" :span="3">
-          <div class="question-data">{{question.createTime.split(' ')[0]}}</div>
+          <div class="question-data">{{question.createTime ? question.createTime.split(' ')[0] : ' '}}</div>
         </el-col>
       </el-row>
     </el-card>

@@ -45,6 +45,7 @@
             type="flex"
             justify="center"
             class="vcard-username"
+            style="font-weight:bold;margin-top:20px;"
           >{{ this.$store.state.user.Nickname }}</el-row>
         </el-card>
         <el-card>

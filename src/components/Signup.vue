@@ -1,12 +1,10 @@
 <template>
-  <div id="sign-wrap">
-    <el-row>
-      <el-col :span="4" :offset="6">
+  <div class="wrapper">
+    <el-row type="flex" justify="center">
         <img src="../assets/logo.png" height="50px">
-      </el-col>
-    </el-row>
+      </el-row>
     <el-row>
-      <el-col :span="6" :offset="4">
+      <el-col :span="22" :offset="1">
         <el-form :model="userForm" :rules="rules" ref="userForm" label-width="80px">
           <el-form-item label="用户名" prop="username">
             <el-input prefix-icon="el-icon-user" v-model="userForm.username" placeholder="请输入用户名"></el-input>
@@ -30,13 +28,13 @@
           <el-form-item label="邮箱" prop="email">
             <el-input prefix-icon="el-icon-message" v-model="userForm.email" placeholder="请输入邮箱"></el-input>
           </el-form-item>
-          <el-form-item>
-            <el-button style="width:90%" type="primary" @click="Signup">注册</el-button>
-          </el-form-item>
+          <el-row type="flex" justify="center">
+            <el-button type="primary" style="width:70%;" @click="Signup">注册</el-button>
+          </el-row>
         </el-form>
       </el-col>
     </el-row>
-    <el-col :span="4" :offset="6">
+    <el-col :offset="8">
       <div>
         已有账号？
         <el-button type="text" @click="goToSignin">登录</el-button>
@@ -48,6 +46,12 @@
 <script>
 export default {
   name: "signup",
+  created: function() {
+    
+  },
+  beforeDestroy: function() {
+    document.body.removeAttribute("class", "main");
+  },
   data() {
     return {
       userForm: {
@@ -114,7 +118,9 @@ export default {
       }
     };
   },
-  mounted: function() {},
+  mounted: function() {
+    document.body.setAttribute("class", "main");
+  },
   methods: {
     Signup: function() {
       //检测确认密码是否一致
@@ -131,23 +137,20 @@ export default {
       };
 
       //请求后台
-      this.$store.dispatch("signup", user)
-      .then(response => {
-        console.log(response);
-        this.$message.success("注册成功");
-        this.$router.push("/signin");
-      })
-      .catch(e => {
-        console.log(e.response);
-        console.log(e.response.data.msg);
-        if (e.response.data.msg == "repeat email")
-        {
-          this.$message.error("邮箱已被注册");
-        }
-      });
-
-
-
+      this.$store
+        .dispatch("signup", user)
+        .then(response => {
+          console.log(response);
+          this.$message.success("注册成功");
+          this.$router.push("/signin");
+        })
+        .catch(e => {
+          console.log(e.response);
+          console.log(e.response.data.msg);
+          if (e.response.data.msg == "repeat email") {
+            this.$message.error("邮箱已被注册");
+          }
+        });
     },
     goToSignin: function() {
       this.$router.push("/signin");
@@ -156,8 +159,18 @@ export default {
 };
 </script>
 
-<style scoped>
-#sign-wrap {
-  margin: auto;
+<style>
+.main {
+  background-image: url("../assets/船背景图.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.wrapper {
+  background-color: rgba(255, 255, 255, 0.5);
+  width: 25%;
+  margin-left: 10%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  border-radius: 10px;
 }
 </style>

@@ -36,8 +36,7 @@
 export default {
   name: "signin",
   created: function() {
-    document.body.setAttribute("class","main");
-    console.log(document.body)
+    
   },
   beforeDestroy: function() {
     document.body.removeAttribute("class", "main");
@@ -69,7 +68,9 @@ export default {
       }
     };
   },
-  mounted: function() {},
+  mounted: function() {
+    document.body.setAttribute("class","main");
+  },
   methods: {
     Signin: function() {
       let user = {
