@@ -194,6 +194,7 @@ export default {
       this.$http.post("/api/qa/", content).then(
         response => {
           this.$message.success("问题发布成功");
+          this.fetchData(1);
           console.log(response);
         },
         response => console.log(response)
