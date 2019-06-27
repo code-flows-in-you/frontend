@@ -13,11 +13,17 @@
         </el-col>
       </el-row>
 
+
+      <div class="question-description">{{ question.description }}</div>
       <el-row>
+        <!-- <el-button @click="answer=true" size="small" type="primary">我来回答</el-button> -->
+      </el-row>
+       <el-divider></el-divider>
+      <el-row style="margin: 10px 0 0 0">
         <el-col :span="20">
           <el-row>
             <el-col :span="1">
-              <el-avatar size="large" src=""></el-avatar>
+              <el-avatar size="large" :src="question.avatar"></el-avatar>
             </el-col>
             <el-col :span="4">
               <el-row class="answser-user">{{ question.creator }}</el-row>
@@ -27,12 +33,6 @@
         <el-col :offset="21" :span="3">
           <div class="question-data">{{question.createTime}}</div>
         </el-col>
-      </el-row>
-
-      <el-divider></el-divider>
-      <div>{{ question.description }}</div>
-      <el-row>
-        <!-- <el-button @click="answer=true" size="small" type="primary">我来回答</el-button> -->
       </el-row>
     </el-card>
     <!-- 我来回答编辑解界面 -->
@@ -227,8 +227,17 @@ export default {
   color: rgba(41, 64, 87, 1);
   /* font-size: 36px;
    */
-  font-size: 21px;
+  font-size: 36px;
   font-family: Roboto;
+}
+
+.question-description
+{
+  color: #666666;
+  line-height: 38px;
+  font-size: 26px;
+  font-family: Roboto;
+  margin: 21px 0 0 0;
 }
 
 .question-data {
