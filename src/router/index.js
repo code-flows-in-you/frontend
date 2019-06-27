@@ -69,6 +69,22 @@ const router = new Router({
   ]
 })
 
+router.beforeEach((to, from, next) =>
+{
+  console.log(to.path)
+  // router guard
 
+  if (to.path != '/signin' && to.path != '/signup')
+  {
+    if (store.getters.isSignedIn)
+      next()
+    else
+      // if the user has not signen in,
+      // he can only visit signin and signup
+      next('/signin')
+  }
+  else
+    next()
+})
 
 export default router
