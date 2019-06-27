@@ -91,10 +91,7 @@
           </el-row>
           <el-row>
             <div>
-              <img
-                src="../assets/余额.png"
-                style="margin:10px; vertical-align:middle; width:26px; height:26px"
-              >
+              <img src="../assets/余额.png" style="margin:10px; vertical-align:middle; width:26px; height:26px">
               <el-link
                 @click="goToProfile('balance')"
                 :underline="false"
