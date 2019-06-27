@@ -35,6 +35,12 @@
 <script>
 export default {
   name: "signin",
+  created: function() {
+    
+  },
+  beforeDestroy: function() {
+    document.body.removeAttribute("class", "main");
+  },
   data() {
     return {
       userForm: {
@@ -62,7 +68,9 @@ export default {
       }
     };
   },
-  mounted: function() {},
+  mounted: function() {
+    document.body.setAttribute("class","main");
+  },
   methods: {
     Signin: function() {
       let user = {
@@ -93,14 +101,14 @@ export default {
 </script>
 
 <style>
-/* body {
+.main {
   background-image: url("../assets/船背景图.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-} */
+}
 .wrapper {
   background-color: rgba(255, 255, 255, 0.5);
-  width: 30%;
+  width: 25%;
   margin-left: 10%;
   padding-top: 50px;
   padding-bottom: 50px;

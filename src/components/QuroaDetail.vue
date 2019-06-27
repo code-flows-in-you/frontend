@@ -4,7 +4,7 @@
     <el-card shadow="never" style="margin-top:10px;">
       <el-row>
         <el-col :span="22">
-          <div class="question-title">{{ question.title }}</div>
+          <div class="question-title" style="font-weight:bold">{{ question.title }}</div>
         </el-col>
         <el-col class="money" :span="2">
           <img src="../assets/coin.png" class="menu-img" width="20">
@@ -16,7 +16,7 @@
       <el-row>
         <!-- <el-button @click="answer=true" size="small" type="primary">我来回答</el-button> -->
       </el-row>
-      <el-divider></el-divider>
+      <!-- <el-divider></el-divider>
       <el-row style="margin: 10px 0 0 0">
         <el-col :span="20">
           <el-row>
@@ -29,9 +29,9 @@
           </el-row>
         </el-col>
         <el-col :offset="21" :span="3">
-          <div class="question-data">{{question.createTime.split(' ')[0]}}</div>
+          <div class="question-data">{{question.createTime ? question.createTime.split(' ')[0] : ' '}}</div>
         </el-col>
-      </el-row>
+      </el-row> -->
     </el-card>
     <!-- 我来回答编辑解界面 -->
     <el-card v-show="!isAnswered && !bestAnswerUserId && !isCreator" shadow="never">
@@ -75,15 +75,15 @@
     </el-card>
     <el-card v-if="answers.length" shadow="never">
       <div v-for="item in answers" :key="item._id">
-        <el-row>
+        <el-row type="flex" align="middle">
           <el-col :span="1">
             <el-avatar size="large" :src="item.avatar"></el-avatar>
           </el-col>
           <el-col :span="3" style="margin-left:10px;">
-            <div class="answser-user">{{ item.user }}</div>
+            <div class="answser-user">{{ item.user.split('@')[1] }}</div>
             <div class="question-data">{{ item.timestamp.split(' ')[0] }}</div>
           </el-col>
-          <el-col :span="3" :offset="21">
+          <el-col :span="3" :offset="17">
             <el-button
               v-if="isCreator && !bestAnswerUserId"
               @click="acceptAnswer(item.qaid)"

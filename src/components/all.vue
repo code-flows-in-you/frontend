@@ -62,6 +62,7 @@
             type="flex"
             justify="center"
             class="vcard-username"
+            style="font-weight:bold;margin-top:20px;"
           >{{ this.$store.state.user.Nickname }}</el-row>
         </el-card>
         <el-card>
@@ -287,7 +288,7 @@ export default {
   display: inline-block;
   color: rgba(41, 64, 87, 1);
   font-size: 25px;
-  font-weight: 500;
+  font-weight: bold;
   border-bottom: 1px solid white;
   cursor: pointer;
 }
