@@ -82,6 +82,7 @@ export default {
           this.$message.success("充值成功");
           console.log(response);
           reChargeNum:""
+          this.$store.dispatch("getUserInfo");
         },
         response => {console.log(response)
           this.$message.error("充值失败");
