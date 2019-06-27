@@ -3,10 +3,10 @@
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
         <el-card>
-          <input v-model="questionnaire.title" placeholder="输入问卷名称"
-          class="title-input"></input>
-          <input v-model="questionnaire.description" placeholder="添加问卷说明"
-          class="description-input"></input>
+          <el-input v-model="questionnaire.title" placeholder="输入问卷名称"
+          class="title-input"></el-input>
+          <el-input v-model="questionnaire.description" placeholder="添加问卷说明"
+          class="description-input"></el-input>
           <el-divider></el-divider>
           <!-- body of the questionnaire -->
 
@@ -17,7 +17,7 @@
               {{ question.title }}
             </p>
             <div v-if="question.type === 'input'">
-              <input placeholder="示例输入框" class="sample-input"></input>
+              <el-input placeholder="示例输入框" class="sample-input"></el-input>
             </div>
             <div v-else> <!-- single and multi -->
               <div v-for="(option, oid) in displayOptions[index]" :key="oid"
@@ -37,8 +37,8 @@
              class="show-hide-button">▼编辑</el-button>
 
             <div v-show="isEdit[index]" class="edit-area">
-              <input v-model="question.title" placeholder="请输入问题标题"
-               class="question-input"></input>
+              <el-input v-model="question.title" placeholder="请输入问题标题"
+               class="question-input"></el-input>
 
 
               <div v-if="question.type !== 'input'">
@@ -51,8 +51,8 @@
                 <el-row type="flex" justify="center"
                  v-for="(option, oid) in displayOptions[index]" :key="oid">
                   <div class="option-input-group">
-                    <input v-model="option.value" :placeholder="'选项'+(oid+1)"
-                     class="option-input"></input>
+                    <el-input v-model="option.value" :placeholder="'选项'+(oid+1)"
+                     class="option-input"></el-input>
                      <img src="../assets/删除.png" @click="deleteOption(index)"
                       class="click-img-button menu-img">
                   </div>
@@ -142,7 +142,8 @@
         :picker-options="pickerBeginDateAfter"
       ></el-date-picker>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="submitQuestionnaire();isShowMoneyDialog=false;" size="small" type="primary">确认</el-button>
+        <el-button @click="submitQuestionnaire();" size="small" type="primary">确认</el-button>
+        <el-button @click="isShowMoneyDialog=false" size="small" >取消</el-button>
       </span>
     </el-dialog>
 
@@ -162,8 +163,8 @@ export default {
       questionnaire:{
         title: "",
         description: "",
-        coin: 0,
-        copy: 0,
+        coin:"0",
+        copy: "0",
         createTime: "",
         startTime: "",
         endTime: "",
@@ -267,16 +268,27 @@ export default {
       }
 
       //validation
-
-      if (this.questionnaire.copy.trim() == "")
+      console.log(this.questionnaire.copy)
+        if (this.questionnaire.copy==0||this.questionnaire.copy=="")
       {
-        this.$message.error("问卷分数不能为空");
+        this.$message.error("问卷份数必须为正整数");
         return;
       }
+      // if (this.questionnaire.copy.trim() == "")
+      // {
+      //   this.$message.error("问卷分数不能为空");
+      //   return;
+      // }
 
-      if (this.questionnaire.coin.trim() == "" || Number(this.questionnaire.coin) < 0)
+      // if (this.questionnaire.coin.trim() == "" || Number(this.questionnaire.coin) < 0)
+      // {
+      //   this.$message.error("悬赏金额不能为空且必须为正整数");
+      //   return;
+      // }
+
+      if (this.questionnaire.coin == ""|| this.questionnaire.coin <= 0)
       {
-        this.$message.error("悬赏金额不能为空且必须为正整数");
+        this.$message.error("悬赏金额必须为正整数");
         return;
       }
 
@@ -296,11 +308,14 @@ export default {
       .then(response =>
       {
         this.$message.success("问卷已发布")
+        this.isShowMoneyDialog=false;
       })
       .catch(e =>
       {
         console.log(e)
         console.log(e.response)
+        if(e.response.data.msg=="not enough coin")
+        this.$message.error("余额不够")
       })
     }
   }
