@@ -29,7 +29,7 @@
             <el-input prefix-icon="el-icon-message" v-model="userForm.email" placeholder="请输入邮箱"></el-input>
           </el-form-item>
           <el-row type="flex" justify="center">
-            <el-button type="primary" style="width:70%;" @click="Signup">注册</el-button>
+            <el-button type="primary" style="width:70%;" @click="Signup('userForm')">注册</el-button>
           </el-row>
         </el-form>
       </el-col>
@@ -47,7 +47,7 @@
 export default {
   name: "signup",
   created: function() {
-    
+
   },
   beforeDestroy: function() {
     document.body.removeAttribute("class", "main");
@@ -122,7 +122,16 @@ export default {
     document.body.setAttribute("class", "main");
   },
   methods: {
-    Signup: function() {
+    Signup: function(signupform) {
+
+      // check if all content is valid
+      let isValid = false
+      this.$refs[signupform].validate((valid) =>
+      {
+        isValid = valid
+      });
+      if (!isValid)
+        return
       //检测确认密码是否一致
       if (this.userForm.password != this.userForm.confirmPassword) {
         this.$message.error("密码不一致");
