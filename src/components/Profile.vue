@@ -20,9 +20,11 @@
         <el-col :span="20">
           <div style="font-size:28px;">{{ this.$store.state.user.Nickname }}</div>
           <el-row>
-            <el-col :span="6">
+            <el-col :span="5">
               <div>0</div>
+               <el-divider direction="vertical"></el-divider>
             </el-col>
+            
             <el-col :span="6">
               <div>0</div>
             </el-col>

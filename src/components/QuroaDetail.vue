@@ -1,5 +1,7 @@
 <template>
   <div style="width:60%;margin:auto;">
+    <el-page-header @back="goBack">
+</el-page-header>
     <el-card shadow="never" style="margin-top:10px;">
       <div class="question-title">{{ question.title }}</div>
       <div class="question-data">{{question.startTime}}</div>
@@ -165,6 +167,9 @@ export default {
         },
         response => console.log(response)
       );
+    },
+    goBack(){
+      this.$router.back(-1);
     }
   }
 };

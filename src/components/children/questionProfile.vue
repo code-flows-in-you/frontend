@@ -34,6 +34,9 @@ export default {
         },
         e => console.log(e)
       );
+    },
+     quroaDetail:function (aid) {
+       this.$router.push("/quroaDetail/" + aid);
     }
   },
   mounted() {

@@ -2,6 +2,7 @@
   <div style="margin-top:10px">
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
+        
         <el-card class="text item">
           <div v-for="item in tasksList" :key="item._id">
             <el-row v-if="item.type == 'qa'">
@@ -43,6 +44,7 @@
             style="text-align:center"
           ></el-pagination>
         </el-card>
+      
       </el-col>
       <el-col :span="4">
         <el-card>
@@ -150,6 +152,7 @@
         <el-button @click="raiseQuestion();newQuestion=false;" size="small" type="primary">发布问题</el-button>
       </span>
     </el-dialog>
+    
   </div>
 </template>
 
