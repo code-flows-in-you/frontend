@@ -243,7 +243,7 @@ export default {
     },
     goToQuestionareDetail: function(aid) {
       console.error(aid);
-      this.$router.push("/questionareDetail/" + aid);
+       this.$router.push("/QuestionnaireDetail/" + aid);
     },
     clearInput: function(done) {
       this.newQuestionDescription = "";
