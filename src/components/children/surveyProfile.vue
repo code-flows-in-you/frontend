@@ -15,7 +15,7 @@
               <el-button
                 icon="el-icon-s-order"
                 type="text"
-                @click="goToQuestionareDetail( item.aid )"
+                @click="goToQuestionnaireAnalyze( item.aid )"
               >{{ item.title}}</el-button>
             </el-col>
             <el-col :span="1">
@@ -56,9 +56,10 @@ export default {
       );
     },
     //跳转到问卷结果
-    goToSurveyResult:function (aid) {
+     goToQuestionnaireAnalyze: function(aid) {
       this.$router.push("/questionnaireAnalyze/" + aid);
     }
+    
   },
   mounted() {
       this.loading = true;

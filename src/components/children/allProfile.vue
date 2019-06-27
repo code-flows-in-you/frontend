@@ -40,7 +40,7 @@
               <el-button
                 icon="el-icon-s-order"
                 type="text"
-                @click="goToQuestionareDetail( item.aid )"
+                @click="goToQuestionnaireAnalyze( item.aid )"
               >{{ item.title}}</el-button>
             </el-col>
             <el-col :span="1">
@@ -83,8 +83,8 @@ export default {
     quroaDetail: function(id) {
       this.$router.push("/quroaDetail/" + id);
     },
-    goToQuestionareDetail: function(aid) {
-      this.$router.push("/questionareDetail/" + aid);
+    goToQuestionnaireAnalyze: function(aid) {
+      this.$router.push("/questionnaireAnalyze/" + aid);
     }
   },
   mounted() {

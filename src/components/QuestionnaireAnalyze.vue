@@ -1,6 +1,8 @@
 <template>
 <div class="card" style="width:70%;margin:auto;">
-  <el-card style="margin-top:10px;">
+    <el-page-header @back="goBack">
+</el-page-header>
+  <el-card style="margin-top:10px;" shadow="never">
     <el-row>
       <el-col :span="22" :offset="1">
         <div class="questionnaire-title">{{ questionnaire.title }}</div>
@@ -129,6 +131,10 @@ export default {
       if (this.numOfAnswers != 0)
         result = this.data[oid].length / this.numOfAnswers * 100
       return Math.round(result)
+    },
+    goBack:function () {
+       this.$router.back(-1);
+      
     }
   }
 
