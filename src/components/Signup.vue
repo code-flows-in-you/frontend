@@ -4,8 +4,8 @@
         <img src="../assets/logo.png" height="50px">
       </el-row>
     <el-row>
-      <el-col :span="22" :offset="1">
-        <el-form :model="userForm" :rules="rules" ref="userForm" label-width="80px">
+      <el-col :span="24">
+        <el-form :model="userForm" :rules="rules" ref="userForm" label-width="80px" style="width:80%;margin:auto">
           <el-form-item label="用户名" prop="username">
             <el-input prefix-icon="el-icon-user" v-model="userForm.username" placeholder="请输入用户名"></el-input>
           </el-form-item>

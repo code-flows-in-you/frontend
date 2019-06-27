@@ -63,7 +63,7 @@
       ></quill-editor>-->
 
       <el-row>
-        <el-col :offset="22">
+        <el-col :offset="21">
           <el-button
             @click="answerQuestion"
             size="small"

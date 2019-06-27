@@ -5,13 +5,13 @@
         <img src="../assets/logo.png" height="50px">
       </el-row>
       <el-row>
-        <el-col :span="22" :offset="1">
-          <el-form :model="userForm" :rules="rules" ref="userForm" label-width="60px">
+        <el-col :span="24">
+          <el-form :model="userForm" :rules="rules" ref="userForm" label-width="60px" style="width:80%;margin:auto">
             <el-form-item label="邮箱" prop="email">
-              <el-input type="text" v-model="userForm.email" autocomplete="off"></el-input>
+              <el-input prefix-icon="el-icon-message" type="text" v-model="userForm.email" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-              <el-input type="password" v-model="userForm.password" autocomplete="off"></el-input>
+              <el-input prefix-icon="el-icon-lock" type="password" v-model="userForm.password" autocomplete="off"></el-input>
             </el-form-item>
             <el-row>
               <el-form-item>
