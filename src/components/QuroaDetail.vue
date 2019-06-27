@@ -1,24 +1,22 @@
 <template>
   <div style="width:60%;margin:auto;">
-    <el-page-header @back="goBack">
-</el-page-header>
+    <el-page-header @back="goBack"></el-page-header>
     <el-card shadow="never" style="margin-top:10px;">
       <el-row>
-        <el-col :span="22" >
+        <el-col :span="22">
           <div class="question-title">{{ question.title }}</div>
         </el-col>
         <el-col class="money" :span="2">
-          <img src="../assets/coin.png" class="menu-img" width="20"/>
+          <img src="../assets/coin.png" class="menu-img" width="20">
           {{ question.coin }}
         </el-col>
       </el-row>
-
 
       <div class="question-description">{{ question.description }}</div>
       <el-row>
         <!-- <el-button @click="answer=true" size="small" type="primary">我来回答</el-button> -->
       </el-row>
-       <el-divider></el-divider>
+      <el-divider></el-divider>
       <el-row style="margin: 10px 0 0 0">
         <el-col :span="20">
           <el-row>
@@ -28,15 +26,15 @@
             <el-col :span="4">
               <el-row class="creator-user">{{ question.creator }}</el-row>
             </el-col>
-        </el-row>
+          </el-row>
         </el-col>
         <el-col :offset="21" :span="3">
-          <div class="question-data">{{question.createTime}}</div>
+          <div class="question-data">{{question.createTime.split(' ')[0]}}</div>
         </el-col>
       </el-row>
     </el-card>
     <!-- 我来回答编辑解界面 -->
-    <el-card v-show="!isAnswered" shadow="never">
+    <el-card v-show="!isAnswered && !bestAnswerUserId && !isCreator" shadow="never">
       <!-- markown 编辑器 -->
       <el-row>
         <el-col :span="1">
@@ -45,7 +43,7 @@
         </el-col>
         <el-col :span="3" style="margin-left:10px;">
           <el-row>{{ this.$store.state.user.Nickname }}</el-row>
-          <el-row>{{ this.$dateFormatter(this.time).split(' ')[0] }}</el-row>
+          <el-row class="timestamp">{{ this.$dateFormatter(this.time).split(' ')[0] }}</el-row>
         </el-col>
       </el-row>
       <el-input
@@ -83,14 +81,24 @@
           <el-col :span="1">
             <el-avatar size="large" :src="item.avatar"></el-avatar>
           </el-col>
-          <el-col :span="4">
-            <el-row class="answser-user">{{ item.user }}</el-row>
+          <el-col :span="3" style="margin-left:10px;">
+            <div class="answser-user">{{ item.user }}</div>
+            <div class="timestamp">{{ item.timestamp.split(' ')[0] }}</div>
+          </el-col>
+          <el-col :span="3" :offset="21">
+            <el-button
+              v-if="isCreator && !bestAnswerUserId"
+              @click="acceptAnswer(item.qaid)"
+              size="small"
+              type="primary"
+            >采纳</el-button>
+            <span v-if="bestAnswerUserId == item.user.split('@')[0]">
+              <img src="../assets/采纳.png" class="menu-img" width="20">
+              已采纳
+            </span>
           </el-col>
         </el-row>
         <div class="answer-content">{{ item.answer }}</div>
-        <el-row>
-          <div class="answer-meta">{{ item.timestamp.substr(0, 10) }}</div>
-        </el-row>
         <!-- <el-col :offset="10">
           <el-button type="text" size="mini" style="margin:auto;">
             展开显示全文
@@ -123,6 +131,8 @@ export default {
       time: new Date(),
       content: "",
       pid: 0,
+      isCreator: false,
+      bestAnswerUserId: {},
       editorOption: {
         modules: {
           toolbar: [
@@ -170,26 +180,35 @@ export default {
         answer: this.content,
         timestamp: this.$dateFormatter(new Date())
       };
-      this.$http.post("/api/qa/" + aid, content)
-      .then(response => {
-          this.$message.success("回答问题成功");
-          console.log(response);
-          this.content = "";
+      this.$http
+        .post("/api/qa/" + aid, content)
+        .then(
+          response => {
+            this.$message.success("回答问题成功");
+            console.log(response);
+            this.content = "";
+            this.fetchData();
+          },
+          response => console.log(response)
+        )
+        .catch(e => {
+          let feedback = e.response.data.msg;
+          if (feedback === "already have a best answer") {
+            this.$message.error("该问题已有最佳答案");
+          } else if (feedback === "already answer") {
+            this.$message.error("您已经回答过该问题");
+          }
+        });
+    },
+    acceptAnswer: function(qaid) {
+      let aid = this.$route.params.id;
+      this.$http.put("/api/qa/" + aid + "/" + qaid).then(
+        response => {
+          this.$message.success("采纳成功");
           this.fetchData();
         },
-        response => console.log(response))
-      .catch(e =>
-      {
-        let feedback = e.response.data.msg
-        if (feedback === "already have a best answer")
-        {
-            this.$message.error("该问题已有最佳答案");
-        }
-        else if (feedback === "already answer")
-        {
-            this.$message.error("您已经回答过该问题");
-        }
-      });
+        response => console.log(response)
+      );
     },
     fetchData: function() {
       let aid = this.$route.params.id;
@@ -198,22 +217,25 @@ export default {
           this.question = response.data;
           this.answers = this.question.answers;
           this.pid = this.question.pid;
-          console.log(this.answers);
-          console.log(response.data);
-
-          let userUid = this.$store.state.user.Uid
-          for (let answer of this.answers)
-          {
-            let uidLength = answer.user.indexOf("@")
-            let uid = answer.user.substr(0, uidLength)
-            if (uid == userUid)
-              this.isAnswered = true
+          this.bestAnswerUserId = this.question.best.user
+            ? this.question.best.user.split("@")[0]
+            : undefined;
+          console.log("answers:", this.answers);
+          console.log("question:", response.data);
+          console.log("bestAnswerUserId:", this.bestAnswerUserId);
+          let userUid = this.$store.state.user.Uid;
+          this.isCreator = userUid == this.question.creatorID;
+          console.log("isCreator:", this.isCreator);
+          for (let answer of this.answers) {
+            let uidLength = answer.user.indexOf("@");
+            let uid = answer.user.substr(0, uidLength);
+            if (uid == userUid) this.isAnswered = true;
           }
         },
         response => console.log(response)
       );
     },
-    goBack: function(){
+    goBack: function() {
       this.$router.back(-1);
     }
   }
@@ -230,8 +252,7 @@ export default {
   font-family: Roboto;
 }
 
-.question-description
-{
+.question-description {
   color: #666666;
   font-size: 19px;
   font-family: Roboto;
@@ -243,8 +264,8 @@ export default {
   color: #5f5f5f;
 }
 
-.answer-meta {
-  font-size: 12px;
+.timestamp {
+  color: rgba(204, 204, 204, 1);
 }
 
 .answer-content {
@@ -254,22 +275,18 @@ export default {
 }
 .answser-user {
   margin-top: 5%;
-  margin-left: 5%;
 }
 
-.creator-user
-{
+.creator-user {
   margin-top: 7%;
   margin-left: 15%;
 }
 
-.money
-{
-  color: #FF4343;
+.money {
+  color: #ff4343;
 }
 
-.menu-img
-{
+.menu-img {
   vertical-align: middle;
 }
 </style>

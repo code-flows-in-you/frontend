@@ -113,7 +113,7 @@
       </el-col>
     </el-row>
     <el-dialog :visible.sync="newTask" width="20%" center>
-      <el-row type="flex" justify="center" style="font-size:20px">请选择求助类型</el-row>
+      <el-row type="flex" justify="center" style="font-size:20px">请选择任务类型</el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="newQuestion=true;newTask=false;" size="small" type="primary">发起提问</el-button>
         <el-button @click="raiseQuestionnaire" size="small" type="primary">发起问卷</el-button>
