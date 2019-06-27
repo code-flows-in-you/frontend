@@ -35,14 +35,13 @@
     </el-card>
     <!-- 我来回答编辑解界面 -->
     <el-card v-show="!isAnswered && !bestAnswerUserId && !isCreator" shadow="never">
-      <!-- markown 编辑器 -->
       <el-row>
         <el-col :span="1">
           <el-avatar size="large" :src="this.$store.state.user.Avatar"></el-avatar>
         </el-col>
         <el-col :span="3" style="margin-left:10px;">
           <el-row>{{ this.$store.state.user.Nickname }}</el-row>
-          <el-row class="timestamp">{{ this.$dateFormatter(this.time).split(' ')[0] }}</el-row>
+          <el-row class="question-data">{{ this.$dateFormatter(this.time).split(' ')[0] }}</el-row>
         </el-col>
       </el-row>
       <el-input
@@ -82,7 +81,7 @@
           </el-col>
           <el-col :span="3" style="margin-left:10px;">
             <div class="answser-user">{{ item.user }}</div>
-            <div class="timestamp">{{ item.timestamp.split(' ')[0] }}</div>
+            <div class="question-data">{{ item.timestamp.split(' ')[0] }}</div>
           </el-col>
           <el-col :span="3" :offset="21">
             <el-button
@@ -252,7 +251,8 @@ export default {
 }
 
 .question-description {
-  color: #666666;
+      margin-bottom: 10px;
+    color: #313131;
   font-size: 19px;
   font-family: Roboto;
   margin: 21px 0 0 0;
@@ -260,7 +260,8 @@ export default {
 
 .question-data {
   font-size: 12px;
-  color: #5f5f5f;
+  font-size: 12px;
+  /* color: #5f5f5f; */
 }
 
 .timestamp {
