@@ -54,7 +54,7 @@
                     <el-input class="option-input"
                      v-model="option.value" :placeholder="'选项'+(oid+1)"></el-input>
                      <img class="click-img-button menu-img"
-                      src="../assets/删除.png" @click="deleteOption(index)">
+                      src="../assets/删除.png" @click="deleteOption(index, oid)">
                   </div>
                 </el-row>
               </div>
@@ -80,28 +80,28 @@
         <el-card>
           <el-row type="flex" justify="center">
             <div>
-              <p class="menu-title">题目类型</p>
+              <p class="menu-title">添加题目</p>
             </div>
           </el-row>
           <el-row>
             <div>
               <img src="../assets/单选-选中.png" class="menu-img">
               <el-link class="menu-text"
-               @click="addQuestion('single')" :underline="false">单选</el-link>
+               @click="addQuestion('single')" :underline="false">添加单选题</el-link>
             </div>
           </el-row>
           <el-row>
             <div>
               <img src="../assets/多选-选中.png" class="menu-img">
               <el-link class="menu-text"
-               @click="addQuestion('multi')" :underline="false">多选</el-link>
+               @click="addQuestion('multi')" :underline="false">添加多选题</el-link>
             </div>
           </el-row>
           <el-row>
             <div>
               <img src="../assets/填空题.png" class="menu-img">
               <el-link class="menu-text"
-               @click="addQuestion('input')" :underline="false">单项填空</el-link>
+               @click="addQuestion('input')" :underline="false">添加填空题</el-link>
             </div>
           </el-row>
         </el-card>
