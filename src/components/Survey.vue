@@ -8,7 +8,6 @@
               <el-col :span="22">
                 <div class="survey-title" @click="goToQuestionnaireDetail( item.aid )">
                   {{ item.title }}
-                  <span v-if="now > item.endTime">【已结束】</span>
                 </div>
               </el-col>
               <el-col :span="1">
@@ -19,10 +18,12 @@
             <div class="survey-info">
               <span
                 class="survey-info"
-              >开始时间：{{ item.startTime.split(" ")[0] }}&nbsp;&nbsp;&nbsp;结束时间：{{ item.endTime.split(" ")[0] }}</span>
+              >{{ item.startTime.split(" ")[0] }}~{{ item.endTime.split(" ")[0] }}</span>
               <span>&nbsp;&nbsp;&nbsp;{{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
             </div>
             <div class="survey-content">{{ item.description }}</div>
+            <div v-if="now > item.endTime" @click="goToQuestionnaireDetail(item.aid)" class="survey-footer">已结束</div>
+            <div v-else @click="goToQuestionnaireDetail(item.aid)" class="survey-footer">填写问卷></div>
             <el-divider></el-divider>
           </div>
           <el-pagination
@@ -181,5 +182,16 @@ export default {
   color: rgba(16, 16, 16, 1);
   font-size: 19px;
   font-family: Roboto;
+  margin-top: 20px;
+}
+.survey-footer {
+  color: rgba(0, 51, 102, 1);
+  font-size: 17px;
+  font-family: Roboto;
+  margin-top: 20px;
+}
+.survey-footer:hover {
+  color: #175199;
+  cursor: pointer;
 }
 </style>

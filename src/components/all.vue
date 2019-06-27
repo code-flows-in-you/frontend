@@ -2,7 +2,6 @@
   <div style="margin-top:10px">
     <el-row :gutter="20">
       <el-col :offset="4" :span="13">
-
         <el-card class="text item" shadow="never">
           <div v-for="item in tasksList" :key="item._id">
             <el-row v-if="item.type == 'qa'">
@@ -16,10 +15,7 @@
             </el-row>
             <el-row v-else-if="item.type == 'questionnaire'">
               <el-col :span="22">
-                <div class="title" @click="goToQuestionnaireDetail( item.aid )">
-                  {{ item.title }}
-                  <span v-if="now > item.endTime">【已结束】</span>
-                </div>
+                <div class="title" @click="goToQuestionnaireDetail( item.aid )">{{ item.title }}</div>
               </el-col>
               <el-col :span="1">
                 <img src="../assets/coin.png" width="20">
@@ -32,10 +28,19 @@
               <span v-if="item.bestCount === 1">&nbsp;&nbsp;&nbsp;已采纳</span>
             </div>
             <div class="info" v-else-if="item.type == 'questionnaire'">
-              <span class="info">开始时间：{{ item.startTime.split(" ")[0] }}&nbsp;&nbsp;&nbsp;结束时间：{{ item.endTime.split(" ")[0] }}</span>
+              <span class="info">{{ item.startTime.split(" ")[0] }}~{{ item.endTime.split(" ")[0] }}</span>
               <span>&nbsp;&nbsp;&nbsp;{{ item.copy-item.coin/item.unit}}份/{{ item.copy }}份</span>
             </div>
             <div class="content">{{ item.description }}</div>
+            <el-row v-if="item.type == 'questionnaire'">
+              <div
+                v-if="now > item.endTime"
+                @click="goToQuestionnaireDetail(item.aid)"
+                class="survey-footer"
+              >已结束</div>
+              <div v-else @click="goToQuestionnaireDetail(item.aid)" class="survey-footer">填写问卷></div>
+            </el-row>
+
             <el-divider></el-divider>
           </div>
           <el-pagination
@@ -47,7 +52,6 @@
             style="text-align:center"
           ></el-pagination>
         </el-card>
-
       </el-col>
       <el-col :span="4">
         <el-card>
@@ -94,7 +98,10 @@
           </el-row>
           <el-row>
             <div>
-              <img src="../assets/余额.png" style="margin:10px; vertical-align:middle; width:26px; height:26px">
+              <img
+                src="../assets/余额.png"
+                style="margin:10px; vertical-align:middle; width:26px; height:26px"
+              >
               <el-link
                 @click="goToProfile('balance')"
                 :underline="false"
@@ -143,9 +150,7 @@
         <el-button @click="raiseQuestion();newQuestion=false;" size="small" type="primary">发布问题</el-button>
       </span>
     </el-dialog>
-
   </div>
-
 </template>
 
 <script>
@@ -200,8 +205,7 @@ export default {
         response => console.log(response)
       );
     },
-    raiseQuestionnaire: function()
-    {
+    raiseQuestionnaire: function() {
       this.$router.push("/questionnaireCreate");
     },
     quroaDetail: function(id) {
@@ -212,7 +216,7 @@ export default {
     },
     goToQuestionnaireDetail: function(aid) {
       console.error(aid);
-       this.$router.push("/QuestionnaireDetail/" + aid);
+      this.$router.push("/QuestionnaireDetail/" + aid);
     },
     clearInput: function(done) {
       this.newQuestionDescription = "";
@@ -282,5 +286,18 @@ export default {
   color: rgba(16, 16, 16, 1);
   font-size: 19px;
   font-family: Roboto;
+  margin-top: 20px;
+}
+
+.survey-footer {
+  color: rgba(0, 51, 102, 1);
+  font-size: 17px;
+  font-family: Roboto;
+  margin-top: 20px;
+}
+
+.survey-footer:hover {
+  color: #175199;
+  cursor: pointer;
 }
 </style>

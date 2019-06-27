@@ -248,6 +248,7 @@ export default {
   color: rgba(16, 16, 16, 1);
   font-size: 19px;
   font-family: Roboto;
+  margin-top: 20px;
 }
 
 .vcard-username {
