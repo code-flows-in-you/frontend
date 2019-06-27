@@ -32,6 +32,7 @@
         maxlength="100"
         show-word-limit
         style="margin-top:20px;"
+        @focus="checkEndTime"
       ></el-input>
       <!-- <quill-editor
         v-model="content"
@@ -98,6 +99,7 @@ export default {
       time: new Date(),
       content: "",
       pid: 0,
+      endTime: 0,
       editorOption: {
         modules: {
           toolbar: [
@@ -138,21 +140,36 @@ export default {
         this.$message.error("回答不能为空");
         return;
       }
+      if (!this.checkEndTime())
+        return
+
       let aid = this.$route.params.id;
       let content = {
         pid: this.pid,
         answer: this.content,
         timestamp: this.$dateFormatter(new Date())
       };
-      this.$http.post("/api/qa/" + aid, content).then(
-        response => {
+      this.$http.post("/api/qa/" + aid, content)
+      .then(response => {
           this.$message.success("回答问题成功");
           console.log(response);
           this.content = "";
           this.fetchData();
         },
         response => console.log(response)
-      );
+      ).catch(e =>
+      {
+        let feedback = e.response.data.msg
+        if (feedback === "already have a best answer")
+        {
+            this.$message.error("该问题已有最佳答案");
+        }
+        else if (feedback === "already answer")
+        {
+            this.$message.error("您已经回答过改问题");
+        }
+      })
+      ;
     },
     fetchData: function() {
       let aid = this.$route.params.id;
@@ -161,6 +178,7 @@ export default {
           this.question = response.data;
           this.answers = this.question.answers;
           this.pid = this.question.pid;
+          this.endTime = this.question.endTime;
           console.log(this.answers);
           // if(this)
           console.log(response.data);
@@ -168,8 +186,18 @@ export default {
         response => console.log(response)
       );
     },
-    goBack(){
+    goBack: function(){
       this.$router.back(-1);
+    },
+    checkEndTime: function()
+    {
+      if (new Date(this.endTime) < new Date)
+      {
+        this.$message.error("已过问题截止时间")
+        return false
+      }
+      return true
+
     }
   }
 };
